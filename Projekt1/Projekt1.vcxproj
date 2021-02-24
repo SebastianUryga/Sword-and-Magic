@@ -179,6 +179,7 @@
     <ClInclude Include="HeroInstance.h" />
     <ClInclude Include="HeroWindow.h" />
     <ClInclude Include="interface_gamearea.h" />
+    <ClInclude Include="IntObject.h" />
     <ClInclude Include="Kingdom.h" />
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="MapObject.h" />
@@ -208,6 +209,7 @@
     <ClCompile Include="HeroInstance.cpp" />
     <ClCompile Include="HeroWindow.cpp" />
     <ClCompile Include="interface_gamearea.cpp" />
+    <ClCompile Include="IntObject.cpp" />
     <ClCompile Include="Kingdom.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="MapObject.cpp" />

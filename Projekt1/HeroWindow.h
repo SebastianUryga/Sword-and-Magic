@@ -6,8 +6,6 @@ class GuiHandler;
 class HeroWindow  : public WindowObject
 {
 private:
-	
-	std::map<std::string, std::shared_ptr<Button>> buttons;
 
 	sf::Text name;
 	sf::Sprite portraitImage;
@@ -18,11 +16,10 @@ public:
 	HeroWindow(const HeroInstance * hero);
 	virtual ~HeroWindow();
 
+	void dismissCurrent();
 	// Functions
-	void setPos(int x, int y);
-	//void OnMouseLeftButtonClick() override;
-	void updateButtons(const sf::Vector2i mousePos);
-	void update(const sf::Vector2i mousePos) override;
+	void setPos(float x, float y);
+	void update(const float dt,const sf::Vector2i mousePos) override;
 	void render(sf::RenderTarget * target) override;
 };
 

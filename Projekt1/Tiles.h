@@ -1,6 +1,7 @@
 #pragma once
 #include "Kingdom.h"
 #include "GameConstants.h"
+#include "PlayerInterface.h"
 #define TILEWIDTH 32.f
 
 namespace MP2
@@ -37,7 +38,7 @@ namespace Maps
 	{
 		NO_ROAD, DIRT_ROAD, GRAVEL_ROAD, COBBLESTONE_ROAD
 	};
-	class Tile
+	class Tile : public IntObject
 	{
 	private:
 		int ground;
@@ -89,6 +90,10 @@ namespace Maps
 		bool isWater() const;
 		bool isFog(int color) const;
 		void ClearFog(int color);
+
+		void clickLeft(bool down, bool previousState) override;
+		void clickRight(bool down, bool previousState) override;
+		bool contains(sf::Vector2f pos) override;
 
 		void updatePassable();
 		void update();

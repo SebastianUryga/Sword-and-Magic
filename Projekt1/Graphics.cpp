@@ -9,7 +9,7 @@ Graphics::Graphics()
 	fogOfWarPartialHide = std::make_shared<sf::Texture>();
 	heroMoveArrows = std::make_shared<sf::Texture>();
 	heroOnMap = std::make_shared<sf::Texture>();
-	this->allHeroesPortraits = std::shared_ptr<sf::Texture>();
+	this->allHeroesPortraits = std::make_shared<sf::Texture>();
 	fogOfWarFullHide->setRepeated(true);
 	fogOfWarPartialHide->setRepeated(true);
 	heroOnMap->setRepeated(true);
@@ -23,7 +23,7 @@ Graphics::~Graphics()
 
 void Graphics::Init()
 {
-	this->allHeroesPortraits->loadFromFile("Textures\\Heroes Portraits");
+	this->allHeroesPortraits->loadFromFile("Textures\\Heroes Portraits.png");
 	this->fogOfWarFullHide->loadFromFile("Textures\\fog.png");
 	//this->fogOfWarPartialHide->loadFromFile("Textures\\");
 	this->heroMoveArrows->loadFromFile("Textures\\arrows.png");

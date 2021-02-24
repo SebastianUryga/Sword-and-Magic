@@ -5,14 +5,7 @@
 
 void GameState::initView()
 {
-	this->view.setSize(
-		static_cast<float>(this->window->getSize().x),
-		static_cast<float>(this->window->getSize().y)
-		);
-	this->view.setCenter(
-		this->window->getSize().x / 2.f,
-		this->window->getSize().y / 2.f
-	);
+	
 }
 
 void GameState::initTextutres()
@@ -45,9 +38,11 @@ void GameState::initWorld()
 
 void GameState::initGameArea()
 {
-	Interface::GameArea & area = Interface::GetGameArea();
-
-	area.built(this->window, Interface::GameMode);
+	std::shared_ptr<Interface::GameArea> area;
+	area = std::make_shared<Interface::GameArea>();
+	area->built(this->window, Interface::EditorMode);
+	PI->gameArea = area;
+	GH.pushInt(area);
 }
 
 void GameState::initButtonsArea()
@@ -72,6 +67,7 @@ GameState::GameState(StateData* state_data)
 GameState::~GameState()
 {
 	world.Reset();
+	//GH.popInt(std::shared_ptr<Interface::GameArea>(&Interface::GetGameArea()));
 }
 
 //modifires
@@ -93,13 +89,19 @@ void GameState::OnMouseLeftButtonClick()
 	sf::Vector2i mousePos((int)this->mousePosView.x, (int)this->mousePosView.y);
 	if (Interface::GetGameArea().contains(mousePos))
 	{
-		sf::Vector2i mapPos(mousePos.x / (int)TILEWIDTH, mousePos.y / TILEWIDTH);
+		sf::Vector2i mapPos(mousePos.x / (int)TILEWIDTH, mousePos.y / (int)TILEWIDTH);
 		if (mapPos != this->mousePosTile)
 			std::cout << "nie zgadza sie o " << mapPos.x - mousePosTile.x << std::endl;
 		Interface::MouseCursorAreaClickLeft(mousePos);
 		
 		//std::cout<< tile.x <<" "<<tile.y <<std::endl;
 	}
+}
+
+void GameState::endState()
+{
+	State::endState();
+	GH.topInt()->close();
 }
 
 // Functions
@@ -111,13 +113,6 @@ void GameState::calculatePaths(const HeroInstance * hero)
 
 void GameState::updateView()
 {
-	if (Interface::GetGameArea().needScroll())
-	{
-		this->view.move(
-			(float)Interface::GetGameArea().getScrollOffset().x*TILEWIDTH,
-			(float)Interface::GetGameArea().getScrollOffset().y*TILEWIDTH
-		);
-	}
 }
 
 void GameState::updateEvents()
@@ -127,13 +122,6 @@ void GameState::updateEvents()
 
 void GameState::updateInput(const float & dt)
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["SCROLL_DOWN"])) && this->getKeytime())
-		//Interface::GetGameArea().needToScroll.y += 1;
-		view.move(0, 32.f);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["SCROLL_UP"])) && this->getKeytime())
-		//Interface::GetGameArea().needToScroll.y -= 1;
-		view.move(0, -32.f);
-	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["CLOSE"])) && this->getKeytime())
 		this->endState();
 
@@ -141,14 +129,16 @@ void GameState::updateInput(const float & dt)
 
 void GameState::update(const float& dt)
 {
-	this->updateMousePositions(&this->view);
+	this->updateMousePositions();
 	this->updateInput(dt);
 	this->updateKeytime(dt);
-	Interface::GetGameArea().update(dt, this->mousePosWindow,this->currentColorTurn);
+	//Interface::GetGameArea().update(dt, this->mousePosWindow);
 	this->updateView();
-	//this->hero->update(dt);
+
 	Interface::GetButtonsArea().update(this->mousePosWindow);
-	GH.update(this->mousePosWindow);
+	if (GH.empty())
+		return;
+	GH.topInt()->update(dt,this->mousePosWindow);
 	
 }
 
@@ -157,12 +147,12 @@ void GameState::render(sf::RenderTarget* target)
 	if (!target)
 		target = this->window;
 
-	target->setView(this->view);
-	Interface::GetGameArea().render(target,Color::RED);
+	//PI->gameArea->render(target,Color::RED);
 	
-	//this->hero->render(target);
-	target->setView(this->window->getDefaultView());
+	
+	if (GH.empty())
+		return;
+	GH.topInt()->render(target);
 	Interface::GetButtonsArea().render(target);
-
 	// if () window.setView(gameArea.view);
 }

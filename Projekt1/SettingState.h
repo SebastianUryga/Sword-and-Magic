@@ -1,6 +1,8 @@
 #pragma once
-#include "State.h"
-#include "Tiles.h"
+
+#include "GuiHandler.h"
+
+
 
 class SettingState :
 	public State

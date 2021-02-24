@@ -3,7 +3,7 @@
 #include "Direction.h"
 
 MovmentComponent::MovmentComponent(sf::Sprite& sprite)
-	: sprite(sprite), nodeIndex(0),moving(false),speed(100.f), positionChanged(false),path(nullptr)
+	: sprite(sprite), nodeIndex(0),moving(false),speed(120.f), positionChanged(false),path(nullptr)
 {
 	this->pathEnded = false;
 	this->velocity = sf::Vector2f(0, 0);
@@ -12,10 +12,6 @@ MovmentComponent::MovmentComponent(sf::Sprite& sprite)
 
 
 MovmentComponent::~MovmentComponent()
-{
-}
-
-void MovmentComponent::setTexture(sf::Texture & texture)
 {
 }
 
@@ -140,15 +136,16 @@ void MovmentComponent::update(const float & dt)
 			}
 			else
 			{
-
 				this->stopMoving();
 				this->pathEnded = true;
-				path = nullptr;
+				this->path = nullptr;
 			}
 		}
 		else
 		{
 			//path interupted
+			this->pathEnded = true;
+			this->path = nullptr;
 			std::cout << "cos nie tak" << std::endl;
 		}
 	}

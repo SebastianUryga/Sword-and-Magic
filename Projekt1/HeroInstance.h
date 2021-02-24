@@ -18,9 +18,8 @@ public:
 	std::shared_ptr<Pathfinder> pathfinder;
 	std::shared_ptr<Path> currentPath;
 
-	bool moveHero(sf::Vector2i dest);
+	bool moveHero();
 	bool makePath(sf::Vector2i dest);
-	void showPath();
 	void calcuatePaths();
 
 	int movement;
@@ -47,4 +46,3 @@ public:
 	void save(std::fstream& file) override;
 	void load(std::fstream& file) override;
 };
-

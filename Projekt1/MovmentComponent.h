@@ -29,8 +29,6 @@ public:
 	MovmentComponent(sf::Sprite& sprite);
 	virtual ~MovmentComponent();
 
-	void setTexture(sf::Texture& texture); 
-
 	const sf::Vector2f& getVelocity() const;
 
 	//Functions

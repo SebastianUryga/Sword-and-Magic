@@ -17,6 +17,18 @@ void Interface::GameArea::setTexturesToAllSprites()
 	}*/
 }
 
+void Interface::GameArea::initView()
+{
+	this->view.setSize(
+		static_cast<float>(this->window->getSize().x),
+		static_cast<float>(this->window->getSize().y)
+	);
+	this->view.setCenter(
+		this->window->getSize().x / 2.f,
+		this->window->getSize().y / 2.f
+	);
+}
+
 HeroInstance * Interface::GameArea::curHero() const
 {
 	if (selection && selection->type == Obj::HERO)
@@ -25,14 +37,25 @@ HeroInstance * Interface::GameArea::curHero() const
 		return nullptr;
 }
 
-sf::Vector2i Interface::GameArea::getScrollOffset()
+sf::Vector2f Interface::GameArea::getScrollOffset() const
 {
 	return this->scrollOffset;
 }
 
+sf::Vector2f Interface::GameArea::getScrollDirection() const
+{
+	return this->scrollDirection;
+}
+
+void Interface::GameArea::focusOn(sf::Vector2f pos)
+{
+	this->scrollTime += 2;
+	this->scrollDirection = ((pos - this->scrollOffset) - sf::Vector2f(20*TILEWIDTH, 15* TILEWIDTH));
+}
+
 bool Interface::GameArea::needScroll()
 {
-	if (scrollOffset.x != 0 || scrollOffset.y != 0)
+	if (this->scrollDirection.x != 0 || this->scrollDirection.y != 0)
 		if (scrollTime > 3.f)
 		{
 			scrollTime = 0;
@@ -52,6 +75,16 @@ void Interface::GameArea::built(sf::RenderWindow* window, int mode)
 	this->mode = mode;
 	this->rectMaps = sf::IntRect(0, 0, window->getSize().x, window->getSize().y);
 
+	this->background.setSize(sf::Vector2f(
+		(float)rectMaps.width, (float)rectMaps.height));
+
+	for (int x = 0; x < world.w(); x++)
+		for (int y = 0; y < world.h(); y++)
+		{
+			this->interactiveElem.push_back(std::shared_ptr<Maps::Tile>(&world.GetTile(x, y), [](Maps::Tile *){}));
+		}
+
+	this->initView();
 	// taki tymczasowy kod
 	if (world.vec_heros.size() > 0)
 		selection = world.vec_heros[0];
@@ -65,13 +98,14 @@ void Interface::GameArea::built(sf::RenderWindow* window, int mode)
 }
 
 Interface::GameArea::GameArea()
+	:WindowObject(0,0,0,0,this->font)
 {
+	this->rectMaps.top = 0.f;
+	this->rectMaps.left = 0.f;
 	this->scrollSpeed = 20.f;
 	this->scrollTime = 10.f;
-	this->scrollOffset.x = 0;
-	this->scrollOffset.y = 0;
-	this->rectMaps.top = 0;
-	this->rectMaps.left = 0;
+	this->scrollOffset = sf::Vector2f(0, 0);
+	this->scrollDirection = sf::Vector2f(0, 0);
 	this->window = nullptr;
 }
 
@@ -80,31 +114,45 @@ Interface::GameArea::~GameArea()
 
 }
 
-void Interface::GameArea::updateInput(const float dt, sf::Vector2i mousePosWindow)
+void Interface::GameArea::updateView()
 {
-	this->scrollTime += dt * this->scrollSpeed;
-	this->scrollOffset = sf::Vector2i(0, 0);
-	if (mousePosWindow.x < 2)
-		this->scrollOffset.x = -1;
-	if (mousePosWindow.y < 2)
-		this->scrollOffset.y = -1;
-	if (mousePosWindow.x > (int)this->window->getSize().x -10) // lol
-		this->scrollOffset.x = 1;
-	if (mousePosWindow.y > (int)this->window->getSize().y -30) // nie ograniam
-		this->scrollOffset.y = 1;
+	if (this->needScroll())
+	{
+		this->view.move(this->getScrollDirection());
+		this->scrollOffset += this->scrollDirection;
+		this->scrollDirection = sf::Vector2f(0, 0);
+	}
 }
 
-void Interface::GameArea::update(const float dt, sf::Vector2i mousePosWindow, int color)
+void Interface::GameArea::updateInput(const float dt, sf::Vector2i mousePosWindow)
+{
+	if (!this->active)
+		return;
+	this->scrollTime += dt * this->scrollSpeed;
+	if (mousePosWindow.x < 2)
+		this->scrollDirection.x = -TILEWIDTH;
+	if (mousePosWindow.y < 2)
+		this->scrollDirection.y = -TILEWIDTH;
+	if (mousePosWindow.x > (int)this->window->getSize().x -10) // lol
+		this->scrollDirection.x = TILEWIDTH;
+	if (mousePosWindow.y > (int)this->window->getSize().y -30) // nie ograniam
+		this->scrollDirection.y = TILEWIDTH;
+}
+
+void Interface::GameArea::update(const float dt, sf::Vector2i mousePosWindow)
 {
 	this->updateInput(dt, mousePosWindow);
+	this->updateView();
 	for (auto it : world.GetAllMapsObjects())
 	{
 		it->update(dt);
 	}
 }
 
-void Interface::GameArea::render(sf::RenderTarget * target, int color)
+void Interface::GameArea::render(sf::RenderTarget * target)
 {
+	target->setView(this->view);
+	
 	for (int x = 0; x < world.w(); x++)
 		for (int y = 0; y < world.h(); y++)
 			world.GetTile(x, y).renderGround(target);
@@ -128,97 +176,26 @@ void Interface::GameArea::render(sf::RenderTarget * target, int color)
 	if(mode == Interface::GameMode) // jesli tworzymy swiat to nie potrzebujemy mgly wojny
 	for (int x = 0; x < world.w(); x++)
 		for (int y = 0; y < world.h(); y++)
-			if(world.GetTile(x, y).isFog(color))
+			if(world.GetTile(x, y).isFog(PI->getCurrentColor()))
 				world.GetTile(x, y).renderFog(target); // rysujemy mgle wojny
+
+	target->setView(this->window->getDefaultView());
 }
 
 void Interface::MouseCursorAreaClickLeft(const sf::Vector2i mousePos)
 {
-	sf::Vector2i mapPos(mousePos.x / TILEWIDTH, mousePos.y / TILEWIDTH);
-	const Maps::Tile *tile = &world.GetTile(mapPos);
-
-	const MP2::ObjectInstance *topBlocking = tile->GetObjectPtr();
-	//if(this->activeHero)
-	if (HeroInstance * currentHero = gameArea.curHero()) //hero is selected
-	{
-		std::cout << currentHero->pos.x << " " << currentHero->pos.y << std::endl;
-
-		const PathNode *pn = currentHero->pathfinder->getNode(mapPos);
-		if (currentHero == topBlocking) //clicked selected hero
-		{
-			//LOCPLINT->openHeroWindow(currentHero);
-			std::cout << "kilkoles herosa"  << std::endl;
-			return;
-		}
-		else if (pn->turns == 255)
-		{
-			std::cout << "nie osiagalne"<< pn->cost << std::endl;
-			return;
-		}
-		else
-		{
-			if (currentHero->currentPath && currentHero->currentPath->endPos() == mapPos)//we'll be moving
-			{
-				
-				if (currentHero->moveHero(mapPos))
-					std::cout << "ruszam" << currentHero->currentPath->endPos().x
-					<< " " << currentHero->currentPath->endPos().y << std::endl;
-				else
-					std::cout << "nie ruszam" << std::endl;
-				return;
-			}
-			else //remove old path and find a new one if we clicked on accessible tile
-			{
-				std::cout << std::endl;
-				if (currentHero->makePath(mapPos))
-				std::cout << "nowa sciezka" << currentHero->currentPath->endPos().x << " " <<
-					currentHero->currentPath->endPos().y << std::endl;
-				else
-					std::cout << " nie ma nowej sciezki" << std::endl;
-			}
-		}
-	}
 }
 
 Interface::GameArea & Interface::GetGameArea()
 {
-	return Interface::gameArea;
+	if (!PI->gameArea)
+		assert(0);
+	return *PI->gameArea;
 }
 
 ButtonsArea & Interface::GetButtonsArea()
 {
 	return Interface::buttonsArea;
-}
-
-int Interface::startGame()
-{
-	int result = 1;
-	while (result)
-	{
-		for (int color = Color::RED; color <= Color::BLUE/*!= Color::UNUSED*/; color = color << 1)
-		{
-			Kingdom & kingdom = world.GetKingdom(color);
-			//kingdom.ActionBeforeTurn(); rescan path
-			//world.setCurrnetColor(color);
-			world.ClearFog(color);
-			result = HumanTurn();
-		}
-	}
-	
-	return 0;
-}
-
-int Interface::HumanTurn()
-{
-	int result = 0;
-	//Kingdom & myKingdom = world.GetKingdom(world.getCurrentColor());
-	//std::vector<Castle> myCasltes = myKingdom.GetCastles();
-	//std::vector<Hero> myHeroes = myKingdom.getHeroes();
-
-	// ResetFocus(GameFocus::FIRSTHERO);
-
-
-	return 0;
 }
 
 Interface::AdvMapArrows & Interface::GetHeroMoveArrows()
@@ -228,7 +205,6 @@ Interface::AdvMapArrows & Interface::GetHeroMoveArrows()
 
 Arrow& Interface::AdvMapArrows::top()
 {
-	std::cout << topIndex << std::endl;
 	assert(topIndex > -1);
 	Arrow& arrow = this->at(topIndex);
 	if(arrow.toDraw)

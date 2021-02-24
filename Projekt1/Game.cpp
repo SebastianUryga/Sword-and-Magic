@@ -6,7 +6,7 @@
 //Initializer functions
 void Game::initWindow()
 {
-	this->window = new sf::RenderWindow(sf::VideoMode::getDesktopMode() , "blablabla",sf::Style::Default);
+	this->window = new sf::RenderWindow(sf::VideoMode::getDesktopMode() , "Heroes 3",sf::Style::Default);
 	this->window->setFramerateLimit(120);
 
 }
@@ -106,28 +106,7 @@ void Game::updateDt()
 
 void Game::updateEvents()
 {
-	while (this->window->pollEvent(this->sfEvent))
-	{
-		if (this->sfEvent.type == sf::Event::Closed)
-		{
-			this->window->close();
-		}
-		if (this->sfEvent.type == sf::Event::MouseButtonPressed &&
-			sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		{
-			this->states.top()->OnMouseLeftButtonClick();
-			
-		}
-		if (this->sfEvent.type == sf::Event::MouseButtonReleased)
-		{
-			this->states.top()->OnMouseLeftButtonReleased();
-		}
-		if (this->sfEvent.type == sf::Event::MouseButtonPressed &&
-			sf::Mouse::isButtonPressed(sf::Mouse::Right))
-		{
-			this->states.top()->OnMouseRightButtonClick();
-		}
-	}
+	GH.handleEvents(states, this->window, this->sfEvent);
 }
 
 void Game::update()
@@ -140,7 +119,6 @@ void Game::update()
 
 		if (this->states.top()->getQuit())
 		{
-			this->states.top()->endState();
 			delete this->states.top();
 			this->states.pop();
 		}

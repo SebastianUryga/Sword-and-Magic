@@ -24,4 +24,5 @@
 #include <assert.h>
 #include<queue>
 #include<list>
+#include <functional>
 #endif //PCH_H

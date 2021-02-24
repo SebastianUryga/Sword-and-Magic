@@ -13,14 +13,30 @@ WindowObject::WindowObject(float x, float y, float width, float height, sf::Font
 
 WindowObject::~WindowObject()
 {
+	this->interactiveElem.clear();
 }
 
 void WindowObject::deactivate()
 {
+	this->active = false;
 }
 
 void WindowObject::activate()
 {
+	this->active = true;
+}
+
+void WindowObject::setPos(float x, float y)
+{
+	//do przetestowania
+	float difX, difY;
+	difX = x - this->background.getPosition().x;
+	difY = y - this->background.getPosition().y;
+	this->background.setPosition((int)x, (int)y);
+	for (auto &btn : this->buttons)
+		btn.second->move(difX, difY);
+	for (auto &text : this->texts)
+		text.move(difX,difY);
 }
 
 void WindowObject::close()
@@ -30,16 +46,19 @@ void WindowObject::close()
 	GH.popInt(GH.topInt());
 }
 
-void WindowObject::OnMouseLeftButtonClick()
-{
-}
-
-void WindowObject::update(const sf::Vector2i mousePos)
+void WindowObject::update(const float dt, const sf::Vector2i mousePos)
 {
 	this->mousePos = mousePos;
+	//update buttons
+	for (auto &btn : this->buttons)
+		btn.second->update(mousePos);
 }
 
 void WindowObject::render(sf::RenderTarget * target)
 {
 	target->draw(background);
+	for (auto &text : this->texts)
+		target->draw(text);
+	for (auto &btn : this->buttons)
+		btn.second->render(target);
 }

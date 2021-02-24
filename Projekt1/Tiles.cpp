@@ -63,6 +63,7 @@ void Maps::Tile::Init(int index)
 
 Maps::Tile::Tile()
 {
+
 }
 
 
@@ -106,7 +107,9 @@ void Maps::Tile::SetIndex(int index)
 {
 	this->maps_index = index;
 	//set sprite position
-	this->groundSprite.setPosition(index % world.w()* TILEWIDTH, index / world.w()* TILEWIDTH);
+	sf::Vector2f pos(index % world.w()* TILEWIDTH, index / world.w()* TILEWIDTH);
+	this->groundSprite.setPosition(pos);
+	this->shape = sf::FloatRect(pos.x, pos.y, TILEWIDTH, TILEWIDTH);
 }
 
 void Maps::Tile::SetObjectType(int type)
@@ -155,16 +158,16 @@ void Maps::Tile::SetGround(int ground)
 
 void Maps::Tile::setFogTexture(sf::Texture & texture,int color)
 {
-	this->fogRect.left = ((int)rand() % texture.getSize().x / TILEWIDTH) * TILEWIDTH;
-	this->fogRect.top = ((int)rand() % texture.getSize().y / TILEWIDTH) * TILEWIDTH;
+	this->fogRect.left = ((int)rand() % texture.getSize().x / (int)TILEWIDTH) * (int)TILEWIDTH;
+	this->fogRect.top = ((int)rand() % texture.getSize().y / (int)TILEWIDTH) * (int)TILEWIDTH;
 	this->fogSprite.setTexture(texture);
 	this->fogSprite.setTextureRect(this->fogRect);
 }
 
 void Maps::Tile::setGroundTexture(sf::Texture & texture)
 {
-	this->groundRect.left = ((int)rand() % texture.getSize().x / TILEWIDTH) * TILEWIDTH;
-	this->groundRect.top = ((int)rand() % texture.getSize().y / TILEWIDTH) * TILEWIDTH;
+	this->groundRect.left = ((int)rand() % texture.getSize().x / (int)TILEWIDTH) * (int)TILEWIDTH;
+	this->groundRect.top = ((int)rand() % texture.getSize().y / (int)TILEWIDTH) * (int)TILEWIDTH;
 	this->groundSprite.setTexture(texture);
 	this->groundSprite.setTextureRect(this->groundRect);
 }
@@ -184,6 +187,25 @@ bool Maps::Tile::isFog(int color) const
 void Maps::Tile::ClearFog(int color)
 {
 	fog_colors &= ~color;
+}
+
+void Maps::Tile::clickLeft(bool down, bool previousState)
+{
+	if(down)
+		PI->tileLClicked(sf::Vector2i(maps_index % world.w(), maps_index / world.w()));
+}
+
+void Maps::Tile::clickRight(bool down, bool previousState)
+{
+}
+
+bool Maps::Tile::contains(sf::Vector2f pos)
+{
+	if (pos.x > 1200.f)
+		return false;
+	sf::Vector2f offset;
+	offset = Interface::GetGameArea().getScrollOffset();
+	return this->shape.contains(pos + offset);
 }
 
 
@@ -227,7 +249,7 @@ void Maps::Tile::renderGround(sf::RenderTarget * target)
 		else
 			shape.setFillColor(sf::Color::Red);
 
-		target->draw(shape);
+		//target->draw(shape);
 	}
 	
 }

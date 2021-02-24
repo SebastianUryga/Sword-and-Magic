@@ -1,62 +1,69 @@
 #pragma once
+#include "MapObject.h"
 #include "ButtonsArea.h"
 #include "Graphics.h"
-#include "GuiHandler.h"
+#include "Tiles.h"
+#include "PlayerInterface.h"
 
 class HeroInstance;
 struct Path;
 struct Arrow;
+
 namespace MP2
 {
 	class ObjectInstance;
 }
+
 namespace Interface
 {
 	class AdvMapArrows;
 	enum { GameMode, EditorMode };
-	class GameArea
+	class GameArea : public WindowObject
 	{
 	private:
 
 		int mode;
 		sf::IntRect rectMaps;
 		
+		sf::View view;
 		sf::RenderWindow* window;
 
-		sf::Vector2i scrollOffset;
+		/// Where to scroll, example (0,0) means dont need to scroll
+		sf::Vector2f scrollDirection;
+		/// View position divide by Tile Width
+		sf::Vector2f scrollOffset;
 		float scrollSpeed;
 		float scrollTime;
 
 		void setTexturesToAllSprites();
-
-	public:
 		
+	public:
+		void initView();
 		MP2::ObjectInstance* selection;
 		HeroInstance* curHero() const;
 		// const TownInstance * curTown() const;
 
-		sf::Vector2i getScrollOffset();
-		bool needScroll(); 
+		sf::Vector2f getScrollOffset() const;
+		sf::Vector2f getScrollDirection() const;
+		void focusOn(sf::Vector2f pos);
+		bool needScroll();
 		bool contains(sf::Vector2i point);
 
 		void built(sf::RenderWindow* window, int mode);
 
 		GameArea();
 		virtual ~GameArea();
-
+		void updateView();
 		void updateInput(const float dt, sf::Vector2i mousePosWindow);
-		void update(const float dt, sf::Vector2i mousePosWindow, int color);
-		void render(sf::RenderTarget * target, int color);
+		void update(const float dt, sf::Vector2i mousePosWindow);
+		void render(sf::RenderTarget * target) override;
 	};
 	void MouseCursorAreaClickLeft(const sf::Vector2i mousePos);
 	void MouseCursorAreaPressRight();
 
-	void ShowPathOrStartMoveHero(); // Hero*
 	GameArea & GetGameArea();
 	ButtonsArea & GetButtonsArea();
-	int startGame();
-	int HumanTurn();
-	static GameArea gameArea;
+	
 	static ButtonsArea buttonsArea;
 
 
@@ -75,6 +82,8 @@ namespace Interface
 	AdvMapArrows & GetHeroMoveArrows();
 	static AdvMapArrows heroMoveArrows;
 	
+	
+
 	/*class CAdvMapInt 
 	{
 	private:

@@ -52,8 +52,11 @@ void EditorState::initWorld()
 
 void EditorState::initGameArea()
 {
-	Interface::GameArea & area = Interface::GetGameArea();
-	area.built(this->window, Interface::EditorMode);
+	std::shared_ptr<Interface::GameArea> area;
+	area = std::make_shared< Interface::GameArea>();
+	area->built(this->window, Interface::EditorMode);
+	PI->gameArea = area;
+	GH.pushInt(area);
 }
 
 EditorState::EditorState(StateData * stateData)
@@ -148,6 +151,7 @@ void EditorState::OnMouseLeftButtonReleased()
 void EditorState::endState()
 {
 	State::endState();
+	GH.topInt()->close();
 	world.Reset();
 }
 
@@ -241,7 +245,7 @@ void EditorState::update(const float& dt)
 	this->updateInput(dt);
 	this->updateKeytime(dt);
 	this->updateSelectObj();
-	Interface::GetGameArea().update(dt, this->mousePosWindow, 0);
+	Interface::GetGameArea().update(dt, this->mousePosWindow);
 	this->updateView();
 	this->updateButtons();
 }
@@ -259,8 +263,6 @@ void EditorState::render(sf::RenderTarget* target)
 {
 	if (!target)
 		target = this->window;
-	target->setView(this->view);
-	Interface::GetGameArea().render(target, 0);
-	target->setView(this->window->getDefaultView());
+	Interface::GetGameArea().render(target);
 	this->renderButtons(target);
 }

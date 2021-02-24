@@ -3,7 +3,7 @@
 #include "World.h"
 
 
-bool HeroInstance::moveHero(sf::Vector2i dest)
+bool HeroInstance::moveHero()
 {
 	if (currentPath && isStanding)
 	{
@@ -21,13 +21,11 @@ bool HeroInstance::makePath(sf::Vector2i dest)
 	bool ret = this->pathfinder->getPath(*this->currentPath, dest);
 	if (ret && this->currentPath->nodes.size())
 	{
-		std::cout << "cost is " << this->currentPath->nodes[0].cost << std::endl;
 		this->movmentComponent->setNewPath(this->currentPath);
-		
 	}
 	else
 		this->currentPath = nullptr;
-	// ustawienie strza³ek TODO
+
 	Interface::GetHeroMoveArrows().calcuateArrows(this->currentPath); //showPath
 	return ret;
 }
@@ -164,7 +162,6 @@ void HeroInstance::setTilePos(const sf::Vector2i& pos)
 void HeroInstance::afterAddToMap()
 {
 	world.vec_heros.push_back(this);
-	std::cout << "dodaem herosa "<<this->id << std::endl;
 }
 
 void HeroInstance::animationUpdate(const float & dt)
@@ -235,7 +232,10 @@ void HeroInstance::update(const float & dt)
 	MP2:ObjectInstance::update(dt);
 	this->animationUpdate(dt);
 	this->movmentComponent->update(dt);
-
+	if (!this->isStanding)
+	{PI->focusOn(this->sprite.getPosition());
+	}
+		
 	if (this->movmentComponent->isHeroChangedPos())
 	{
 		sf::Vector2i heroPos = this->movmentComponent->getActualHeroTilePos();

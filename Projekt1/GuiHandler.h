@@ -1,6 +1,7 @@
 #pragma once
+#include "State.h"
 #include "HeroWindow.h"
-#include "GameState.h"
+#include "interface_gamearea.h"
 namespace Interface
 {
 	class GameArea;
@@ -9,8 +10,10 @@ class GuiHandler
 {
 private:
 
-	std::list<std::shared_ptr<WindowObject>> listInt;
+	sf::Vector2f mousePosWindow;
+	std::list<std::shared_ptr<WindowObject>> winodwList;
 	
+	void handleMouseButtonClick(sf::Mouse::Button btn, bool isPressed);
 public:
 
 	void pushInt(std::shared_ptr<WindowObject> newInt); //deactivate old top interface, activates this one and pushes to the top
@@ -30,9 +33,10 @@ public:
 	GuiHandler() {}
 	virtual ~GuiHandler();
 
-	static GuiHandler &	Get();
+	void handleEvents(std::stack<State*>& states,sf::RenderWindow* window, sf::Event& event);
+	void handleMouseMotion();
 
-	void update(const sf::Vector2i mousePos);
+	static GuiHandler &	Get();
 };
 
 extern GuiHandler& GH;
