@@ -81,14 +81,16 @@ EditorState::~EditorState()
 
 void EditorState::OnMouseLeftButtonClick()
 {
-	sf::Vector2i mousePos((int)this->mousePosView.x, (int)this->mousePosView.y);
+	sf::Vector2i mousePos = (this->mousePosWindow / (int)TILEWIDTH);
+	std::cout << mousePos.x << " " << mousePos.y << std::endl;
 
-	if (Interface::GetGameArea().contains(sf::Vector2i(
-		(int)this->mousePosView.x,
-		(int)this->mousePosView.y
-	)))
+	mousePos += (sf::Vector2i)PI->gameArea->getScrollOffset() / (int)TILEWIDTH;
+	//mousePos.x += (int)PI->gameArea->getScrollOffset().x / TILEWIDTH;
+
+	
+	if (Interface::GetGameArea().contains( mousePos ))
 	{
-		sf::Vector2i tile = this->mousePosTile;
+		sf::Vector2i tile = mousePos;
 		if (mode == Mode::PutObject)
 		{
 			MP2::ObjectInstance* obj = nullptr;
@@ -118,9 +120,6 @@ void EditorState::OnMouseLeftButtonClick()
 			obj->setTilePos(tile);
 			obj->initObj();
 			world.addMapObject(obj);
-			//if(this->activeHero)
-			if(obj->type == Obj::STABLES)
-				std::cout <<"visitable pos"<< obj->getVisitablePos().x << " " << obj->getVisitablePos().y << std::endl;
 		}
 		if (mode == Mode::Erase)
 		{
@@ -129,8 +128,6 @@ void EditorState::OnMouseLeftButtonClick()
 		if (mode == Mode::ChangePos)
 		{
 			this->selection = world.GetObjectByPos(tile);
-			std::cout << "zaznaczyles" << std::endl;
-
 		}
 	}
 
@@ -151,7 +148,7 @@ void EditorState::OnMouseLeftButtonReleased()
 void EditorState::endState()
 {
 	State::endState();
-	GH.topInt()->close();
+	GH.topWindow()->close();
 	world.Reset();
 }
 
@@ -162,8 +159,7 @@ void EditorState::updateSelectObj()
 	{
 		this->selection->sprite.setPosition(
 			sf::Vector2f(
-				this->mousePosTile.x*TILEWIDTH,
-				this->mousePosTile.y*TILEWIDTH)
+				this->mousePosWindow / (int)TILEWIDTH) * TILEWIDTH
 		);
 	}
 
@@ -187,16 +183,6 @@ void EditorState::updateButtons()
 	}
 }
 
-void EditorState::updateView()
-{
-	if (Interface::GetGameArea().needScroll())
-	{
-		this->view.move(
-			(float)Interface::GetGameArea().getScrollOffset().x*TILEWIDTH,
-			(float)Interface::GetGameArea().getScrollOffset().y*TILEWIDTH
-		);
-	}
-}
 
 void EditorState::updateInput(const float & dt)
 {
@@ -210,7 +196,7 @@ void EditorState::updateInput(const float & dt)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["CHANGE_CRATER_OBJ"])))
 	{
 		mode = Mode::PutObject;
-		chosenTypeObj = Obj::CRATER;
+		chosenTypeObj = Obj::TAVERN; // to change on Crater
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["CHANGE_ARENA_OBJ"])))
 	{
@@ -246,7 +232,6 @@ void EditorState::update(const float& dt)
 	this->updateKeytime(dt);
 	this->updateSelectObj();
 	Interface::GetGameArea().update(dt, this->mousePosWindow);
-	this->updateView();
 	this->updateButtons();
 }
 

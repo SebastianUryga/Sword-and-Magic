@@ -1,7 +1,7 @@
 #pragma once
 #include "interface_gamearea.h"
 #include "Tiles.h"
-#include "HeroInstance.h"
+//#include "HeroInstance.h"
 
 namespace Maps
 {
@@ -19,12 +19,13 @@ private:
 	std::vector<Maps::Tile> vec_tiles;
 	std::vector<Kingdom*> vec_kingdoms;
 	std::vector<MP2::ObjectInstance*> vec_objects;
-
+	std::vector < HeroInstance* > allHeroes;
 	World() :width(0), height(0) {};
 public:
 	std::vector<HeroInstance*> vec_heros;
 	std::vector<std::vector<sf::Vector2i>> guardingCreaturePositions;
 
+	void initAllHeroes();
 	void initKingdoms();
 	void initFogOfWar();
 	void ClearFog(int color);
@@ -54,6 +55,7 @@ public:
 	MP2::ObjectInstance* GetObjectByPos(sf::Vector2i pos);
 	std::vector<MP2::ObjectInstance*> & GetAllMapsObjects() { return vec_objects; }
 	Kingdom & GetKingdom(int color);
+	HeroInstance * getRandomHero();
 	
 
 	int w() const;

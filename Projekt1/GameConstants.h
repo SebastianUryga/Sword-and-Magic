@@ -72,6 +72,22 @@ enum ArrowDirection : int8_t
 	BottomRight_Bottom = 14,
 	BottomRight_BottomRight = 3,
 };
+enum Hero
+{
+	EDRIC,
+	CHRISTIAN,
+	RION,
+};
+enum HeroClass : int
+{
+	KNIGHT,
+	CLERIC,
+	RANGER,
+	DRUID,
+	ALCHEMIST,
+	WIZARD,
+};
+
 struct Arrow
 {
 	ArrowDirection dir = None;
@@ -135,9 +151,6 @@ public:
 		LEAN_TO = 39,
 		LIBRARY_OF_ENLIGHTENMENT = 41,
 		LIGHTHOUSE = 42,
-		MONOLITH_ONE_WAY_ENTRANCE = 43,
-		MONOLITH_ONE_WAY_EXIT = 44,
-		MONOLITH_TWO_WAY = 45,
 		MAGIC_PLAINS1 = 46,
 		SCHOOL_OF_MAGIC = 47,
 		MAGIC_SPRING = 48,

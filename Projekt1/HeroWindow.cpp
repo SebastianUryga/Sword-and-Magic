@@ -37,9 +37,9 @@ HeroWindow::HeroWindow(const HeroInstance * hero)
 {
 	this->curHero = hero;
 	this->initButtons();
-	this->portraitImage.setPosition(this->background.getPosition());
+	this->portraitImage.setPosition(this->background.getPosition()+sf::Vector2f(5,5));
 	this->portraitImage.setTexture(*graphics.allHeroesPortraits);
-	this->portraitImage.setTextureRect(sf::IntRect(10, 10, 50, 50));
+	this->portraitImage.setTextureRect(sf::IntRect(3, 3, 45, 50));
 }
 
 

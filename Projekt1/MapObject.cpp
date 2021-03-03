@@ -55,13 +55,12 @@ void MP2::ObjectInstance::setOwner(int ow)
 
 void MP2::ObjectInstance::setTexture(sf::Texture & sheetTexture)
 {
-	int heightPixel = this->getHeight()*(int)TILEWIDTH;
-	int widthPixel = this->getWidth()*(int)TILEWIDTH;
-	sf::IntRect rect(0, 0, widthPixel, heightPixel);
-	rect.left = ((int)rand() % sheetTexture.getSize().x / widthPixel) * widthPixel;
-	
+	//int heightPixel = this->getHeight()*(int)TILEWIDTH;
+	//int widthPixel = this->getWidth()*(int)TILEWIDTH;
+	//sf::IntRect rect(0, 0, widthPixel, heightPixel);
+	//rect.left = ((int)rand() % sheetTexture.getSize().x / widthPixel) * widthPixel;
 	this->sprite.setTexture(sheetTexture);
-	this->sprite.setTextureRect(rect);
+	//this->sprite.setTextureRect(rect);
 	this->sprite.setOrigin( // change orgin to RIGHT-BOTTOM corner
 		(this->getWidth() - 1)*TILEWIDTH,
 		(this->getHeight() - 1)*TILEWIDTH);
@@ -69,18 +68,33 @@ void MP2::ObjectInstance::setTexture(sf::Texture & sheetTexture)
 
 void MP2::ObjectInstance::initObjAnimaiton()
 {
+	int heightPixel = this->getHeight()*(int)TILEWIDTH;
+	int widthPixel = this->getWidth()*(int)TILEWIDTH;
+	this->animationComponent = new AnimotionComponent(this->sprite, *graphics.mapObjects[this->type]);
+	this->animationComponent->addAnimotion("IDLE", 3.f, 0, 0, this->numberOfFrameAnimation, 0, widthPixel, heightPixel, false);
+
 }
 
 void MP2::ObjectInstance::initObj()
 {
 	switch (this->type)
 	{
+	case Obj::TAVERN:
+		this->setOwner(Color::UNUSED);
+		this->instanceName = "Tavern";
+		this->setSize(3, 4);
+		this->usedTiles = { {4,2,1},{1,1,1},{1,1,1},{1,1,1}};
+		this->visitDir = DIRECTION_BOTTOM_ROW | DIRECTION_CENTER_ROW;
+		this->numberOfFrameAnimation = 7;
+		this->blockVisit = true;
+		break;
 	case Obj::STABLES:
 		this->setOwner(Color::UNUSED);
 		this->instanceName = "Stables";
 		this->setSize(3, 2);
 		this->usedTiles = { {2,4,1},{1,4,1} }; // BLOCKED = 4, VISITABLE = 2,VISIBLE = 1
 		this->visitDir = DIRECTION_BOTTOM_ROW | DIRECTION_CENTER_ROW;
+		this->numberOfFrameAnimation = 6;
 		break;
 	case Obj::TRADING_POST:
 		this->setOwner(Color::UNUSED);
@@ -88,12 +102,14 @@ void MP2::ObjectInstance::initObj()
 		this->setSize(3, 3);
 		this->usedTiles = { {2,4,1}, {1,1,1}, {1,1,1} };
 		this->visitDir = DIRECTION_BOTTOM_ROW | DIRECTION_CENTER_ROW;
+		this->numberOfFrameAnimation = 7;
 		break;
 	case Obj::CRATER:
 		this->setOwner(Color::UNUSED);
 		this->instanceName = "Crater";
 		this->setSize(2, 2);
 		this->usedTiles = { {4,4},{4,4} };
+		this->numberOfFrameAnimation = 0;
 		break;
 	case Obj::MOUNTS1:
 		this->setOwner(Color::UNUSED);
@@ -101,12 +117,14 @@ void MP2::ObjectInstance::initObj()
 		this->setSize(4, 3);
 		this->usedTiles = { {1,4,1,1},{1,4,4,1},{1,4,4,4} };
 		this->visitDir = Direction::UNKNOWN;
+		this->numberOfFrameAnimation = 0;
 		break;
 	case Obj::MOUNTS2:
 		this->setOwner(Color::UNUSED);
 		this->instanceName = "Mounts2";
 		this->setSize(4, 2);
 		this->usedTiles = { {1,4,4,1},{1,1,4,4} };
+		this->numberOfFrameAnimation = 0;
 		break;
 	case Obj::ARENA:
 		this->setOwner(Color::UNUSED);
@@ -114,6 +132,7 @@ void MP2::ObjectInstance::initObj()
 		this->setSize(3, 3);
 		this->usedTiles = { {4,2,4},{4,4,4},{1,1,1} };
 		this->visitDir = DIRECTION_BOTTOM_ROW | DIRECTION_CENTER_ROW;
+		this->numberOfFrameAnimation = 0;
 		break;
 
 	default:
@@ -126,13 +145,22 @@ void MP2::ObjectInstance::initObj()
 	//	this->sprite.getLocalBounds().width,
 	//	this->sprite.getLocalBounds().height);
 	this->setTexture(*graphics.mapObjects[type]);
+	this->initObjAnimaiton();
 }
 
 void MP2::ObjectInstance::setType(int32_t type)
 {
-
 	this->type = Obj(type);
-	
+}
+
+std::string MP2::ObjectInstance::getObjectName() const
+{
+	return this->instanceName;
+}
+
+std::string MP2::ObjectInstance::getHoverText(const HeroInstance * hero) const
+{
+	return this->getObjectName();
 }
 
 void MP2::ObjectInstance::setSize(unsigned width, unsigned height)
@@ -156,7 +184,7 @@ bool MP2::ObjectInstance::isVisitable() const
 {
 	for (auto & line : usedTiles)
 		for (auto & tile : line)
-			if (tile & BlockMapBits::VISITABLE)
+			if (tile == BlockMapBits::VISITABLE)
 				return true;
 	return false;
 }
@@ -181,6 +209,14 @@ sf::Vector2i MP2::ObjectInstance::getVisitablePos() const
 
 void MP2::ObjectInstance::onHeroVisit(const HeroInstance * h) const
 {
+	switch (type)
+	{
+	case Obj::TAVERN:
+	{
+		PI->openWindow(h->ownerColor,this);
+		break;
+	}
+	}
 }
 
 void MP2::ObjectInstance::afterAddToMap()
@@ -209,6 +245,8 @@ void MP2::ObjectInstance::save(std::fstream & file)
 
 void MP2::ObjectInstance::animationUpdate(const float& dt)
 {
+	if(this->animationComponent)
+		this->animationComponent->paly("IDLE", dt);
 }
 
 void MP2::ObjectInstance::update(const float & dt)
@@ -223,14 +261,15 @@ void MP2::ObjectInstance::render(sf::RenderTarget * target)
 
 MP2::ObjectInstance::ObjectInstance()
 {
-	toDelete = false;
-	id = countID++;
-	pos = sf::Vector2i(-1, -1);
-	type = Obj::NO_OBJ;
-	subType = -1;
-	blockVisit = false;
+	this->toDelete = false;
+	this->id = countID++;
+	this->pos = sf::Vector2i(-1, -1);
+	this->type = Obj::NO_OBJ;
+	this->subType = -1;
+	this->blockVisit = false;
 }
 
 MP2::ObjectInstance::~ObjectInstance()
 {
+	delete this->animationComponent;
 }

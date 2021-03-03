@@ -9,17 +9,20 @@ public:
 	std::shared_ptr<sf::Texture> fogOfWarFullHide;
 	std::shared_ptr<sf::Texture> fogOfWarPartialHide;
 	std::shared_ptr<sf::Texture> heroMoveArrows;
-	std::shared_ptr<sf::Texture> heroOnMap;
+	std::shared_ptr<sf::Texture> heroOnMapSheet;
+	std::map<int, sf::IntRect> heroesOnMap;
 	std::map<int, std::shared_ptr<sf::Texture>> mapObjects;
 	std::map<int, std::shared_ptr<sf::Texture>> grounds;
 	std::shared_ptr<sf::Texture> allHeroesPortraits;
 	std::map<int, sf::Texture> primarySkills;
+	std::map<int, sf::IntRect> portriats;
 	void Init();
 
 	static Graphics & Get();
+	static sf::IntRect selectPortriat(Hero portrait);
+	static sf::IntRect selectHeroOnMap(HeroClass hc);
 	/*
-	std::shared_ptr<Animation> fogOfWarFullHide;
-	std::shared_ptr<Animation> fogOfWarPartialHide;
+
 	heroMoveArrows;
 	mapObjectAnimations;
 	imageLists;

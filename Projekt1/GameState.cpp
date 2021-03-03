@@ -40,7 +40,7 @@ void GameState::initGameArea()
 {
 	std::shared_ptr<Interface::GameArea> area;
 	area = std::make_shared<Interface::GameArea>();
-	area->built(this->window, Interface::EditorMode);
+	area->built(this->window, Interface::GameMode);
 	PI->gameArea = area;
 	GH.pushInt(area);
 }
@@ -101,7 +101,7 @@ void GameState::OnMouseLeftButtonClick()
 void GameState::endState()
 {
 	State::endState();
-	GH.topInt()->close();
+	GH.topWindow()->close();
 }
 
 // Functions
@@ -138,7 +138,7 @@ void GameState::update(const float& dt)
 	Interface::GetButtonsArea().update(this->mousePosWindow);
 	if (GH.empty())
 		return;
-	GH.topInt()->update(dt,this->mousePosWindow);
+	GH.topWindow()->update(dt,this->mousePosWindow);
 	
 }
 
@@ -152,7 +152,7 @@ void GameState::render(sf::RenderTarget* target)
 	
 	if (GH.empty())
 		return;
-	GH.topInt()->render(target);
+	GH.renderAll(target);
 	Interface::GetButtonsArea().render(target);
 	// if () window.setView(gameArea.view);
 }

@@ -1,10 +1,12 @@
 #pragma once
 #include "GameConstants.h"
+
 class HeroInstance;
 namespace Maps
 {
 	class Tile;
 }
+
 template<typename N>
 struct NodeComparer
 {
@@ -97,6 +99,7 @@ public:
 
 	std::vector<PathNode *> calculateNeighbours(
 		const PathNode * source);
+
 	void calculatePaths();
 	void push(PathNode * node);
 	PathNode * getInitialNode();

@@ -1,6 +1,11 @@
 #pragma once
 #include "MapObject.h"
 #include "MovmentComponent.h"
+#include "GameConstants.h"
+namespace MP2
+{
+	class ObjectInstance;
+}
 
 class HeroInstance : public MP2::ObjectInstance
 {
@@ -15,6 +20,7 @@ private:
 
 	
 public:
+	Hero name;
 	std::shared_ptr<Pathfinder> pathfinder;
 	std::shared_ptr<Path> currentPath;
 
@@ -38,9 +44,11 @@ public:
 	void setType(int type) override;
 	void setTilePos(const sf::Vector2i& pos) override;
 	void afterAddToMap() override;
-
+	virtual std::string getObjectName() const;
+	std::string getHoverText(const HeroInstance* hero) const override;
+	void onHeroVisit(const HeroInstance * h) const override;
 	void animationUpdate(const float& dt) override;
-	virtual void update(const float& dt);
+	void update(const float& dt) override;
 	virtual void render(sf::RenderTarget* target);
 
 	void save(std::fstream& file) override;

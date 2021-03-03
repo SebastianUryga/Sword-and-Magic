@@ -75,6 +75,34 @@ void PlayerInterface::tileLClicked(const sf::Vector2i mapPos)
 
 void PlayerInterface::tileRClicked(const sf::Vector2i mapPos)
 {
+	std::shared_ptr<WindowObject> wind;
+	wind = std::make_shared<WindowObject>(
+		mapPos.x*TILEWIDTH - gameArea->getScrollOffset().x - 100,
+		mapPos.y*TILEWIDTH - gameArea->getScrollOffset().y - 100,
+		100, 100, GH.globalFont);
+	if (auto obj = world.GetTile(mapPos).GetObjectPtr())
+	{
+		if (obj->type == Obj::HERO)
+		{
+			// show small Hero Window
+		}
+		else if (obj->type == Obj::TOWN)
+		{
+			// show small Town window
+		}
+		else
+		{
+			std::string text = obj->getHoverText(gameArea->curHero());
+			wind->addText(text, sf::Vector2f(10, 10));
+		}
+	}
+	else
+	{
+		std::string text = Maps::Ground::String(world.GetTile(mapPos).GetGround());
+		wind->addText(text, sf::Vector2f(10, 10));
+	}
+
+	GH.makePopup(wind);
 }
 
 void PlayerInterface::dismissHero(const HeroInstance * hero)
@@ -85,6 +113,28 @@ void PlayerInterface::dismissHero(const HeroInstance * hero)
 void PlayerInterface::openHeroWindow(const HeroInstance * hero)
 {
 	GH.pushIntT<HeroWindow>(hero);
+}
+
+void PlayerInterface::openWindow(int player, const MP2::ObjectInstance* tav)
+{
+	GH.pushIntT<TavernWindow>(player,tav);
+}
+
+bool PlayerInterface::canRecruitHero(int player, const MP2::ObjectInstance * obj)
+{
+	// check if enough gold
+	// check if tile is allready busy
+	if(world.GetTile(obj->getVisitablePos()).GetObjectPtr()->type == Obj::HERO)
+	 return false;
+}
+
+HeroInstance * PlayerInterface::getTavernHero(int player)
+{
+	return world.getRandomHero();
+}
+
+void PlayerInterface::tileLClickedEditor(const sf::Vector2i mapPos)
+{
 }
 
 void PlayerInterface::showYesNoDialog(const std::string & text, std::function<void()> onYes, std::function<void()> onNo)

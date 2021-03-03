@@ -191,11 +191,31 @@ void Maps::Tile::ClearFog(int color)
 
 void Maps::Tile::clickLeft(bool down, bool previousState)
 {
-	if(down)
-		PI->tileLClicked(sf::Vector2i(maps_index % world.w(), maps_index / world.w()));
+	if (PI->gameArea->getMode() == Interface::GameMode)
+	{
+		if (down)
+			PI->tileLClicked(sf::Vector2i(maps_index % world.w(), maps_index / world.w()));
+	}
+	if (PI->gameArea->getMode() == Interface::EditorMode)
+	{
+		if (down)
+		{
+
+		}
+		else if(previousState && (down == false))
+		{
+			
+		}
+	}
 }
 
 void Maps::Tile::clickRight(bool down, bool previousState)
+{
+	if (down)
+		PI->tileRClicked(sf::Vector2i(maps_index % world.w(), maps_index / world.w()));
+}
+
+void Maps::Tile::hover(bool on)
 {
 }
 

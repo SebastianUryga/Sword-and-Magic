@@ -47,6 +47,11 @@ sf::Vector2f Interface::GameArea::getScrollDirection() const
 	return this->scrollDirection;
 }
 
+int Interface::GameArea::getMode() const
+{
+	return this->mode;
+}
+
 void Interface::GameArea::focusOn(sf::Vector2f pos)
 {
 	this->scrollTime += 2;
@@ -64,12 +69,12 @@ bool Interface::GameArea::needScroll()
 	return false;
 }
 
-bool Interface::GameArea::contains(sf::Vector2i point)
+bool Interface::GameArea::contains(sf::Vector2i point) const
 {
 	return this->rectMaps.contains(point);
 }
 
-void Interface::GameArea::built(sf::RenderWindow* window, int mode)
+void Interface::GameArea::built(sf::RenderWindow* window,  int mode)
 {
 	this->window = window;
 	this->mode = mode;

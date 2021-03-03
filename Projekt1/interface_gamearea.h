@@ -4,6 +4,7 @@
 #include "Graphics.h"
 #include "Tiles.h"
 #include "PlayerInterface.h"
+#include "InfoWindows.h"
 
 class HeroInstance;
 struct Path;
@@ -43,12 +44,14 @@ namespace Interface
 		HeroInstance* curHero() const;
 		// const TownInstance * curTown() const;
 
+		//Accesors
 		sf::Vector2f getScrollOffset() const;
 		sf::Vector2f getScrollDirection() const;
+		int getMode() const;
+		bool contains(sf::Vector2i point) const;
+
 		void focusOn(sf::Vector2f pos);
 		bool needScroll();
-		bool contains(sf::Vector2i point);
-
 		void built(sf::RenderWindow* window, int mode);
 
 		GameArea();

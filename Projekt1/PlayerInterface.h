@@ -28,15 +28,19 @@ public:
 	void focusOn(sf::Vector2f on);
 	void focusOn(sf::Vector2i on, bool fade = false);
 	void focusOn(const MP2::ObjectInstance *obj, bool fade = false);
-	Path *getAndVerifyPath(const HeroInstance * h);
 	void stopMovement(const HeroInstance * hero);
 	void tileLClicked(const sf::Vector2i mapPos);
 	void tileRClicked(const sf::Vector2i mapPos);
 	void dismissHero(const HeroInstance * hero);
 	void openHeroWindow(const HeroInstance * hero); //shows hero window with given hero
+	void openWindow(int player, const MP2::ObjectInstance* tav);
+	bool canRecruitHero(int player, const MP2::ObjectInstance * obj);
+	HeroInstance* getTavernHero(int player);
 	//void initMovement(const TryMoveHero &details, const HeroInstance * ho, const int3 &hp);//initializing objects and performing first step of move
 	//void heroVisit(const HeroInstance * visitor, const ObjectInstance * visitedObj, bool start);
 	//void heroVisitsTown(const HeroInstance* hero, const TownInstance * town);
+
+	void tileLClickedEditor(const sf::Vector2i mapPos); // name function to change
 	void showYesNoDialog(const std::string &text, std::function<void()> onYes, std::function<void()> onNo);
 private:
 };

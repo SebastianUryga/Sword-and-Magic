@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "Direction.h"
-#include "Tiles.h"
 
 int Direction::Get(int from, int to)
 {

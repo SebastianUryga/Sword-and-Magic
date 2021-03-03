@@ -93,6 +93,7 @@ namespace Maps
 
 		void clickLeft(bool down, bool previousState) override;
 		void clickRight(bool down, bool previousState) override;
+		void hover(bool on) override;
 		bool contains(sf::Vector2f pos) override;
 
 		void updatePassable();

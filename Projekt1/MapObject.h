@@ -1,12 +1,13 @@
 #pragma once
+#include"InfoWindows.h"
 #include"Pathfinder.h"
 #include"AnimotionComponent.h"
 
+class AnimotionComponent;
 class Graphics;
-
+class HeroInstance;
 namespace MP2
 {
-
 	class ObjectInstance
 	{
 	public:
@@ -56,6 +57,10 @@ namespace MP2
 		virtual void initObjAnimaiton();
 		virtual void initObj();
 		virtual void setType(int32_t type);
+		// Returns generic name of object
+		virtual std::string getObjectName() const;
+		// Returns hover name, including visited/not visited info
+		virtual std::string getHoverText(const HeroInstance * hero) const;
 
 		void setSize(unsigned width,unsigned height);
 		virtual void setTilePos(const sf::Vector2i& pos);
@@ -76,6 +81,9 @@ namespace MP2
 		virtual void animationUpdate(const float& dt);
 		virtual void update(const float& dt);
 		virtual void render(sf::RenderTarget* target);
+
+	private:
+		int numberOfFrameAnimation;
 	};
 
 	enum

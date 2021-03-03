@@ -16,6 +16,13 @@ WindowObject::~WindowObject()
 	this->interactiveElem.clear();
 }
 
+void WindowObject::addText(std::string text, sf::Vector2f pos)
+{
+	pos += background.getPosition();
+	texts.push_back(sf::Text(text, this->font, 20));
+	texts.back().setPosition(pos);
+}
+
 void WindowObject::deactivate()
 {
 	this->active = false;
@@ -41,9 +48,9 @@ void WindowObject::setPos(float x, float y)
 
 void WindowObject::close()
 {
-	if (GH.topInt().get() != this)
+	if (GH.topWindow().get() != this)
 		std::cout << "error: only top interface can be close" << std::endl;
-	GH.popInt(GH.topInt());
+	GH.popInt(GH.topWindow());
 }
 
 void WindowObject::update(const float dt, const sf::Vector2i mousePos)

@@ -5,9 +5,11 @@ GuiHandler & GH = GuiHandler::Get();
 
 void GuiHandler::handleMouseButtonClick(sf::Mouse::Button btn, bool isPressed)
 {
-	if (!this->topInt())
+	if (!this->topWindow())
 		return;
-	auto hlp = this->topInt()->interactiveElem;
+
+	auto hlp = this->topWindow()->interactiveElem;
+	if(popupWindow && popupWindow->iner) hlp.push_back(popupWindow);
 	for (auto & i : hlp)
 	{
 		auto prev = i->mouseState(btn);
@@ -47,6 +49,19 @@ void GuiHandler::pushInt(std::shared_ptr<WindowObject> newInt)
 	newInt->activate();
 }
 
+void GuiHandler::makePopup(std::shared_ptr<WindowObject> w)
+{
+	if (popupWindow)
+		popupWindow->iner = w;
+	else
+		popupWindow = std::make_shared<PopupWindow>();
+}
+
+void GuiHandler::closePopup()
+{
+	this->popupWindow->iner = nullptr;
+}
+
 void GuiHandler::popInt(std::shared_ptr<WindowObject> top)
 {
 	assert(this->winodwList.front() == top);
@@ -55,7 +70,7 @@ void GuiHandler::popInt(std::shared_ptr<WindowObject> top)
 		this->winodwList.front()->activate();
 }
 
-std::shared_ptr<WindowObject> GuiHandler::topInt()
+std::shared_ptr<WindowObject> GuiHandler::topWindow()
 {
 	if (winodwList.empty())
 		return std::shared_ptr<WindowObject>();
@@ -122,7 +137,8 @@ void GuiHandler::handleMouseMotion()
 {
 	if (this->empty())
 		return;
-	auto hlp = this->topInt()->interactiveElem;
+	auto hlp = this->topWindow()->interactiveElem;
+	if (popupWindow && popupWindow->iner) hlp.push_back(popupWindow);
 	for (auto & i : hlp)
 	{
 		if (i->contains(mousePosWindow))
@@ -132,6 +148,14 @@ void GuiHandler::handleMouseMotion()
 		else
 			i->hover(false);
 	}
+}
+
+void GuiHandler::renderAll(sf::RenderTarget * target)
+{
+	for (auto i : winodwList)
+		i->render(target);
+	if (popupWindow && popupWindow->iner)
+			popupWindow->iner->render(target);
 }
 
 GuiHandler & GuiHandler::Get()

@@ -47,6 +47,7 @@ HeroInstance::HeroInstance() : MP2::ObjectInstance()
 
 HeroInstance::~HeroInstance()
 {
+	MP2::ObjectInstance::~ObjectInstance();
 }
 
 int HeroInstance::getTileCost(const Maps::Tile & dest, const Maps::Tile & from) const
@@ -87,7 +88,7 @@ void HeroInstance::initHero()
 	//this->pathfinder->initializeGraph();
 	this->currentPath = nullptr;
 	this->movmentComponent = new MovmentComponent(this->sprite);
-	this->setTexture(*graphics.heroOnMap);
+	this->setTexture(*graphics.heroOnMapSheet);
 }
 
 int HeroInstance::getSightRadius() const
@@ -115,23 +116,25 @@ void HeroInstance::initObj()
 
 void HeroInstance::initObjAnimaiton()
 {
-	this->animationComponent = new AnimotionComponent(this->sprite, *graphics.heroOnMap);
-	this->animationComponent->addAnimotion("IDLE_DOWN", 10.f, 0, 0, 0, 0, 96, 64, false);
-	this->animationComponent->addAnimotion("IDLE_DOWN_RIGHT", 10.f, 1, 0, 0, 0, 96, 64, false);
-	this->animationComponent->addAnimotion("IDLE_DOWN_LEFT", 10.f, 1, 0, 0, 0, 96, 64, true);
-	this->animationComponent->addAnimotion("IDLE_RIGHT", 10.f, 2, 0, 0, 0, 96, 64, false);
-	this->animationComponent->addAnimotion("IDLE_LEFT", 10.f, 2, 0, 0, 0, 96, 64, true);
-	this->animationComponent->addAnimotion("IDLE_UP_RIGHT", 10.f, 3, 0, 0, 0, 96, 64, false);
-	this->animationComponent->addAnimotion("IDLE_UP_LEFT", 10.f, 3, 0, 0, 0, 96, 64, true);
-	this->animationComponent->addAnimotion("IDLE_UP", 10.f, 4, 0, 0, 0, 96, 64, false);
-	this->animationComponent->addAnimotion("MOVE_DOWN", 1.f, 5, 0, 7, 0, 96, 64, false);
-	this->animationComponent->addAnimotion("MOVE_DOWN_RIGHT", 1.f, 13, 0, 7, 0, 96, 64, false);
-	this->animationComponent->addAnimotion("MOVE_DOWN_LEFT", 1.f, 13, 0, 7, 0, 96, 64, true);
-	this->animationComponent->addAnimotion("MOVE_RIGHT", 1.f, 21, 0, 7, 0, 96, 64, false);
-	this->animationComponent->addAnimotion("MOVE_LEFT", 1.f, 21, 0, 7, 0, 96, 64, true);
-	this->animationComponent->addAnimotion("MOVE_UP_RIGHT", 1.f, 29, 0, 7, 0, 96, 64, false);
-	this->animationComponent->addAnimotion("MOVE_UP_LEFT", 1.f, 29, 0, 7, 0, 96, 64, true);
-	this->animationComponent->addAnimotion("MOVE_UP", 1.f, 37, 0, 7, 0, 96, 64, false);
+	this->animationComponent = new AnimotionComponent(this->sprite, *graphics.heroOnMapSheet);
+	sf::IntRect squre = Graphics::selectHeroOnMap((HeroClass)this->subType);
+	
+	this->animationComponent->addAnimotion("IDLE_DOWN", 10.f, squre.left, squre.top, 0, 0, 96, 64, false);
+	this->animationComponent->addAnimotion("IDLE_DOWN_RIGHT", 10.f, squre.left+1, squre.top, 0, 0, 96, 64, false);
+	this->animationComponent->addAnimotion("IDLE_DOWN_LEFT", 10.f, 1, squre.top, 0, 0, 96, 64, true);
+	this->animationComponent->addAnimotion("IDLE_RIGHT", 10.f, 2, squre.top, 0, 0, 96, 64, false);
+	this->animationComponent->addAnimotion("IDLE_LEFT", 10.f, 2, squre.top, 0, 0, 96, 64, true);
+	this->animationComponent->addAnimotion("IDLE_UP_RIGHT", 10.f, 3, squre.top, 0, 0, 96, 64, false);
+	this->animationComponent->addAnimotion("IDLE_UP_LEFT", 10.f, 3, squre.top, 0, 0, 96, 64, true);
+	this->animationComponent->addAnimotion("IDLE_UP", 10.f, 4, squre.top, 0, 0, 96, 64, false);
+	this->animationComponent->addAnimotion("MOVE_DOWN", 1.f, 5, squre.top, 7, 0, 96, 64, false);
+	this->animationComponent->addAnimotion("MOVE_DOWN_RIGHT", 1.f, 13, squre.top, 7, 0, 96, 64, false);
+	this->animationComponent->addAnimotion("MOVE_DOWN_LEFT", 1.f, 13, squre.top, 7, 0, 96, 64, true);
+	this->animationComponent->addAnimotion("MOVE_RIGHT", 1.f, 21, squre.top, 7, 0, 96, 64, false);
+	this->animationComponent->addAnimotion("MOVE_LEFT", 1.f, 21, squre.top, 7, 0, 96, 64, true);
+	this->animationComponent->addAnimotion("MOVE_UP_RIGHT", 1.f, 29, squre.top, 7, 0, 96, 64, false);
+	this->animationComponent->addAnimotion("MOVE_UP_LEFT", 1.f, 29, squre.top, 7, 0, 96, 64, true);
+	this->animationComponent->addAnimotion("MOVE_UP", 1.f, 37, squre.top, 7, 0, 96, 64, false);
 
 }
 
@@ -162,6 +165,21 @@ void HeroInstance::setTilePos(const sf::Vector2i& pos)
 void HeroInstance::afterAddToMap()
 {
 	world.vec_heros.push_back(this);
+}
+
+std::string HeroInstance::getObjectName() const
+{
+	return MP2::ObjectInstance::getObjectName();
+}
+
+std::string HeroInstance::getHoverText(const HeroInstance * hero) const
+{
+	return std::string(this->subTypeName);
+}
+
+void HeroInstance::onHeroVisit(const HeroInstance * h) const
+{
+
 }
 
 void HeroInstance::animationUpdate(const float & dt)
@@ -229,7 +247,6 @@ void HeroInstance::animationUpdate(const float & dt)
 
 void HeroInstance::update(const float & dt)
 {
-	MP2:ObjectInstance::update(dt);
 	this->animationUpdate(dt);
 	this->movmentComponent->update(dt);
 	if (!this->isStanding)

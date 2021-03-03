@@ -16,7 +16,7 @@ public:
 	sf::Font font;
 	WindowObject(float x, float y, float width, float height, sf::Font& font);
 	virtual ~WindowObject();
-
+	void addText(std::string text, sf::Vector2f pos);
 
 	void deactivate();
 	void activate();

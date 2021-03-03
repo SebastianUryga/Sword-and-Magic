@@ -12,7 +12,7 @@ private:
 
 	sf::Vector2f mousePosWindow;
 	std::list<std::shared_ptr<WindowObject>> winodwList;
-	
+	std::shared_ptr<PopupWindow> popupWindow;
 	void handleMouseButtonClick(sf::Mouse::Button btn, bool isPressed);
 public:
 
@@ -23,9 +23,11 @@ public:
 		auto newInt = std::make_shared<T>(std::forward<Args>(args)...);
 		pushInt(newInt);
 	}
+	void makePopup(std::shared_ptr<WindowObject> w);
+	void closePopup();
 	void popInt(std::shared_ptr<WindowObject> top);
 
-	std::shared_ptr<WindowObject> topInt(); //returns top interface
+	std::shared_ptr<WindowObject> topWindow(); //returns top Window
 	bool empty();
 
 	sf::Font globalFont;
@@ -35,7 +37,7 @@ public:
 
 	void handleEvents(std::stack<State*>& states,sf::RenderWindow* window, sf::Event& event);
 	void handleMouseMotion();
-
+	void renderAll(sf::RenderTarget * target);
 	static GuiHandler &	Get();
 };
 

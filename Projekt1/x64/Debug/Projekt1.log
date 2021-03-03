@@ -4,15 +4,16 @@ d:\visual\vc\tools\msvc\14.16.27023\include\memory(1801): warning C4244: "argume
           [
               _Ty=int
           ]
-  d:\visual\vc\tools\msvc\14.16.27023\include\memory(1865): note: zobacz odwołanie do funkcji szablon; wystąpienie „std::_Ref_count_obj<_Ty>::_Ref_count_obj<int,int,int,int,sf::Font&>(int &&,int &&,int &&,int &&,sf::Font &)” jest kompilowane
+  d:\visual\vc\tools\msvc\14.16.27023\include\memory(1865): note: zobacz odwołanie do funkcji szablon; wystąpienie „std::_Ref_count_obj<_Ty>::_Ref_count_obj<float,float,int,int,sf::Font&>(float &&,float &&,int &&,int &&,sf::Font &)” jest kompilowane
           with
           [
               _Ty=WindowObject
           ]
-  d:\visual\vc\tools\msvc\14.16.27023\include\memory(1866): note: zobacz odwołanie do funkcji szablon; wystąpienie „std::_Ref_count_obj<_Ty>::_Ref_count_obj<int,int,int,int,sf::Font&>(int &&,int &&,int &&,int &&,sf::Font &)” jest kompilowane
+  d:\visual\vc\tools\msvc\14.16.27023\include\memory(1866): note: zobacz odwołanie do funkcji szablon; wystąpienie „std::_Ref_count_obj<_Ty>::_Ref_count_obj<float,float,int,int,sf::Font&>(float &&,float &&,int &&,int &&,sf::Font &)” jest kompilowane
           with
           [
               _Ty=WindowObject
           ]
-  d:\projekt1\projekt1\playerinterface.cpp(94): note: zobacz odwołanie do funkcji szablon; wystąpienie „std::shared_ptr<WindowObject> std::make_shared<WindowObject,int,int,int,int,sf::Font&>(int &&,int &&,int &&,int &&,sf::Font &)” jest kompilowane
+  d:\projekt1\projekt1\playerinterface.cpp(82): note: zobacz odwołanie do funkcji szablon; wystąpienie „std::shared_ptr<WindowObject> std::make_shared<WindowObject,float,float,int,int,sf::Font&>(float &&,float &&,int &&,int &&,sf::Font &)” jest kompilowane
+d:\projekt1\projekt1\playerinterface.cpp(129): warning C4715: "PlayerInterface::canRecruitHero”: niewszystkie ścieżki kodu zwracają wartość
   Projekt1.vcxproj -> D:\Projekt1\x64\Debug\Projekt1.exe

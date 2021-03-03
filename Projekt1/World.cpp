@@ -112,6 +112,15 @@ Kingdom & World::GetKingdom(int color)
 	return *vec_kingdoms[6];
 }
 
+HeroInstance * World::getRandomHero()
+{
+	auto h = allHeroes[rand() % allHeroes.size()];
+	if (h->ownerColor == Color::UNUSED)
+		return h;
+	else
+		return this->getRandomHero();
+}
+
 
 int World::w() const
 {
@@ -121,6 +130,34 @@ int World::w() const
 int World::h() const
 {
 	return this->height;
+}
+
+void World::initAllHeroes()
+{
+	HeroInstance* h;
+	h = new HeroInstance();
+	h->name = Hero::EDRIC;
+	h->instanceName = "Edric";
+	h->typeName = "";
+	h->subType = HeroClass::KNIGHT;
+	h->subTypeName = "Knight";
+	this->allHeroes.push_back(h);
+
+	h = new HeroInstance();
+	h->name = Hero::CHRISTIAN;
+	h->instanceName = "Christian";
+	h->typeName = "";
+	h->subType = HeroClass::KNIGHT;
+	h->subTypeName = "Knight";
+	this->allHeroes.push_back(h);
+
+	h = new HeroInstance();
+	h->name = Hero::RION;
+	h->instanceName = "Rion";
+	h->typeName = "";
+	h->subType = HeroClass::CLERIC;
+	h->subTypeName = "Cleric";
+	this->allHeroes.push_back(h);
 }
 
 void World::initKingdoms()
@@ -228,7 +265,6 @@ void World::removeBlockVisTiles(MP2::ObjectInstance * obj, bool total)
 				Maps::Tile & tile = this->GetTile(xVal, yVal);
 				if (total || obj->blockingAt(xVal,yVal))
 				{
-					//std::cout << obj->pos.x - x << " " << obj->pos.y - y << std::endl;
 					tile.removeMapObject(obj);
 					tile.blocked = tile.objects.size();
 				}
