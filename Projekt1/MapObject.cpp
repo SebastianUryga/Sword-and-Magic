@@ -140,7 +140,7 @@ void MP2::ObjectInstance::initObj()
 		assert(0);
 		break;
 	}
-
+	this->priority = 2;
 	//this->sprite.setOrigin( // change orgin to RIGHT-BOTTOM corner
 	//	this->sprite.getLocalBounds().width,
 	//	this->sprite.getLocalBounds().height);

@@ -6,6 +6,7 @@ PlayerInterface* PI = new PlayerInterface();
 PlayerInterface::PlayerInterface()
 {
 	gameArea = nullptr;
+	currentColorTurn = Color::RED;
 }
 
 
@@ -33,6 +34,18 @@ void PlayerInterface::focusOn(sf::Vector2i on, bool fade)
 void PlayerInterface::focusOn(const MP2::ObjectInstance * obj, bool fade)
 {
 	focusOn(obj->getSightCenter(), fade);
+}
+
+void PlayerInterface::mergeStacks(std::vector<Troop> & garr, int stack1Id, int stack2Id) // Mergeing to stack1
+{
+	garr[stack1Id].count += garr[stack2Id].count;
+	garr[stack2Id].monster = Monster::NO_CREATURE;
+	garr[stack2Id].count = 0;
+}
+
+void PlayerInterface::swapStacks(std::vector<Troop>& garr, int stack1Id, int stack2Id)
+{
+	std::swap(garr[stack1Id], garr[stack2Id]);
 }
 
 void PlayerInterface::tileLClicked(const sf::Vector2i mapPos)
@@ -105,19 +118,21 @@ void PlayerInterface::tileRClicked(const sf::Vector2i mapPos)
 	GH.makePopup(wind);
 }
 
-void PlayerInterface::dismissHero(const HeroInstance * hero)
+void PlayerInterface::dismissHero(HeroInstance * hero)
 {
 	std::cout << "kiled hero" <<hero->id<< std::endl;
+	//remove from map
+	// set owner to unused
 }
 
-void PlayerInterface::openHeroWindow(const HeroInstance * hero)
+void PlayerInterface::openHeroWindow(HeroInstance * hero)
 {
-	GH.pushIntT<HeroWindow>(hero);
+	GH.pushWindowT<HeroWindow>(hero);
 }
 
 void PlayerInterface::openWindow(int player, const MP2::ObjectInstance* tav)
 {
-	GH.pushIntT<TavernWindow>(player,tav);
+	GH.pushWindowT<TavernWindow>(player,tav);
 }
 
 bool PlayerInterface::canRecruitHero(int player, const MP2::ObjectInstance * obj)
@@ -125,12 +140,14 @@ bool PlayerInterface::canRecruitHero(int player, const MP2::ObjectInstance * obj
 	// check if enough gold
 	// check if tile is allready busy
 	if(world.GetTile(obj->getVisitablePos()).GetObjectPtr()->type == Obj::HERO)
-	 return false;
+		return false;
+	return true;
 }
 
 HeroInstance * PlayerInterface::getTavernHero(int player)
 {
-	return world.getRandomHero();
+	HeroInstance * h = world.getRandomHero();
+	return h;
 }
 
 void PlayerInterface::tileLClickedEditor(const sf::Vector2i mapPos)
@@ -160,6 +177,7 @@ void PlayerInterface::showYesNoDialog(const std::string & text, std::function<vo
 	temp->interactiveElem.push_back(temp->buttons["yes"]);
 	temp->texts.push_back(sf::Text(text,GH.globalFont,20));
 	temp->texts[0].setPosition(50 + 300, 50 + 200);
-
-	GH.pushInt(temp);
+	temp->background.setOutlineThickness(2);
+	temp->background.setOutlineColor(sf::Color::Yellow);
+	GH.pushWindow(temp);
 }

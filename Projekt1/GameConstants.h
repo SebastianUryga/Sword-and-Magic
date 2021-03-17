@@ -1,4 +1,5 @@
 #pragma once
+#include"Monster.h"
 namespace GameConstants
 {
 
@@ -72,7 +73,7 @@ enum ArrowDirection : int8_t
 	BottomRight_Bottom = 14,
 	BottomRight_BottomRight = 3,
 };
-enum Hero
+enum HeroName
 {
 	EDRIC,
 	CHRISTIAN,
@@ -112,7 +113,7 @@ struct Arrow
 class Obj
 {
 public:
-	enum EObj
+	enum ObjType
 	{
 		NO_OBJ = -1,
 		ALTAR_OF_SACRIFICE = 2,
@@ -244,11 +245,11 @@ public:
 	};
 
 
-	Obj(EObj _num = NO_OBJ) : num(_num)
+	Obj(ObjType _num = NO_OBJ) : num(_num)
 	{}
 	Obj(const Obj & other) { num = other.num; }
-	explicit Obj(int id) : num(static_cast<EObj>(id)) {}
+	explicit Obj(int id) : num(static_cast<ObjType>(id)) {}
 	Obj & operator=(const Obj & other) { num = other.num; return *this; }
-	operator EObj() const { return num; }
-	EObj num;
+	operator ObjType() const { return num; }
+	ObjType num;
 };

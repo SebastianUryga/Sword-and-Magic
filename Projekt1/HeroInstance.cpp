@@ -7,7 +7,7 @@ bool HeroInstance::moveHero()
 {
 	if (currentPath && isStanding)
 	{
-		this->movmentComponent->StartMoving();
+		this->movmentComponent->startMoving();
 		isStanding = false;
 		return true;
 	}
@@ -42,11 +42,13 @@ HeroInstance::HeroInstance() : MP2::ObjectInstance()
 	this->type = Obj::HERO;
 	this->movement = getMaxMovePoints();
 	this->lastMove = movment_state::MOVING_DOWN;
+	this->ownerColor = Color::UNUSED;
 }
 
 
 HeroInstance::~HeroInstance()
 {
+
 	MP2::ObjectInstance::~ObjectInstance();
 }
 
@@ -84,6 +86,9 @@ int HeroInstance::getMaxMovePoints() const
 
 void HeroInstance::initHero()
 {
+	
+	
+	this->priority = 5;
 	this->pathfinder = std::make_shared<Pathfinder>(sf::Vector2i (world.w(), world.h()), this);
 	//this->pathfinder->initializeGraph();
 	this->currentPath = nullptr;
@@ -98,18 +103,31 @@ int HeroInstance::getSightRadius() const
 
 void HeroInstance::initObj()
 {
+	// init simple Troops
+	troops.resize(7);
+
 	switch (this->subType)
 	{
-	case 1:
+	case HeroClass::KNIGHT:
+		troops = { {Monster::PIKEMAN, 5},{Monster::SWORDMAN, 4},{Monster::ARCHER, 2},
+		{Monster::ARCHER, 4} ,{Monster::PIKEMAN, 2}, {Monster::NO_CREATURE, 0} ,{Monster::NO_CREATURE, 0} };
+		break;
+	case HeroClass::CLERIC:
+		troops = { {Monster::PIKEMAN, 15},{Monster::GRIFFIN, 5},{Monster::ARCHER, 5},
+		{Monster::MARKSMEN, 7} ,{Monster::NO_CREATURE, 0}, {Monster::NO_CREATURE, 0} ,{Monster::NO_CREATURE, 0} };
+		break;
 	default:
-		this->setOwner(Color::BLUE);
-		this->instanceName = "Hero";
-		this->setSize(3, 2);
-		this->usedTiles = { { 2,1,1 }, {1,1,1} };
-		this->visitDir = DIRECTION_ALL;
-		this->blockVisit = true;
+		troops = { {Monster::NO_CREATURE, 0},{Monster::NO_CREATURE, 0},
+		{Monster::NO_CREATURE, 0}, {Monster::NO_CREATURE, 0}, {Monster::NO_CREATURE, 0},
+		{Monster::NO_CREATURE, 0},{Monster::NO_CREATURE, 0} };
+		
 		break;
 	}
+	//this->setOwner(Color::BLUE);//  do zmiany
+	this->setSize(3, 2);
+	this->usedTiles = { { 2,1,1 }, {1,1,1} };
+	this->visitDir = DIRECTION_ALL;
+	this->blockVisit = true;
 	this->initHero();
 	this->initObjAnimaiton();
 }
@@ -158,7 +176,13 @@ void HeroInstance::setType(int type)
 
 void HeroInstance::setTilePos(const sf::Vector2i& pos)
 {
-	MP2::ObjectInstance::setTilePos(pos);
+	if (world.isInTheMap(pos))
+	{
+		this->pos = pos;
+		if(isStanding)
+			this->sprite.setPosition(sf::Vector2f(pos.x*TILEWIDTH, pos.y*TILEWIDTH));
+	}
+	else std::cout << "obiekt nie zostl wstawiony: Poza mapa" << std::endl;
 	
 }
 
@@ -179,7 +203,8 @@ std::string HeroInstance::getHoverText(const HeroInstance * hero) const
 
 void HeroInstance::onHeroVisit(const HeroInstance * h) const
 {
-
+	// if enemy start battle
+	// if fiend open exchangeing window
 }
 
 void HeroInstance::animationUpdate(const float & dt)
@@ -257,17 +282,34 @@ void HeroInstance::update(const float & dt)
 	{
 		sf::Vector2i heroPos = this->movmentComponent->getActualHeroTilePos();
 		//erace arrow
+		world.changeObjPos(this->id, this->pos, heroPos);
+		/*this->pos = heroPos;
+		world.sortObjects();
+		std::cout <<pos.x<< " " << pos.y << std::endl;*/
 		Interface::GetHeroMoveArrows().eraseArrow(heroPos);
+		//subtract movmentpoint
+		auto pn = this->pathfinder->getNode(heroPos);
+		this->movement = pn->moveRemains;
+		//if (pn.moveRemains != this->movement) std::cout << "klopoty z ruchem" << std::endl;
 		//scoute
 		world.revealTilesInRange(heroPos, this->getSightRadius(), this->getOwner());
-		//this->sprite.setPosition(spritePos * TILEWIDTH);
 	}
 		
 	if (this->movmentComponent->isPathEnded())
 	{
+		sf::Vector2i heroPos = this->movmentComponent->getActualHeroTilePos();
+		if (this->currentPath->nodes[0].accessible == PathNode::BLOCKVIS &&
+			heroPos == this->currentPath->nodes[1].coord)
+		{
+			PathNode* pn = this->pathfinder->getNode(this->currentPath->endPos());
+			this->movement = pn->moveRemains;
+			Maps::Tile & dest = world.GetTile(pn->coord);
+			dest.GetObjectPtr()->onHeroVisit(this);
+		}
+			
 		this->isStanding = true;
-		//this->setTilePos(this->movmentComponent->getActualHeroTilePos());
-		world.changeObjPos(this->id, this->pos, this->movmentComponent->getActualHeroTilePos());
+		this->currentPath = nullptr;
+		world.changeObjPos(this->id, this->pos, heroPos);
 		for (auto i : world.vec_heros)
 		{
 			i->pathfinder->initializeGraph();
@@ -284,11 +326,22 @@ void HeroInstance::render(sf::RenderTarget * target)
 void HeroInstance::save(std::fstream & file)
 {
 	MP2::ObjectInstance::save(file);
-	//zapisz patrol
+	for (auto troop : this->troops)
+	{
+		file << " " << troop.monster.monster << " " << troop.count;
+	}
+	//zapisz garnizon
 	// umiejetonsci
 }
 
 void HeroInstance::load(std::fstream & file)
 {
 	MP2::ObjectInstance::load(file);
+	for (auto& troop : this->troops)
+	{
+		int type;
+		file >> type >> troop.count;
+		Monster temp(type);
+		troop.monster = temp;
+	}
 }

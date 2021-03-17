@@ -37,15 +37,16 @@ public:
 
 		void clickLeft(bool down, bool previousState) override;
 		void clickRight(bool down, bool previousState) override;
-		HeroPortrait(bool & sel, int x, int y, HeroInstance * H);
+		HeroPortrait(int& sel, int id, int x, int y, HeroInstance * H);
 
 		sf::RectangleShape selectFrame;
 		sf::Sprite portriat;
 
-		bool* sel; // nie wiem czy to potrzebne
+		int* sel; // nie wiem czy to potrzebne
+		int id;
 	};
 	std::shared_ptr<HeroPortrait> heroPortraits[2];
-	bool selected; // 0 -> left, 1 -> right
+	int selected; // 0 -> left, 1 -> right, 2 -> no one
 	const MP2::ObjectInstance * tavern;
 	TavernWindow(int player, const MP2::ObjectInstance* obj);
 	void render(sf::RenderTarget * target) override;

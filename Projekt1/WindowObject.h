@@ -1,5 +1,6 @@
 #pragma once
 #include "Button.h"
+#include "GarrnisonInterface.h"
 
 class WindowObject
 {

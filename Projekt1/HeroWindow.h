@@ -1,19 +1,22 @@
 #pragma once
 #include "WindowObject.h"
 #include "HeroInstance.h"
+#include "GarrnisonInterface.h"
+
 class GuiHandler;
 
 class HeroWindow  : public WindowObject
 {
 private:
 
-	sf::Text name;
 	sf::Sprite portraitImage;
+	std::shared_ptr<GarrnisonInterface> gar;
+	void initGarrison(std::vector<Troop>& troops);
 	void initBackground();
 	void initButtons();
 public:
-	const HeroInstance * curHero;
-	HeroWindow(const HeroInstance * hero);
+	HeroInstance * curHero;
+	HeroWindow(HeroInstance * hero);
 	virtual ~HeroWindow();
 
 	void dismissCurrent();

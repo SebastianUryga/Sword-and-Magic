@@ -56,7 +56,7 @@ void EditorState::initGameArea()
 	area = std::make_shared< Interface::GameArea>();
 	area->built(this->window, Interface::EditorMode);
 	PI->gameArea = area;
-	GH.pushInt(area);
+	GH.pushWindow(area);
 }
 
 EditorState::EditorState(StateData * stateData)
@@ -99,6 +99,9 @@ void EditorState::OnMouseLeftButtonClick()
 			case Obj::HERO:
 			{
 				auto hero = new HeroInstance();
+				
+				hero = world.getRandomHero(); // temp code
+				hero->setOwner(PI->getCurrentColor()); // temporary code
 				obj = hero;
 				break;
 			}
@@ -138,7 +141,10 @@ void EditorState::OnMouseLeftButtonReleased()
 	if (selection && mode == Mode::ChangePos)
 	{
 		std::cout << "button rleased." << std::endl;
-		world.changeObjPos(this->selection->id, this->selection->pos, this->mousePosTile);
+		world.changeObjPos(
+			this->selection->id,
+			this->selection->pos,
+			this->mousePosTile + PI->gameArea->getScrollTileOffset());
 		this->selection = nullptr;
 	}
 }

@@ -14,12 +14,15 @@ public:
 	std::map<int, std::shared_ptr<sf::Texture>> mapObjects;
 	std::map<int, std::shared_ptr<sf::Texture>> grounds;
 	std::shared_ptr<sf::Texture> allHeroesPortraits;
+	std::shared_ptr<sf::Texture> allCreaturePortraits;
+	std::map<Monster, sf::IntRect> creaturePortraits;
 	std::map<int, sf::Texture> primarySkills;
 	std::map<int, sf::IntRect> portriats;
 	void Init();
 
 	static Graphics & Get();
-	static sf::IntRect selectPortriat(Hero portrait);
+	static sf::IntRect selectPortrait(Monster type);
+	static sf::IntRect selectPortriat(HeroName portrait);
 	static sf::IntRect selectHeroOnMap(HeroClass hc);
 	/*
 

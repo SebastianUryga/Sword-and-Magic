@@ -114,11 +114,11 @@ Kingdom & World::GetKingdom(int color)
 
 HeroInstance * World::getRandomHero()
 {
-	auto h = allHeroes[rand() % allHeroes.size()];
+	auto h = allHeroes[std::rand() % allHeroes.size()];
 	if (h->ownerColor == Color::UNUSED)
 		return h;
 	else
-		return this->getRandomHero();
+		return this->getRandomHero(); // nie dobre rozwi¹zanie
 }
 
 
@@ -136,27 +136,30 @@ void World::initAllHeroes()
 {
 	HeroInstance* h;
 	h = new HeroInstance();
-	h->name = Hero::EDRIC;
+	h->name = HeroName::EDRIC;
 	h->instanceName = "Edric";
 	h->typeName = "";
 	h->subType = HeroClass::KNIGHT;
 	h->subTypeName = "Knight";
+	h->initObj();
 	this->allHeroes.push_back(h);
 
 	h = new HeroInstance();
-	h->name = Hero::CHRISTIAN;
+	h->name = HeroName::CHRISTIAN;
 	h->instanceName = "Christian";
 	h->typeName = "";
 	h->subType = HeroClass::KNIGHT;
 	h->subTypeName = "Knight";
+	h->initObj();
 	this->allHeroes.push_back(h);
 
 	h = new HeroInstance();
-	h->name = Hero::RION;
+	h->name = HeroName::RION;
 	h->instanceName = "Rion";
 	h->typeName = "";
 	h->subType = HeroClass::CLERIC;
 	h->subTypeName = "Cleric";
+	h->initObj();
 	this->allHeroes.push_back(h);
 }
 
@@ -192,14 +195,16 @@ void World::Reset()
 	this->vec_kingdoms.clear();
 	this->vec_objects.clear();
 	this->vec_heros.clear();
+	this->allHeroes.clear();
 	/*for(auto obj : this->vec_objects)
 		removeMapObject(obj);*/
 }
 
 void World::NewMaps(int sw, int sh)
 {
-	Reset();
-	initKingdoms();
+	this->Reset();
+	this->initKingdoms();
+	this->initAllHeroes();
 
 	this->width = sw;
 	this->height = sh;
@@ -221,7 +226,7 @@ void World::sortObjects()
 		[](MP2::ObjectInstance* a, MP2::ObjectInstance* b)
 	{
 		return a->pos.y < b->pos.y ||
-			(a->pos.y == b->pos.y && a->pos.x < b->pos.x);
+			(a->pos.y == b->pos.y && a->priority < b->priority);
 	});
 }
 
@@ -298,9 +303,15 @@ void World::removeMapObject(sf::Vector2i pos)
 		obj->toDelete = true;
 		this->removeBlockVisTiles(obj, false);
 
+		if (obj->type == Obj::HERO)
+			for (int i = 0; i < vec_heros.size(); i++)
+				if (obj->id = vec_heros[i]->id)
+					vec_heros.erase(vec_heros.begin() + i);
 		for (int i = 0; i < vec_objects.size(); i++)
 			if (obj->id == vec_objects[i]->id)
 				vec_objects.erase(vec_objects.begin() + i);
+		
+
 	}
 }
 
@@ -331,7 +342,7 @@ void World::revealTilesInRange(sf::Vector2i pos, int radious, int playerColor)
 
 			if (distance <= radious)
 			{
-				auto tile = world.GetTile(tilePos);
+				auto &tile = world.GetTile(tilePos);
 				tile.ClearFog(playerColor);
 			}
 		}
@@ -379,6 +390,7 @@ bool World::load(std::string path)
 		temp++;
 		tile.load(file);
 	}
+	this->initAllHeroes();
 	file >> temp;
 	for (int i = 0; i < temp; i++)
 	{

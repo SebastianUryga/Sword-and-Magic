@@ -6,7 +6,7 @@ WindowObject::WindowObject(float x, float y, float width, float height, sf::Font
 {
 	this->background.setSize(sf::Vector2f(width, height));
 	this->background.setPosition(sf::Vector2f(x, y));
-	this->background.setFillColor(sf::Color::Cyan);
+	this->background.setFillColor(sf::Color(100,100,100,255));
 	this->font = font;
 }
 
@@ -21,6 +21,7 @@ void WindowObject::addText(std::string text, sf::Vector2f pos)
 	pos += background.getPosition();
 	texts.push_back(sf::Text(text, this->font, 20));
 	texts.back().setPosition(pos);
+	texts.back().setStyle(sf::Text::Italic);
 }
 
 void WindowObject::deactivate()
@@ -50,7 +51,7 @@ void WindowObject::close()
 {
 	if (GH.topWindow().get() != this)
 		std::cout << "error: only top interface can be close" << std::endl;
-	GH.popInt(GH.topWindow());
+	GH.popWindow(GH.topWindow());
 }
 
 void WindowObject::update(const float dt, const sf::Vector2i mousePos)

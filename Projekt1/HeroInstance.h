@@ -2,10 +2,17 @@
 #include "MapObject.h"
 #include "MovmentComponent.h"
 #include "GameConstants.h"
+
 namespace MP2
 {
 	class ObjectInstance;
 }
+
+struct Troop
+{
+	Monster monster;
+	int count;
+};
 
 class HeroInstance : public MP2::ObjectInstance
 {
@@ -20,10 +27,12 @@ private:
 
 	
 public:
-	Hero name;
+	std::vector<Troop> troops;
+
+	HeroName name;
 	std::shared_ptr<Pathfinder> pathfinder;
 	std::shared_ptr<Path> currentPath;
-
+	
 	bool moveHero();
 	bool makePath(sf::Vector2i dest);
 	void calcuatePaths();

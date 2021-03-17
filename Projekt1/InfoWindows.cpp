@@ -36,10 +36,11 @@ TavernWindow::TavernWindow(int player, const MP2::ObjectInstance* obj)
 
 	this->buttons["Recruit"]->addFuctionallity([=]() {
 		auto h = heroPortraits[this->selected]->h;
-		h->initObj();
+		h->setOwner(player);
 		h->setTilePos(obj->getVisitablePos());
 		world.addMapObject(h);
-	});// to test
+		this->close();
+	});// mozna nowa funcja zrobic w PI recruitHero(tavern,hero)
 
 	this->buttons["Quit"] = std::make_shared<Button>(
 		this->background.getPosition().x + 50,
@@ -52,18 +53,18 @@ TavernWindow::TavernWindow(int player, const MP2::ObjectInstance* obj)
 	this->buttons["Quit"]->addFuctionallity([=]() {this->close(); });
 
 	this->heroPortraits[0] = std::make_shared<HeroPortrait>(
-		selected,
+		selected, 0,
 		this->background.getPosition().x + 50,
-		this->background.getPosition().y + 50,
+		this->background.getPosition().y + 100,
 		PI->getTavernHero(PI->currentColorTurn)
 		);
 	this->heroPortraits[1] = std::make_shared<HeroPortrait>(
-		selected,
-		this->background.getPosition().x + 50,
-		this->background.getPosition().y + 50,
+		selected, 1,
+		this->background.getPosition().x + 120,
+		this->background.getPosition().y + 100,
 		PI->getTavernHero(PI->currentColorTurn)
 		);
-	this->addText("Znajdujesz sie w tawernie, mozesz tu rekrutowac nowych bohaterow",
+	this->addText("Znajdujesz sie w tawernie,\n mozesz tu rekrutowac nowych bohaterow",
 		sf::Vector2f(30,30));
 	this->interactiveElem.push_back(buttons["Recruit"]);
 	this->interactiveElem.push_back(buttons["Quit"]);
@@ -77,15 +78,15 @@ void TavernWindow::render(sf::RenderTarget * target)
 	target->draw(heroPortraits[0]->portriat);
 	target->draw(heroPortraits[1]->portriat);
 	if (this->selected)
-		target->draw(this->heroPortraits[0]->selectFrame);
-	else
 		target->draw(this->heroPortraits[1]->selectFrame);
+	else
+		target->draw(this->heroPortraits[0]->selectFrame);
 }
 
 void TavernWindow::HeroPortrait::clickLeft(bool down, bool previousState)
 {
-	if(down)
-		*this->sel = true;
+	if(down && previousState == false)
+		*this->sel = id;
 }
 
 void TavernWindow::HeroPortrait::clickRight(bool down, bool previousState)
@@ -94,15 +95,17 @@ void TavernWindow::HeroPortrait::clickRight(bool down, bool previousState)
 		GH.makePopup(std::make_shared<HeroWindow>(this->h));
 }
 
-TavernWindow::HeroPortrait::HeroPortrait(bool & sel, int x, int y, HeroInstance * H)
+TavernWindow::HeroPortrait::HeroPortrait(int& sel, int id, int x, int y, HeroInstance * H)
 	:h(H),sel(&sel)
 {
-	this->shape = sf::FloatRect((float)x, (float)y, 30, 40);
-	this->selectFrame = sf::RectangleShape(sf::Vector2f(30,40));
-	this->selectFrame.setOutlineThickness(3);
+	this->id = id;
+	this->shape = sf::FloatRect((float)x, (float)y, 50, 60);
+	this->selectFrame = sf::RectangleShape(sf::Vector2f(50,60));
+	this->selectFrame.setOutlineThickness(2);
 	this->selectFrame.setOutlineColor(sf::Color::Yellow);
 	this->selectFrame.setPosition(x, y);
+	this->selectFrame.setFillColor(sf::Color::Transparent);
 	this->portriat.setTexture(*graphics.allHeroesPortraits);
-	this->portriat.setTextureRect(sf::IntRect(3, 3, 30, 40));
+	this->portriat.setTextureRect(Graphics::selectPortriat(h->name));
 	this->portriat.setPosition(sf::Vector2f((float)x,(float)y));
 }

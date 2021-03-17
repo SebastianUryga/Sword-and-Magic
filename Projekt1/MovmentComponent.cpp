@@ -59,7 +59,12 @@ bool MovmentComponent::isHeroChangedPos()
 
 bool MovmentComponent::isPathEnded()
 {
-	return this->pathEnded;
+	if (this->pathEnded)
+	{
+		this->pathEnded = false;
+		return true;
+	}
+	return false;
 }
 
 bool MovmentComponent::setNewPath(std::shared_ptr<Path> path)
@@ -92,9 +97,10 @@ void MovmentComponent::DoMove(int x, int y)
 {
 	this->positionChanged = true;
 	this->velocity = sf::Vector2f((float)x, (float)y);
+
 }
 
-void MovmentComponent::StartMoving()
+void MovmentComponent::startMoving()
 {
 	if (path)
 	{
@@ -111,8 +117,8 @@ void MovmentComponent::stopMoving()
 {
 	if (path)
 	{
-		this->tilePos = this->path->nodes[nodeIndex].coord;
 		this->moving = false;
+		this->tilePos = this->path->nodes[nodeIndex].coord;
 	}
 }
 
@@ -129,10 +135,25 @@ void MovmentComponent::update(const float & dt)
 		{
 			if (0 < nodeIndex)
 			{
+				
 				PathNode cur = this->path->nodes[nodeIndex];
 				PathNode next = this->path->nodes[nodeIndex - 1];
-				this->DoMove(next.coord.x - cur.coord.x, next.coord.y - cur.coord.y);
-				nodeIndex--;
+				if (nodeIndex == 1 && next.accessible == PathNode::BLOCKVIS)
+				{	
+					this->stopMoving();
+					this->DoMove(
+						(next.coord.x - cur.coord.x)* 0.01,
+						(next.coord.y - cur.coord.y)* 0.01);
+					this->offset = sf::Vector2f(TILEWIDTH, TILEWIDTH);
+					//this->path->nodes.pop_back();
+				}
+				else
+				{
+					this->DoMove(next.coord.x - cur.coord.x, next.coord.y - cur.coord.y);
+					nodeIndex--;
+					this->path->nodes.pop_back();
+				}
+				
 			}
 			else
 			{
@@ -143,10 +164,9 @@ void MovmentComponent::update(const float & dt)
 		}
 		else
 		{
-			//path interupted
+			//path interupted or visiting blockVistited object
 			this->pathEnded = true;
 			this->path = nullptr;
-			std::cout << "cos nie tak" << std::endl;
 		}
 	}
 }

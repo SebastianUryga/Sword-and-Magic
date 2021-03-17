@@ -36,15 +36,15 @@ void GuiHandler::handleMouseButtonClick(sf::Mouse::Button btn, bool isPressed)
 	}
 }
 
-void GuiHandler::pushInt(std::shared_ptr<WindowObject> newInt)
+void GuiHandler::pushWindow(std::shared_ptr<WindowObject> newInt)
 {
 	assert(newInt);
-	if (std::find(winodwList.begin(), winodwList.end(), newInt) != winodwList.end())
+	if (std::find(vecWindow.begin(), vecWindow.end(), newInt) != vecWindow.end())
 		assert(0); // do not add same object twice
 	
-	if (!winodwList.empty())
-		winodwList.front()->deactivate();
-	winodwList.push_front(newInt);
+	if (!vecWindow.empty())
+		vecWindow.back()->deactivate();
+	vecWindow.push_back(newInt);
 	
 	newInt->activate();
 }
@@ -62,25 +62,25 @@ void GuiHandler::closePopup()
 	this->popupWindow->iner = nullptr;
 }
 
-void GuiHandler::popInt(std::shared_ptr<WindowObject> top)
+void GuiHandler::popWindow(std::shared_ptr<WindowObject> top)
 {
-	assert(this->winodwList.front() == top);
-	this->winodwList.pop_front();
-	if (!this->winodwList.empty())
-		this->winodwList.front()->activate();
+	assert(this->vecWindow.back() == top);
+	this->vecWindow.pop_back();
+	if (!this->vecWindow.empty())
+		this->vecWindow.back()->activate();
 }
 
 std::shared_ptr<WindowObject> GuiHandler::topWindow()
 {
-	if (winodwList.empty())
+	if (vecWindow.empty())
 		return std::shared_ptr<WindowObject>();
 	else
-		return winodwList.front();
+		return vecWindow.back();
 }
 
 bool GuiHandler::empty()
 {
-	return this->winodwList.empty();
+	return this->vecWindow.empty();
 }
 
 GuiHandler::~GuiHandler()
@@ -152,8 +152,8 @@ void GuiHandler::handleMouseMotion()
 
 void GuiHandler::renderAll(sf::RenderTarget * target)
 {
-	for (auto i : winodwList)
-		i->render(target);
+	for (auto it : this->vecWindow)
+		it->render(target);
 	if (popupWindow && popupWindow->iner)
 			popupWindow->iner->render(target);
 }

@@ -6,6 +6,7 @@
 #include "PlayerInterface.h"
 #include "InfoWindows.h"
 
+
 class HeroInstance;
 struct Path;
 struct Arrow;
@@ -47,6 +48,7 @@ namespace Interface
 		//Accesors
 		sf::Vector2f getScrollOffset() const;
 		sf::Vector2f getScrollDirection() const;
+		sf::Vector2i getScrollTileOffset() const;
 		int getMode() const;
 		bool contains(sf::Vector2i point) const;
 
@@ -85,7 +87,17 @@ namespace Interface
 	AdvMapArrows & GetHeroMoveArrows();
 	static AdvMapArrows heroMoveArrows;
 	
-	
+	class HeroList
+	{
+		class HeroIntem : public IntObject
+		{
+			sf::Sprite heroPortrait;
+			sf::RectangleShape selectFrame;
+			void setPos(sf::Vector2f pos);
+			void clickLeft(bool down, bool previousState) override;
+			HeroIntem();
+		};
+	};
 
 	/*class CAdvMapInt 
 	{

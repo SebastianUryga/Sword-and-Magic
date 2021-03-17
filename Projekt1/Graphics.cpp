@@ -10,15 +10,25 @@ Graphics::Graphics()
 	heroMoveArrows = std::make_shared<sf::Texture>();
 	heroOnMapSheet = std::make_shared<sf::Texture>();
 	this->allHeroesPortraits = std::make_shared<sf::Texture>();
+	this->allCreaturePortraits = std::make_shared<sf::Texture>();
 	fogOfWarFullHide->setRepeated(true);
 	fogOfWarPartialHide->setRepeated(true);
 	heroOnMapSheet->setRepeated(true);
-	this->portriats[Hero::EDRIC] = sf::IntRect(101, 3, 42, 47);
-	this->portriats[Hero::CHRISTIAN] = sf::IntRect(365, 54, 42, 47);
-	this->portriats[Hero::RION] = sf::IntRect(680, 54, 42, 47);
+	this->portriats[HeroName::EDRIC] = sf::IntRect(101, 3, 42, 47);
+	this->portriats[HeroName::CHRISTIAN] = sf::IntRect(365, 54, 42, 47);
+	this->portriats[HeroName::RION] = sf::IntRect(680, 54, 42, 47);
 	this->heroesOnMap[HeroClass::KNIGHT] = sf::IntRect(0, 0, 100, 100);
 	this->heroesOnMap[HeroClass::CLERIC] = sf::IntRect(0, 64, 100, 100);
 	this->heroesOnMap[HeroClass::DRUID] = sf::IntRect(0, 128, 100, 100);
+	this->creaturePortraits[Monster::NO_CREATURE] = sf::IntRect(386, 627, 58, 64);
+	this->creaturePortraits[Monster::PIKEMAN] = sf::IntRect(8, 6, 58, 64);
+	this->creaturePortraits[Monster::HALBERDIER] = sf::IntRect(70, 6, 58, 64);
+	this->creaturePortraits[Monster::ARCHER] = sf::IntRect(134, 6, 58, 64);
+	this->creaturePortraits[Monster::MARKSMEN] = sf::IntRect(194, 6, 58, 64);
+	this->creaturePortraits[Monster::GRIFFIN] = sf::IntRect(256, 6, 58, 64);
+	this->creaturePortraits[Monster::ROYAL_GRIFFIN] = sf::IntRect(320, 6, 58, 64);
+	this->creaturePortraits[Monster::SWORDMAN] = sf::IntRect(386, 6, 58, 64);
+	this->creaturePortraits[Monster::CRUSADER] = sf::IntRect(456, 6, 58, 64);
 }
 
 
@@ -29,6 +39,7 @@ Graphics::~Graphics()
 void Graphics::Init()
 {
 	this->allHeroesPortraits->loadFromFile("Textures\\Heroes Portraits.png");
+	this->allCreaturePortraits->loadFromFile("Textures\\Creatures Portraits.png");
 	this->fogOfWarFullHide->loadFromFile("Textures\\fog.png");
 	//this->fogOfWarPartialHide->loadFromFile("Textures\\");
 	this->heroMoveArrows->loadFromFile("Textures\\arrows.png");
@@ -62,7 +73,12 @@ Graphics & Graphics::Get()
 	return gr;
 }
 
-sf::IntRect Graphics::selectPortriat(Hero portrait)
+sf::IntRect Graphics::selectPortrait(Monster type)
+{
+	return Graphics::Get().creaturePortraits[type];
+}
+
+sf::IntRect Graphics::selectPortriat(HeroName portrait)
 {
 	return Graphics::Get().portriats[portrait];
 }

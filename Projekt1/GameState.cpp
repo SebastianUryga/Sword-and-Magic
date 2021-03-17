@@ -42,7 +42,7 @@ void GameState::initGameArea()
 	area = std::make_shared<Interface::GameArea>();
 	area->built(this->window, Interface::GameMode);
 	PI->gameArea = area;
-	GH.pushInt(area);
+	GH.pushWindow(area);
 }
 
 void GameState::initButtonsArea()

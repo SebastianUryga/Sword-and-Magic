@@ -2,6 +2,17 @@
 #include "GuiHandler.h"
 //#include "HeroWindow.h"
 
+void HeroWindow::initGarrison(std::vector<Troop>& troops)
+{
+	this->gar = std::make_shared<GarrnisonInterface>(
+			troops, this->background.getPosition() + sf::Vector2f(30, 400));
+	for (auto slot : gar->slots)
+	{
+		this->texts.push_back(slot->number);
+		this->interactiveElem.push_back(slot);
+	}
+}
+
 void HeroWindow::initBackground()
 {
 
@@ -9,7 +20,6 @@ void HeroWindow::initBackground()
 
 void HeroWindow::initButtons()
 {
-	
 	this->buttons["Quit"] = std::make_shared<Button>(
 		this->background.getPosition().x + 700,
 		this->background.getPosition().y + 450,
@@ -32,14 +42,17 @@ void HeroWindow::initButtons()
 	this->interactiveElem.push_back(this->buttons["Dismis"]);
 }
 
-HeroWindow::HeroWindow(const HeroInstance * hero)
+HeroWindow::HeroWindow(HeroInstance * hero)
 	:WindowObject(200,100,800,500, GH.globalFont)
 {
 	this->curHero = hero;
+	this->initGarrison(hero->troops);
 	this->initButtons();
+	this->addText(hero->subTypeName, sf::Vector2f(50, 5));
 	this->portraitImage.setPosition(this->background.getPosition()+sf::Vector2f(5,5));
 	this->portraitImage.setTexture(*graphics.allHeroesPortraits);
-	this->portraitImage.setTextureRect(sf::IntRect(3, 3, 45, 50));
+	this->portraitImage.setTextureRect(Graphics::selectPortriat(hero->name));
+	
 }
 
 
@@ -50,7 +63,7 @@ HeroWindow::~HeroWindow()
 void HeroWindow::dismissCurrent()
 {
 	std::function<void()> onYes = [=]() {PI->dismissHero(this->curHero); close(); };
-	PI->showYesNoDialog("czy na pewno chcesz zwolnic bohatera?", onYes, [=]() {});
+	PI->showYesNoDialog("czy na pewno chcesz\n zwolnic bohatera?", onYes, [=]() {});
 }
 
 void HeroWindow::setPos(float x, float y)
@@ -69,4 +82,5 @@ void HeroWindow::render(sf::RenderTarget * target)
 {
 	WindowObject::render(target);
 	target->draw(portraitImage);
+	this->gar->render(target);
 }

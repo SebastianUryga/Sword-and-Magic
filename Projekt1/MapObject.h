@@ -34,6 +34,7 @@ namespace MP2
 		bool blockVisit;
 		/// tiles that are covered by this object, uses BlockMapBits enum as flags
 		std::vector<std::vector<int8_t>> usedTiles;
+		int priority;
 		AnimotionComponent* animationComponent;
 		sf::Sprite sprite;
 

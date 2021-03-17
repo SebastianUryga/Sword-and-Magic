@@ -17,6 +17,7 @@ class PlayerInterface
 public:
 	//Variables
 	std::shared_ptr<Interface::GameArea> gameArea;
+	std::vector < const HeroInstance*> playerHeroes;
 	int currentColorTurn;
 
 	PlayerInterface();
@@ -28,11 +29,14 @@ public:
 	void focusOn(sf::Vector2f on);
 	void focusOn(sf::Vector2i on, bool fade = false);
 	void focusOn(const MP2::ObjectInstance *obj, bool fade = false);
+
+	void mergeStacks(std::vector<Troop>& garr, int stack1Id, int stack2Id);
+	void swapStacks(std::vector<Troop>& garr, int stack1Id, int stack2Id);
 	void stopMovement(const HeroInstance * hero);
 	void tileLClicked(const sf::Vector2i mapPos);
 	void tileRClicked(const sf::Vector2i mapPos);
-	void dismissHero(const HeroInstance * hero);
-	void openHeroWindow(const HeroInstance * hero); //shows hero window with given hero
+	void dismissHero(HeroInstance * hero);
+	void openHeroWindow(HeroInstance * hero); //shows hero window with given hero
 	void openWindow(int player, const MP2::ObjectInstance* tav);
 	bool canRecruitHero(int player, const MP2::ObjectInstance * obj);
 	HeroInstance* getTavernHero(int player);

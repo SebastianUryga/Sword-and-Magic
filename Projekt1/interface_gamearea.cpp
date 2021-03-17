@@ -47,6 +47,11 @@ sf::Vector2f Interface::GameArea::getScrollDirection() const
 	return this->scrollDirection;
 }
 
+sf::Vector2i Interface::GameArea::getScrollTileOffset() const
+{
+	return (sf::Vector2i) (this->scrollOffset / TILEWIDTH);
+}
+
 int Interface::GameArea::getMode() const
 {
 	return this->mode;
@@ -54,7 +59,7 @@ int Interface::GameArea::getMode() const
 
 void Interface::GameArea::focusOn(sf::Vector2f pos)
 {
-	this->scrollTime += 2;
+	this->scrollTime += 2.7;
 	this->scrollDirection = ((pos - this->scrollOffset) - sf::Vector2f(20*TILEWIDTH, 15* TILEWIDTH));
 }
 

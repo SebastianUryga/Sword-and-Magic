@@ -170,14 +170,14 @@ int Pathfinder::getMovementCost(const sf::Vector2i & src, const sf::Vector2i & d
 {
 	if (src == dst) //same tile
 		return 0;
-	const Maps::Tile & ct = world.GetTile(src.x, src.y);
-	const Maps::Tile & dt = world.GetTile(dst.x, dst.y);
-	int ret = hero->getTileCost(dt, ct);
+	const Maps::Tile & t1 = world.GetTile(src.x, src.y);
+	const Maps::Tile & t2 = world.GetTile(dst.x, dst.y);
+	int ret = hero->getTileCost(t2, t1);
 
 	if (src.x != dst.x && src.y != dst.y) //it's diagonal move
 	{
 		int old = ret;
-		ret *= 1.414213;
+		ret *= 1.41421;
 		//diagonal move costs too much but normal move is possible - allow diagonal move for remaining move points
 		/*if (ret > remainingMovePoints && remainingMovePoints >= old)
 		{

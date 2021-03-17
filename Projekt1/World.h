@@ -1,7 +1,6 @@
 #pragma once
 #include "interface_gamearea.h"
 #include "Tiles.h"
-//#include "HeroInstance.h"
 
 namespace Maps
 {

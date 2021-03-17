@@ -39,7 +39,7 @@ public:
 	sf::Vector2i getActualHeroTilePos();
 
 	void DoMove(int x, int y);
-	void StartMoving();
+	void startMoving();
 	void stopMoving();
 
 	virtual void update(const float& dt);
