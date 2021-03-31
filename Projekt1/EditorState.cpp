@@ -22,11 +22,14 @@ void EditorState::initKeybinds()
 {
 	this->keybinds["CLOSE"] = this->supportedKeys->at("Escape");
 	this->keybinds["CHANGE_ARENA_OBJ"] = this->supportedKeys->at("A");
+	this->keybinds["CHANGE_MOUNTS_OBJ"] = this->supportedKeys->at("M");
 	this->keybinds["CHANGE_STABLE_OBJ"] = this->supportedKeys->at("S");
 	this->keybinds["CHANGE_CRATER_OBJ"] = this->supportedKeys->at("C");
 	this->keybinds["CHANGE_HERO_OBJ"] = this->supportedKeys->at("H");
 	this->keybinds["CHANGE_TRADING_POST_OBJ"] = this->supportedKeys->at("T");
 	this->keybinds["CHANGE_POS_MODE"] = this->supportedKeys->at("P");
+	this->keybinds["CHANGE_TOWN_OBJ"] = this->supportedKeys->at("Q");
+	this->keybinds["CHANGE_ROADS_MODE"] = this->supportedKeys->at("R");
 	this->keybinds["ERASE_MODE"] = this->supportedKeys->at("E");
 }
 
@@ -47,7 +50,7 @@ void EditorState::initButtons()
 void EditorState::initWorld()
 {
 	if (!world.load("startmap.txt"))
-		world.NewMaps(30, 20);
+		world.NewMaps(90, 60);
 }
 
 void EditorState::initGameArea()
@@ -81,12 +84,11 @@ EditorState::~EditorState()
 
 void EditorState::OnMouseLeftButtonClick()
 {
-	sf::Vector2i mousePos = (this->mousePosWindow / (int)TILEWIDTH);
-	std::cout << mousePos.x << " " << mousePos.y << std::endl;
+	sf::Vector2i mousePos = this->mousePosTile;
 
-	mousePos += (sf::Vector2i)PI->gameArea->getScrollOffset() / (int)TILEWIDTH;
+	mousePos += PI->gameArea->getScrollTileOffset();
 	//mousePos.x += (int)PI->gameArea->getScrollOffset().x / TILEWIDTH;
-
+	std::cout << mousePos.x << " " << mousePos.y << std::endl;
 	
 	if (Interface::GetGameArea().contains( mousePos ))
 	{
@@ -105,10 +107,17 @@ void EditorState::OnMouseLeftButtonClick()
 				obj = hero;
 				break;
 			}
+			case Obj::TOWN:
+			{
+				auto town = new TownInstance();
+				town->setOwner(PI->getCurrentColor());
+				town->putBuildingsOnMap(tile);
+				obj = town;
+				break;
+			}
 			case Obj::ARTIFACT:
 				//auto art = new ArtifactInstance();
 				//obj = art;
-				break;
 			case Obj::MONSTER:
 				//auto creature = CreatureInstance();
 				//obj = creature;
@@ -127,10 +136,15 @@ void EditorState::OnMouseLeftButtonClick()
 		if (mode == Mode::Erase)
 		{
 			world.removeMapObject(tile);
+			this->settingRoad = true;
 		}
 		if (mode == Mode::ChangePos)
 		{
 			this->selection = world.GetObjectByPos(tile);
+		}
+		if (mode == Mode::MakeRoads)
+		{
+			this->settingRoad = true;	
 		}
 	}
 
@@ -147,6 +161,7 @@ void EditorState::OnMouseLeftButtonReleased()
 			this->mousePosTile + PI->gameArea->getScrollTileOffset());
 		this->selection = nullptr;
 	}
+	this->settingRoad = false;
 }
 
 // Functions
@@ -158,14 +173,27 @@ void EditorState::endState()
 	world.Reset();
 }
 
+void EditorState::updateRoadSettingMode()
+{
+	if (this->mouseMoved && this->settingRoad)
+	{
+		sf::Vector2i mousePos = 
+			this->mousePosTile + PI->gameArea->getScrollTileOffset();
+		Maps::Tile & tile = world.GetTile(mousePos);
+			
+		tile.SetRoad(this->chosenRoadType);
+	}
+	
+}
+
 void EditorState::updateSelectObj()
 {
 
-	if (this->selection && mode == Mode::ChangePos)
+	if (this->selection && mode == Mode::ChangePos && this->mouseMoved)
 	{
 		this->selection->sprite.setPosition(
 			sf::Vector2f(
-				this->mousePosWindow / (int)TILEWIDTH) * TILEWIDTH
+				((sf::Vector2f)this->mousePosTile) * TILEWIDTH)
 		);
 	}
 
@@ -194,6 +222,11 @@ void EditorState::updateInput(const float & dt)
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["CLOSE"])))
 		endState();
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["CHANGE_MOUNTS_OBJ"])))
+	{
+		mode = Mode::PutObject;
+		chosenTypeObj = Obj::MOUNTS;
+	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["CHANGE_STABLE_OBJ"])))
 	{
 		mode = Mode::PutObject;
@@ -219,6 +252,16 @@ void EditorState::updateInput(const float & dt)
 		mode = Mode::PutObject;
 		chosenTypeObj = Obj::HERO;
 	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["CHANGE_ROADS_MODE"])))
+	{
+		this->mode = Mode::MakeRoads;
+		this->chosenRoadType = Maps::RoadType::COBBLESTONE_ROAD;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["CHANGE_TOWN_OBJ"])))
+	{
+		mode = Mode::PutObject;
+		chosenTypeObj = Obj::TOWN;
+	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["CHANGE_POS_MODE"])))
 	{
@@ -227,6 +270,7 @@ void EditorState::updateInput(const float & dt)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["ERASE_MODE"])))
 	{
 		mode = Mode::Erase;
+		chosenRoadType = Maps::RoadType::NO_ROAD;
 	}
 
 }
@@ -237,6 +281,7 @@ void EditorState::update(const float& dt)
 	this->updateInput(dt);
 	this->updateKeytime(dt);
 	this->updateSelectObj();
+	this->updateRoadSettingMode();
 	Interface::GetGameArea().update(dt, this->mousePosWindow);
 	this->updateButtons();
 }

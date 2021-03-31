@@ -86,8 +86,6 @@ int HeroInstance::getMaxMovePoints() const
 
 void HeroInstance::initHero()
 {
-	
-	
 	this->priority = 5;
 	this->pathfinder = std::make_shared<Pathfinder>(sf::Vector2i (world.w(), world.h()), this);
 	//this->pathfinder->initializeGraph();
@@ -99,6 +97,26 @@ void HeroInstance::initHero()
 int HeroInstance::getSightRadius() const
 {
 	return 5;// + bonus
+}
+
+void HeroInstance::setOwner(int ow)
+{
+	Kingdom & player = world.GetKingdom(this->getOwner());
+	auto hero = std::find(player.heroes.begin(), player.heroes.end(), this);
+	if (hero != player.heroes.end())
+		player.heroes.erase(hero);
+
+	MP2::ObjectInstance::setOwner(ow);
+	player = world.GetKingdom(ow);
+	player.heroes.push_back(this);
+	if(PI->gameArea)
+		PI->gameArea->playerListOfHero->update();
+
+	world.revealTilesInRange(
+		this->getVisitablePos(),
+		this->getSightRadius(),
+		this->ownerColor
+	);
 }
 
 void HeroInstance::initObj()
@@ -169,9 +187,10 @@ void HeroInstance::setTexture(sf::Texture & sheetTexture)
 		(this->getHeight() - 1)*TILEWIDTH);
 }
 
-void HeroInstance::setType(int type)
+void HeroInstance::setType(int type, int subType)
 {
 	assert(type == Obj::HERO);
+	this->subType = subType;
 }
 
 void HeroInstance::setTilePos(const sf::Vector2i& pos)
@@ -188,7 +207,17 @@ void HeroInstance::setTilePos(const sf::Vector2i& pos)
 
 void HeroInstance::afterAddToMap()
 {
-	world.vec_heros.push_back(this);
+	std::vector<HeroInstance*> & vec = world.vec_heros;
+	auto hero = std::find(vec.begin(), vec.end(), this);
+	if (hero == vec.end())
+	{
+		vec.push_back(this);
+		PI->playerHeroes.push_back(this);
+		if (PI->gameArea)
+			PI->gameArea->playerListOfHero->addHero(this);
+	}
+	else
+		std::cout << "Hero is already existing in world" << std::endl;
 }
 
 std::string HeroInstance::getObjectName() const
@@ -201,7 +230,7 @@ std::string HeroInstance::getHoverText(const HeroInstance * hero) const
 	return std::string(this->subTypeName);
 }
 
-void HeroInstance::onHeroVisit(const HeroInstance * h) const
+void HeroInstance::onHeroVisit(const HeroInstance * h)
 {
 	// if enemy start battle
 	// if fiend open exchangeing window
@@ -310,25 +339,27 @@ void HeroInstance::update(const float & dt)
 		this->isStanding = true;
 		this->currentPath = nullptr;
 		world.changeObjPos(this->id, this->pos, heroPos);
-		for (auto i : world.vec_heros)
-		{
-			i->pathfinder->initializeGraph();
-			i->pathfinder->calculatePaths();
-		}
+		
+		PI->canCalcuatePaths = true;
+		//compiutingPahts.join();
+		
+		/*this->pathfinder->initializeGraph();
+		this->pathfinder->calculatePaths();*/
 	}
 }
 
 void HeroInstance::render(sf::RenderTarget * target)
 {
-	MP2:ObjectInstance::render(target);
+	MP2::ObjectInstance::render(target);
 }
 
 void HeroInstance::save(std::fstream & file)
 {
+	file << name << " ";
 	MP2::ObjectInstance::save(file);
 	for (auto troop : this->troops)
 	{
-		file << " " << troop.monster.monster << " " << troop.count;
+		file << " " << troop.monster.monster << " " << troop.count << " ";
 	}
 	//zapisz garnizon
 	// umiejetonsci

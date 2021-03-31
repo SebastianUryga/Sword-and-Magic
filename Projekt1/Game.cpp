@@ -37,6 +37,10 @@ void Game::initKeys()
 	this->supportedKeys["T"] = sf::Keyboard::T;
 	this->supportedKeys["M"] = sf::Keyboard::M;
 	this->supportedKeys["B"] = sf::Keyboard::B;
+	this->supportedKeys["Q"] = sf::Keyboard::Q;
+	this->supportedKeys["R"] = sf::Keyboard::R;
+	this->supportedKeys["U"] = sf::Keyboard::U;
+	this->supportedKeys["Y"] = sf::Keyboard::Y;
 }
 
 void Game::initStateData()
@@ -102,6 +106,8 @@ void Game::render()
 void Game::updateDt()
 {
 	this->dt = this->dtClock.restart().asSeconds();
+	if (PI)
+		PI->globalClock.restart(); // temporary code
 }
 
 void Game::updateEvents()
@@ -137,6 +143,13 @@ void Game::run()
 	{
 		updateDt();
 		update();
+		if (PI) if (PI->globalClock.getElapsedTime().asSeconds() > 0.1)
+			std::cout <<"update"<< PI->globalClock.getElapsedTime().asSeconds()<< std::endl;
+		//std::cout <<"update:"<< dtClock.getElapsedTime().asSeconds() << std::endl;
 		render();
+		//if (PI) if ( PI->globalClock.getElapsedTime().asSeconds()  > 0.1)
+			//std::cout << "render" << PI->globalClock.getElapsedTime().asSeconds() << std::endl;
+		//if(dtClock.getElapsedTime().asSeconds() > 0.09)
+		//std::cout << "render:" << dtClock.getElapsedTime().asSeconds() << std::endl;
 	}
 }

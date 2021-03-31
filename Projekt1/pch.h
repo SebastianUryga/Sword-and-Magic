@@ -25,4 +25,5 @@
 #include<queue>
 #include<list>
 #include <functional>
+#include <thread>
 #endif //PCH_H

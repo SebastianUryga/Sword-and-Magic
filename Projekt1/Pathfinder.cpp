@@ -234,11 +234,9 @@ void Pathfinder::initializeGraph()
 	{
 		for (pos.y = 0; pos.y < sizes.y; ++pos.y)
 		{
-			//std::cout << "bylem " << pos.x << " " << pos.y << std::endl;
 			Maps::Tile * tile = &world.GetTile(pos.x, pos.y);
 			this->getNode(pos)->reset();
 			this->getNode(pos)->update(pos, this->evaluateAccessibility(pos, tile, player));
-			
 		}
 		
 	}

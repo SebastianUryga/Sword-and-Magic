@@ -1,5 +1,6 @@
 #pragma once
 #include"Monster.h"
+
 namespace GameConstants
 {
 
@@ -73,11 +74,14 @@ enum ArrowDirection : int8_t
 	BottomRight_Bottom = 14,
 	BottomRight_BottomRight = 3,
 };
+
 enum HeroName
 {
 	EDRIC,
 	CHRISTIAN,
 	RION,
+	CAITLIN,
+	LOYNIS
 };
 enum HeroClass : int
 {
@@ -88,7 +92,23 @@ enum HeroClass : int
 	ALCHEMIST,
 	WIZARD,
 };
-
+enum Dwelling : int
+{
+	Guardhouse,
+	ArchersTower,
+	GriffinTower,
+	Barracks,
+	Monastery,
+	TrainingGrounds,
+	PoltarOfGlory,
+};
+enum TownLevel : int
+{
+	NoFort = 0,
+	Fort = 1,
+	Citadel = 2,
+	Castle = 3
+};
 struct Arrow
 {
 	ArrowDirection dir = None;
@@ -122,8 +142,7 @@ public:
 		ARTIFACT = 5,
 		PANDORAS_BOX = 6,
 		BLACK_MARKET = 7,
-		MOUNTS1 = 8,
-		MOUNTS2 = 9,
+		MOUNTS = 8,
 		KEYMASTER = 10,
 		BUOY = 11,
 		CAMPFIRE = 12,
@@ -203,7 +222,7 @@ public:
 		STABLES = 94,
 		TAVERN = 95,
 		TEMPLE = 96,
-		DEN_OF_THIEVES = 97,
+		TOWN_WALL = 97,
 		TOWN = 98,
 		TRADING_POST = 99,
 		LEARNING_STONE = 100,
@@ -225,23 +244,18 @@ public:
 		FREELANCERS_GUILD = 213,
 		HERO_PLACEHOLDER = 214,
 		QUEST_GUARD = 215,
-		RANDOM_DWELLING = 216,
+		DWELLING = 216,
 		RANDOM_DWELLING_LVL = 217, //subtype = creature level
 		RANDOM_DWELLING_FACTION = 218, //subtype = faction
 		GARRISON2 = 219,
 		ABANDONED_MINE = 220,
 		TRADING_POST_SNOW = 221,
-		CLOVER_FIELD = 222,
-		CURSED_GROUND2 = 223,
-		EVIL_FOG = 224,
-		FAVORABLE_WINDS = 225,
-		FIERY_FIELDS = 226,
-		HOLY_GROUNDS = 227,
-		LUCID_POOLS = 228,
-		MAGIC_CLOUDS = 229,
-		MAGIC_PLAINS2 = 230,
 		ROCKLANDS = 231,
 		CRATER = 232,
+		FLOWERS = 233,
+		LAKE = 234,
+		MOUND = 235,
+		DIRT_HILLS = 236,
 	};
 
 
@@ -253,3 +267,16 @@ public:
 	operator ObjType() const { return num; }
 	ObjType num;
 };
+
+struct MapObjectParametrs
+{
+	std::string name;
+	int width;
+	int height;
+	std::vector<std::vector<int8_t>> usedTlies;
+	int frameAnimation;
+	uint16_t visitDir;
+	bool blockVisit;
+};
+
+extern std::map<std::pair<Obj,int>, MapObjectParametrs> mapObjectsStats;

@@ -7,7 +7,6 @@ void GuiHandler::handleMouseButtonClick(sf::Mouse::Button btn, bool isPressed)
 {
 	if (!this->topWindow())
 		return;
-
 	auto hlp = this->topWindow()->interactiveElem;
 	if(popupWindow && popupWindow->iner) hlp.push_back(popupWindow);
 	for (auto & i : hlp)
@@ -32,7 +31,6 @@ void GuiHandler::handleMouseButtonClick(sf::Mouse::Button btn, bool isPressed)
 				break;
 			}
 		}
-			
 	}
 }
 
@@ -54,7 +52,11 @@ void GuiHandler::makePopup(std::shared_ptr<WindowObject> w)
 	if (popupWindow)
 		popupWindow->iner = w;
 	else
+	{
 		popupWindow = std::make_shared<PopupWindow>();
+		popupWindow->iner = w;
+	}
+		
 }
 
 void GuiHandler::closePopup()
@@ -89,7 +91,7 @@ GuiHandler::~GuiHandler()
 
 void GuiHandler::handleEvents(std::stack<State*>& states,sf::RenderWindow* window, sf::Event& event)
 {
-	while (window->pollEvent(event))
+	if (window->pollEvent(event))
 	{
 		if (event.type == sf::Event::Closed)
 		{
@@ -104,7 +106,7 @@ void GuiHandler::handleEvents(std::stack<State*>& states,sf::RenderWindow* windo
 		{
 			this->handleMouseMotion();
 		}
-
+		
 		if (event.type == sf::Event::MouseButtonPressed)
 		{
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -117,9 +119,10 @@ void GuiHandler::handleEvents(std::stack<State*>& states,sf::RenderWindow* windo
 				handleMouseButtonClick(sf::Mouse::Right, true);
 				states.top()->OnMouseRightButtonClick();
 			}
+			
 
 		}
-
+		
 		if (event.type == sf::Event::MouseButtonReleased)
 		{
 			handleMouseButtonClick(sf::Mouse::Left, false);
@@ -128,8 +131,8 @@ void GuiHandler::handleEvents(std::stack<State*>& states,sf::RenderWindow* windo
 			handleMouseButtonClick(sf::Mouse::Right, false);
 
 		}
-
 		this->mousePosWindow = (sf::Vector2f)sf::Mouse::getPosition(*window);
+		
 	}
 }
 
@@ -137,6 +140,7 @@ void GuiHandler::handleMouseMotion()
 {
 	if (this->empty())
 		return;
+	
 	auto hlp = this->topWindow()->interactiveElem;
 	if (popupWindow && popupWindow->iner) hlp.push_back(popupWindow);
 	for (auto & i : hlp)

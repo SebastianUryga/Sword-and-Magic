@@ -61,12 +61,18 @@ void State::updateMousePositions(sf::View *view)
 	if (view)
 		this->window->setView(*view);
 
+	auto temp = this->mousePosTile;
+
 	this->mousePosView = this->window->mapPixelToCoords(sf::Mouse::getPosition(*this->window));
 	this->mousePosTile =
 		sf::Vector2i(
-			(int)this->mousePosView.x / TILEWIDTH,
-			(int)this->mousePosView.y / TILEWIDTH
+			(int)this->mousePosView.x / (int)TILEWIDTH,
+			(int)this->mousePosView.y / (int)TILEWIDTH
 		);
+
+	if (temp != this->mousePosTile) this->mouseMoved = true;
+	else this->mouseMoved = false;
+
 	this->window->setView(this->window->getDefaultView());
 }
 

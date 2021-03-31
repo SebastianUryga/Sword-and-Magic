@@ -46,6 +46,16 @@ const bool MovmentComponent::getState(const short unsigned state) const
 	return false;
 }
 
+void MovmentComponent::fixSpritePos()
+{
+	sf::Vector2f fixedPos = this->sprite.getPosition();
+	fixedPos /= 32.f;
+	fixedPos.x = std::round(fixedPos.x);
+	fixedPos.y = std::round(fixedPos.y);
+	fixedPos *= 32.f;
+	this->sprite.setPosition(fixedPos);
+}
+
 bool MovmentComponent::isHeroChangedPos()
 {
 	if (this->positionChanged)
@@ -149,6 +159,7 @@ void MovmentComponent::update(const float & dt)
 				}
 				else
 				{
+					this->fixSpritePos();
 					this->DoMove(next.coord.x - cur.coord.x, next.coord.y - cur.coord.y);
 					nodeIndex--;
 					this->path->nodes.pop_back();

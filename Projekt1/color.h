@@ -1,5 +1,4 @@
 #pragma once
-#include "World.h"
 
 namespace Color
 {
@@ -15,5 +14,5 @@ namespace Color
 		UNUSED = 0x80,
 		ALL = BLUE | GREEN | RED | YELLOW | ORANGE | PURPLE
 	};
-
+	int getNextColor(int color);
 }

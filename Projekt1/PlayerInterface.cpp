@@ -5,6 +5,8 @@ PlayerInterface* PI = new PlayerInterface();
 
 PlayerInterface::PlayerInterface()
 {
+	canCalcuatePaths = false;
+	end = false;
 	gameArea = nullptr;
 	currentColorTurn = Color::RED;
 }
@@ -17,6 +19,17 @@ PlayerInterface::~PlayerInterface()
 int PlayerInterface::getCurrentColor()
 {
 	return currentColorTurn;
+}
+
+void PlayerInterface::select(MP2::ObjectInstance * sel, bool centerView)
+{
+	Kingdom & player = world.GetKingdom(this->currentColorTurn);
+	if (player.containsHero(dynamic_cast<HeroInstance*>(sel)) ||
+		player.containsTown(dynamic_cast<TownInstance*>(sel)))
+	{
+		this->gameArea->selection = sel;
+		if (centerView) this->focusOn(sel);
+	}
 }
 
 void PlayerInterface::focusOn(sf::Vector2f on)
@@ -34,6 +47,16 @@ void PlayerInterface::focusOn(sf::Vector2i on, bool fade)
 void PlayerInterface::focusOn(const MP2::ObjectInstance * obj, bool fade)
 {
 	focusOn(obj->getSightCenter(), fade);
+}
+
+void PlayerInterface::calcuatePaths()
+{
+	HeroInstance* h = nullptr;
+	if (h = this->gameArea->curHero())
+	{
+		h->calcuatePaths();
+		PI->canCalcuatePaths = false;
+	}
 }
 
 void PlayerInterface::mergeStacks(std::vector<Troop> & garr, int stack1Id, int stack2Id) // Mergeing to stack1
@@ -54,6 +77,16 @@ void PlayerInterface::tileLClicked(const sf::Vector2i mapPos)
 
 	const MP2::ObjectInstance *topBlocking = tile->GetObjectPtr();
 
+	if (topBlocking && mapPos != topBlocking->getVisitablePos()
+		&& topBlocking->type == Obj::TOWN &&
+		topBlocking->getOwner() == currentColorTurn)
+	{
+		if (this->gameArea->selection == topBlocking)
+			PI->openTownWindow(this->gameArea->curTown());
+		else
+			this->select(tile->GetObjectPtr());
+	}
+	
 	if (HeroInstance * currentHero = gameArea->curHero()) //hero is selected
 	{
 		const PathNode *pn = currentHero->pathfinder->getNode(mapPos);
@@ -130,6 +163,11 @@ void PlayerInterface::openHeroWindow(HeroInstance * hero)
 	GH.pushWindowT<HeroWindow>(hero);
 }
 
+void PlayerInterface::openTownWindow(TownInstance * town)
+{
+	GH.pushWindowT<TownWindow>(town);
+}
+
 void PlayerInterface::openWindow(int player, const MP2::ObjectInstance* tav)
 {
 	GH.pushWindowT<TavernWindow>(player,tav);
@@ -137,10 +175,17 @@ void PlayerInterface::openWindow(int player, const MP2::ObjectInstance* tav)
 
 bool PlayerInterface::canRecruitHero(int player, const MP2::ObjectInstance * obj)
 {
+	Kingdom & playerKingdom = world.GetKingdom(player);
+
+	if (playerKingdom.heroes.size() > 8)
+		return false;
 	// check if enough gold
+	if (playerKingdom.getMoney() < 2500)
+		return false;
 	// check if tile is allready busy
 	if(world.GetTile(obj->getVisitablePos()).GetObjectPtr()->type == Obj::HERO)
 		return false;
+
 	return true;
 }
 
@@ -148,6 +193,26 @@ HeroInstance * PlayerInterface::getTavernHero(int player)
 {
 	HeroInstance * h = world.getRandomHero();
 	return h;
+}
+
+void PlayerInterface::bulid(BuildingID building, int slot)
+{
+	TownInstance* town = gameArea->curTown();
+	if (town)
+	{
+		world.GetKingdom(currentColorTurn).spendMoney(buildingStats[building].cost);
+		town->buldings[slot]->setType(building);
+	}
+}
+
+void PlayerInterface::nextPlayer()
+{
+	this->currentColorTurn = Color::getNextColor(this->currentColorTurn);
+	if (this->currentColorTurn == Color::GREEN)
+		this->currentColorTurn = Color::RED;
+
+	Kingdom & player = world.GetKingdom(this->currentColorTurn);
+	this->gameArea->playerListOfHero->setHeroes(player.heroes);
 }
 
 void PlayerInterface::tileLClickedEditor(const sf::Vector2i mapPos)

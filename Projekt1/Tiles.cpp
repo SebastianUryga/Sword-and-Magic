@@ -55,15 +55,17 @@ void Maps::Tile::Init(int index)
 	this->visitable = false;
 	this->blocked = false;
 	this->fog_colors = Color::UNUSED;
-	this->roadType = RoadType::NO_ROAD;
 	this->SetIndex(index);
+	this->SetRoad(RoadType::NO_ROAD);
 	this->groundSprite.setPosition(index % world.w() * TILEWIDTH, index / world.w() * TILEWIDTH);
-	this->groundRect = sf::IntRect(std::rand() % 6 * TILEWIDTH, std::rand() % 2 * TILEWIDTH, 32, 32);
+	this->groundRect = sf::IntRect(std::rand() % 6 * (int)TILEWIDTH, std::rand() % 2 * (int)TILEWIDTH, 32, 32);
+	this->roadSprite.setPosition(this->groundSprite.getPosition());
+	this->roadSprite.move(0, TILEWIDTH / 2);
 }
 
 Maps::Tile::Tile()
 {
-
+	this->roadType = RoadType::NO_ROAD;
 }
 
 
@@ -92,7 +94,7 @@ int Maps::Tile::GetGround() const
 
 int Maps::Tile::GetRoad() const
 {
-	return 0;
+	return this->roadType;
 }
 bool Maps::Tile::isBlocked() const
 {
@@ -147,7 +149,25 @@ void Maps::Tile::removeMapObject(MP2::ObjectInstance* object)
 
 void Maps::Tile::SetRoad(int road)
 {
+	if (this->GetGround() == road)
+		return;
 	this->roadType = road;
+
+	sf::Vector2i mapPos(
+		this->maps_index % world.w(),
+		this->maps_index / world.w());
+
+	Graphics::updateRoadTexture(mapPos);
+	static const sf::Vector2i dirs[] = {
+		sf::Vector2i(-1, -1), sf::Vector2i(0, -1), sf::Vector2i(+1, -1),
+		sf::Vector2i(-1, +0),   /* source pos */   sf::Vector2i(+1, +0),
+		sf::Vector2i(-1, +1), sf::Vector2i(0, +1), sf::Vector2i(+1, +1)
+	};
+	for (int i = 0; i < 8; i++)
+	{
+		if (world.isInTheMap(mapPos + dirs[i]))
+			Graphics::updateRoadTexture(mapPos + dirs[i]);
+	}
 }
 
 void Maps::Tile::SetGround(int ground)
@@ -189,46 +209,6 @@ void Maps::Tile::ClearFog(int color)
 	fog_colors &= ~color;
 }
 
-void Maps::Tile::clickLeft(bool down, bool previousState)
-{
-	if (PI->gameArea->getMode() == Interface::GameMode)
-	{
-		if (down)
-			PI->tileLClicked(sf::Vector2i(maps_index % world.w(), maps_index / world.w()));
-	}
-	if (PI->gameArea->getMode() == Interface::EditorMode)
-	{
-		if (down)
-		{
-
-		}
-		else if(previousState && (down == false))
-		{
-			
-		}
-	}
-}
-
-void Maps::Tile::clickRight(bool down, bool previousState)
-{
-	if (down)
-		PI->tileRClicked(sf::Vector2i(maps_index % world.w(), maps_index / world.w()));
-}
-
-void Maps::Tile::hover(bool on)
-{
-}
-
-bool Maps::Tile::contains(sf::Vector2f pos)
-{
-	if (pos.x > 1200.f)
-		return false;
-	sf::Vector2f offset;
-	offset = Interface::GetGameArea().getScrollOffset();
-	return this->shape.contains(pos + offset);
-}
-
-
 void Maps::Tile::updatePassable()
 {
 	this->visitable = false;
@@ -260,22 +240,25 @@ void Maps::Tile::renderGround(sf::RenderTarget * target)
 {
 	static sf::RectangleShape shape;
 	target->draw(this->groundSprite);
-	if (this->blocked || this->visitable)
+	//if(this->visitable || this->blocked)
+	if (this->GetGround()==RoadType::GRAVEL_ROAD)
 	{
 		shape.setPosition(groundSprite.getPosition());
-		shape.setSize(sf::Vector2f(20, 20));
+		shape.setSize(sf::Vector2f(30, 30));
 		if (this->visitable)
-			shape.setFillColor(sf::Color::Yellow);
+			shape.setFillColor(sf::Color(59,59,59,20));
 		else
-			shape.setFillColor(sf::Color::Red);
+			shape.setFillColor(sf::Color(59, 59, 59, 20));
 
-		//target->draw(shape);
+		target->draw(shape);
 	}
 	
 }
 
 void Maps::Tile::renderRoad(sf::RenderTarget * target)
 {
+	if (this->roadType == RoadType::NO_ROAD)
+		return;
 	target->draw(this->roadSprite);
 }
 
@@ -286,12 +269,14 @@ void Maps::Tile::renderFog(sf::RenderTarget * target)
 
 void Maps::Tile::load(std::fstream& file)
 {
-	file >> maps_index >> ground;
+	int temp = 0;
+	file >> maps_index >> ground >> temp;
 	Init(maps_index);
 	SetGround(ground);
+	SetRoad(temp);
 }
 
 void Maps::Tile::save(std::fstream & file)
 {
-	file << maps_index <<" "<< ground << " ";
+	file << maps_index <<" "<< ground << " " << roadType << " ";
 }

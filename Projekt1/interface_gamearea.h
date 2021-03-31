@@ -1,13 +1,17 @@
 #pragma once
 #include "MapObject.h"
 #include "ButtonsArea.h"
+#include "TownInstance.h"
 #include "Graphics.h"
 #include "Tiles.h"
 #include "PlayerInterface.h"
 #include "InfoWindows.h"
+#include "color.h"
+#include "Direction.h"
 
 
 class HeroInstance;
+class TownInstance;
 struct Path;
 struct Arrow;
 
@@ -19,6 +23,7 @@ namespace MP2
 namespace Interface
 {
 	class AdvMapArrows;
+	class HeroList;
 	enum { GameMode, EditorMode };
 	class GameArea : public WindowObject
 	{
@@ -36,19 +41,21 @@ namespace Interface
 		sf::Vector2f scrollOffset;
 		float scrollSpeed;
 		float scrollTime;
-
-		void setTexturesToAllSprites();
 		
 	public:
 		void initView();
+		void initHeroList();
 		MP2::ObjectInstance* selection;
 		HeroInstance* curHero() const;
+		TownInstance* curTown() const;
+		HeroList* playerListOfHero;
 		// const TownInstance * curTown() const;
 
 		//Accesors
 		sf::Vector2f getScrollOffset() const;
 		sf::Vector2f getScrollDirection() const;
 		sf::Vector2i getScrollTileOffset() const;
+		sf::View getView() const;
 		int getMode() const;
 		bool contains(sf::Vector2i point) const;
 
@@ -64,13 +71,12 @@ namespace Interface
 		void render(sf::RenderTarget * target) override;
 	};
 	void MouseCursorAreaClickLeft(const sf::Vector2i mousePos);
-	void MouseCursorAreaPressRight();
+	void MouseCursorAreaClickRight(const sf::Vector2i mousePos);
 
 	GameArea & GetGameArea();
 	ButtonsArea & GetButtonsArea();
 	
 	static ButtonsArea buttonsArea;
-
 
 	class AdvMapArrows : public std::vector<Arrow>
 	{
@@ -89,16 +95,50 @@ namespace Interface
 	
 	class HeroList
 	{
-		class HeroIntem : public IntObject
+	public:
+		class HeroItem : public IntObject
 		{
+		public:
+			HeroInstance* h;
 			sf::Sprite heroPortrait;
 			sf::RectangleShape selectFrame;
-			void setPos(sf::Vector2f pos);
+			sf::RectangleShape movment;
 			void clickLeft(bool down, bool previousState) override;
-			HeroIntem();
+			HeroItem(int id,int* selected, float x, float y, HeroInstance * h);
+			int id;
+		private:
+			int * sel;
 		};
+		sf::RectangleShape background;
+		std::vector<HeroItem*> portraits;
+		HeroList(float x, float y);
+		int selected;
+		void addHero(HeroInstance* h);
+		void setHeroes(std::vector<HeroInstance*> &playerHeroes);
+		void update();
+		void render(sf::RenderTarget* target);
+		
 	};
-
+	class TownList
+	{
+	public:
+		class TownItem : public IntObject
+		{
+		public:
+			TownInstance* t;
+			sf::Sprite sprite;
+			sf::RectangleShape selectFrame;
+			void clickLeft(bool down, bool previousState) override;
+			TownItem(int id, int* selected, float x, float y, TownInstance* t);
+		private:
+			int *sel;
+		};
+		sf::RectangleShape background;
+		std::vector<TownItem*> twons;
+		TownList(float x, float y);
+		int selected;
+		void addTown(TownInstance* t);
+	};
 	/*class CAdvMapInt 
 	{
 	private:

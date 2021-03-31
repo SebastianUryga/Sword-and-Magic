@@ -171,6 +171,7 @@
     <ClInclude Include="ControlPanel.h" />
     <ClInclude Include="Direction.h" />
     <ClInclude Include="EditorState.h" />
+    <ClInclude Include="Fraction.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameConstants.h" />
     <ClInclude Include="GameState.h" />
@@ -193,6 +194,8 @@
     <ClInclude Include="SettingState.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="Tiles.h" />
+    <ClInclude Include="TownInstance.h" />
+    <ClInclude Include="TownWindow.h" />
     <ClInclude Include="WindowObject.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
@@ -201,9 +204,11 @@
     <ClCompile Include="BorderWindow.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="ButtonsArea.cpp" />
+    <ClCompile Include="color.cpp" />
     <ClCompile Include="ControlPanel.cpp" />
     <ClCompile Include="Direction.cpp" />
     <ClCompile Include="EditorState.cpp" />
+    <ClCompile Include="Fraction.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameConstants.cpp" />
     <ClCompile Include="GameState.cpp" />
@@ -232,6 +237,8 @@
     <ClCompile Include="SettingState.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="Tiles.cpp" />
+    <ClCompile Include="TownInstance.cpp" />
+    <ClCompile Include="TownWindow.cpp" />
     <ClCompile Include="WindowObject.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>

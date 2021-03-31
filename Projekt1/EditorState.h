@@ -11,7 +11,8 @@ private:
 		Erase,
 		PutObject,
 		ChangePos,
-		ChangeGround
+		ChangeGround,
+		MakeRoads
 	};
 	Mode mode;
 	std::map<std::string, Button*> buttons;
@@ -20,6 +21,9 @@ private:
 	MP2::ObjectInstance* selection;
 
 	int chosenTypeObj;
+	int chosenRoadType;
+	bool settingRoad;
+
 	void initView();
 	void initBackground();
 	void initKeybinds();
@@ -30,13 +34,13 @@ public:
 	EditorState(StateData* state_data);
 	virtual ~EditorState();
 
-
 	void OnMouseLeftButtonClick() override;
 	void OnMouseLeftButtonReleased() override;
 	
 	// Functions
 	void endState() override;
 
+	void updateRoadSettingMode();
 	void updateSelectObj();
 	void updateButtons();
 	void updateView();

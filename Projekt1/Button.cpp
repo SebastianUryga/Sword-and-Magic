@@ -1,10 +1,10 @@
 #include "pch.h"
 #include "Button.h"
-
+#include "GuiHandler.h"
 
 Button::Button(float x, float y, float width, float height,
-	sf::Font* font, std::string text,
-	sf::Color idleColor, sf::Color hoverColor, sf::Color activeColor)
+	sf::Font* font, std::string text, sf::Color idleColor, 
+	sf::Color hoverColor, sf::Color activeColor, sf::Color blockColor)
 {
 	this->buttonState = BTN_IDLE;
 	
@@ -25,6 +25,7 @@ Button::Button(float x, float y, float width, float height,
 	this->activeColor = activeColor;
 	this->hoverColor = hoverColor;
 	this->idleColor = idleColor;
+	this->blockColor = blockColor;
 
 	this->background.setFillColor(this->idleColor);
 }
@@ -48,14 +49,14 @@ bool Button::isBlocked()
 
 void Button::clickRight(bool pressed, bool previousState)
 {
-	//some popup in future
+	if(pressed && popupWindow)
+		GH.makePopup(popupWindow);
 }
 
 void Button::clickLeft(bool pressed, bool previousState)
 {
 	if(isBlocked())
 		return;
-	std::cout << previousState << " " << pressed << std::endl;
 	if (pressed)
 	{
 		// play sound
@@ -83,6 +84,11 @@ void Button::addFuctionallity(const std::function<void()>& f)
 	this->onClick = f;
 }
 
+void Button::addRightClickPopup(const std::shared_ptr<WindowObject> window)
+{
+	this->popupWindow = window;
+}
+
 void Button::block(bool on)
 {
 	if (on)
@@ -107,6 +113,11 @@ void Button::setPos(float x, float y)
 	);
 }
 
+void Button::setText(std::string t)
+{
+	this->text.setString(t);
+}
+
 void Button::move(float x, float y)
 {
 	this->background.move(x, y);
@@ -119,20 +130,22 @@ void Button::move(float x, float y)
 void Button::update(const sf::Vector2i mousePos)
 {
 	//*Update the booleans for hover and pressed*/
-	this->buttonState = BTN_IDLE;
-
-	//hover
-	if (this->background.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)))
+	if (this->buttonState != BTN_BLOCK)
 	{
-		this->buttonState = BTN_HOVER;
+		this->buttonState = BTN_IDLE;
 
-		//pressed
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		//hover
+		if (this->background.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)))
 		{
-			this->buttonState = BTN_PRESSED;
+			this->buttonState = BTN_HOVER;
+
+			//pressed
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			{
+				this->buttonState = BTN_PRESSED;
+			}
 		}
 	}
-	
 	switch (buttonState)
 	{
 	case BTN_HOVER:
@@ -143,6 +156,9 @@ void Button::update(const sf::Vector2i mousePos)
 		break;
 	case BTN_PRESSED:
 		this->background.setFillColor(this->activeColor);
+		break;
+	case BTN_BLOCK:
+		this->background.setFillColor(this->blockColor);
 		break;
 	default:
 		this->background.setFillColor(sf::Color::Red);

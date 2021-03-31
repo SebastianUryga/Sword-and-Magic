@@ -34,7 +34,8 @@ protected:
 	sf::Vector2i mousePosWindow;
 	sf::Vector2f mousePosView;
 	sf::Vector2i mousePosTile;
-	
+	bool mouseMoved;
+
 	//Functions
 	virtual void initKeybinds() = 0;
 public:

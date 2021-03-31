@@ -90,6 +90,13 @@ Maps::Tile & World::GetTile(sf::Vector2i pos)
 	return this->vec_tiles[this->width * pos.y + pos.x];
 }
 
+MP2::ObjectInstance* World::GetObject(int id)
+{
+	for (auto obj : this->vec_objects)
+		if (obj->id == id) return obj;
+	return nullptr;
+}
+
 MP2::ObjectInstance* World::GetObjectByPos(sf::Vector2i pos)
 {
 	
@@ -108,8 +115,8 @@ Kingdom & World::GetKingdom(int color)
 	case Color::PURPLE:    return *vec_kingdoms[5];
 	default: break;
 	}
-
-	return *vec_kingdoms[6];
+	//temp code
+	return *vec_kingdoms[0];
 }
 
 HeroInstance * World::getRandomHero()
@@ -119,6 +126,13 @@ HeroInstance * World::getRandomHero()
 		return h;
 	else
 		return this->getRandomHero(); // nie dobre rozwi¹zanie
+}
+
+HeroInstance * World::getHeroByName(HeroName name)
+{
+	for (auto& hero : this->allHeroes)
+		if (hero->name == name) return hero;
+	return nullptr;
 }
 
 
@@ -156,7 +170,25 @@ void World::initAllHeroes()
 	h = new HeroInstance();
 	h->name = HeroName::RION;
 	h->instanceName = "Rion";
-	h->typeName = "";
+	h->typeName = "Hero";
+	h->subType = HeroClass::CLERIC;
+	h->subTypeName = "Cleric";
+	h->initObj();
+	this->allHeroes.push_back(h);
+
+	h = new HeroInstance();
+	h->name = HeroName::CAITLIN;
+	h->instanceName = "Caitlin";
+	h->typeName = "Hero";
+	h->subType = HeroClass::CLERIC;
+	h->subTypeName = "Cleric";
+	h->initObj();
+	this->allHeroes.push_back(h);
+
+	h = new HeroInstance();
+	h->name = HeroName::LOYNIS;
+	h->instanceName = "Loynis";
+	h->typeName = "Hero";
 	h->subType = HeroClass::CLERIC;
 	h->subTypeName = "Cleric";
 	h->initObj();
@@ -195,7 +227,9 @@ void World::Reset()
 	this->vec_kingdoms.clear();
 	this->vec_objects.clear();
 	this->vec_heros.clear();
+	this->vec_town.clear();
 	this->allHeroes.clear();
+	
 	/*for(auto obj : this->vec_objects)
 		removeMapObject(obj);*/
 }
@@ -214,7 +248,10 @@ void World::NewMaps(int sw, int sh)
 	for (auto &i : this->vec_tiles)
 	{
 		i.Init(temp);
-		i.SetGround(Maps::Ground::DIRT);
+		if (temp > 3000)
+			i.SetGround(Maps::Ground::GRASS);
+		else
+			i.SetGround(Maps::Ground::DIRT);
 		temp++;
 	}
 }
@@ -286,18 +323,22 @@ void World::removeBlockVisTiles(MP2::ObjectInstance * obj, bool total)
 void World::addMapObject(MP2::ObjectInstance * obj)
 {
 	// wczesniej powinno byc sprawdzone czy obiekt nie wychodzi poza mape
-	
-	this->vec_objects.push_back(obj);
-	obj->afterAddToMap();
+	auto mapObj = std::find(vec_objects.begin(), vec_objects.end(), obj);
+	if (mapObj == this->vec_objects.end())
+	{
+		this->vec_objects.push_back(obj);
+		obj->afterAddToMap();
 
-	this->addBlockVisTiles(obj);
+		this->addBlockVisTiles(obj);
 
-	this->sortObjects();
+		this->sortObjects();
+	}
+	else
+		std::cout << "Object is already existing in world" << std::endl;
 }
 
-void World::removeMapObject(sf::Vector2i pos)
+void World::removeMapObject(MP2::ObjectInstance * obj)
 {
-	MP2::ObjectInstance* obj = this->GetTile(pos.x, pos.y).GetObjectPtr();
 	if (obj)
 	{
 		obj->toDelete = true;
@@ -310,9 +351,13 @@ void World::removeMapObject(sf::Vector2i pos)
 		for (int i = 0; i < vec_objects.size(); i++)
 			if (obj->id == vec_objects[i]->id)
 				vec_objects.erase(vec_objects.begin() + i);
-		
-
 	}
+}
+
+void World::removeMapObject(sf::Vector2i pos)
+{
+	MP2::ObjectInstance* obj = this->GetTile(pos.x, pos.y).GetObjectPtr();
+	this->removeMapObject(obj);
 }
 
 void World::changeObjPos(int id, sf::Vector2i oldPos,sf::Vector2i newPos)
@@ -321,7 +366,7 @@ void World::changeObjPos(int id, sf::Vector2i oldPos,sf::Vector2i newPos)
 	for (auto obj : this->vec_objects)
 		if (obj->id == id)
 		{
-			this->removeBlockVisTiles(obj,false);
+			this->removeBlockVisTiles(obj, false);
 			obj->setTilePos(newPos);
 			this->addBlockVisTiles(obj);
 		}
@@ -383,29 +428,50 @@ bool World::load(std::string path)
 		file.close();
 		return false;
 	}
+
 	int temp = 0;
+	int type = Obj::NO_OBJ;
+	int name;
 	vec_tiles.resize(width*height);
 	for (auto &tile : this->vec_tiles)
 	{
-		temp++;
 		tile.load(file);
 	}
 	this->initAllHeroes();
+	this->initKingdoms();
+	file >> MP2::ObjectInstance::getCountID();
 	file >> temp;
 	for (int i = 0; i < temp; i++)
 	{
-		HeroInstance* hero = new HeroInstance();
-		hero->load(file);
-		this->addMapObject(hero);
-	}
-	file >> temp;
-	for (int i = 0 ; i < temp ; i++)
-	{
-		MP2::ObjectInstance * obj = new MP2::ObjectInstance();
+		MP2::ObjectInstance * obj;
+		file >> type;
+		switch (Obj(type))
+		{
+		case Obj::HERO:
+		{
+			file >> name;
+			obj = world.getHeroByName(HeroName(name));
+			break;
+		}
+		case Obj::TOWN:
+		{
+			obj = new TownInstance();
+			break;
+		}
+		case Obj::MONSTER:
+		{
+			obj = new MP2::ObjectInstance();
+			break;
+		}
+		default:
+			obj = new MP2::ObjectInstance();
+			break;
+		}
 		obj->load(file);
 		this->addMapObject(obj);
 	}
-	file.close();
+	for (auto town : this->vec_town)
+		town->setObjectsToBuildings();
 	return true;
 }
 
@@ -415,22 +481,17 @@ void World::save(std::string path)
 	file.open(path);
 	file.clear();
 	file << world.w() << " " << world.h() << std::endl;
+
 	for (auto tile : vec_tiles)
 	{
 		tile.save(file);
 	}
 	file << std::endl;
-	file << vec_heros.size();
-	for (auto obj : vec_heros)
-	{
-		obj->save(file);
-	}
-	file << std::endl;
-	file << vec_objects.size() - vec_heros.size();
+	file << MP2::ObjectInstance::getCountID() << " ";
+	file << vec_objects.size() << std::endl;
 	for (auto obj : vec_objects)
 	{
-		if (obj->type == Obj::HERO) 
-			continue;
+		file << obj->type << " ";
 		obj->save(file);
 	}
 	file.close();

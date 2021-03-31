@@ -1,6 +1,7 @@
 #pragma once
 #include "State.h"
 #include "HeroWindow.h"
+#include "TownWindow.h"
 #include "interface_gamearea.h"
 namespace Interface
 {

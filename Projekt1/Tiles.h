@@ -52,10 +52,9 @@ namespace Maps
 		sf::IntRect fogRect;
 		sf::Sprite fogSprite;
 		sf::IntRect roadRect;
-		sf::Sprite roadSprite;
-
+		
 	public:
-
+		sf::Sprite roadSprite;
 		/// Map objects that belong to this tile
 		std::vector<MP2::ObjectInstance*> objects;
 
@@ -90,11 +89,6 @@ namespace Maps
 		bool isWater() const;
 		bool isFog(int color) const;
 		void ClearFog(int color);
-
-		void clickLeft(bool down, bool previousState) override;
-		void clickRight(bool down, bool previousState) override;
-		void hover(bool on) override;
-		bool contains(sf::Vector2f pos) override;
 
 		void updatePassable();
 		void update();

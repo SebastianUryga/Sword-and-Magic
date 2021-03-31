@@ -29,6 +29,7 @@ public:
 	void setCurrentColor(int color);
 	void setToNextColor();
 	void OnMouseLeftButtonClick() override;
+	void OnMouseRightButtonClick() override;
 	void endState() override;
 	// Functions
 	void calculatePaths(const HeroInstance *hero);

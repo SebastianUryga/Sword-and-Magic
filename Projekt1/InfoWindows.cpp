@@ -95,11 +95,11 @@ void TavernWindow::HeroPortrait::clickRight(bool down, bool previousState)
 		GH.makePopup(std::make_shared<HeroWindow>(this->h));
 }
 
-TavernWindow::HeroPortrait::HeroPortrait(int& sel, int id, int x, int y, HeroInstance * H)
+TavernWindow::HeroPortrait::HeroPortrait(int& sel, int id, float x, float y, HeroInstance * H)
 	:h(H),sel(&sel)
 {
 	this->id = id;
-	this->shape = sf::FloatRect((float)x, (float)y, 50, 60);
+	this->shape = sf::FloatRect(x, y, 50, 60);
 	this->selectFrame = sf::RectangleShape(sf::Vector2f(50,60));
 	this->selectFrame.setOutlineThickness(2);
 	this->selectFrame.setOutlineColor(sf::Color::Yellow);

@@ -57,7 +57,7 @@ namespace MP2
 		virtual void setTexture(sf::Texture& sheetTexture);
 		virtual void initObjAnimaiton();
 		virtual void initObj();
-		virtual void setType(int32_t type);
+		virtual void setType(int32_t type, int subType = 0);
 		// Returns generic name of object
 		virtual std::string getObjectName() const;
 		// Returns hover name, including visited/not visited info
@@ -71,13 +71,13 @@ namespace MP2
 		sf::Vector2i getVisitablePos() const;
 		
 
-		virtual void onHeroVisit(const HeroInstance * h) const;
+		virtual void onHeroVisit(const HeroInstance * h);
 
 		virtual void afterAddToMap();
 
 		virtual void load(std::fstream& file);
 		virtual void save(std::fstream& file);
-
+		static int & getCountID();
 
 		virtual void animationUpdate(const float& dt);
 		virtual void update(const float& dt);

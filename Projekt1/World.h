@@ -7,6 +7,7 @@ namespace Maps
 	class Tile;
 }
 class Kingdom;
+class TownInstance;
 
 class World
 {
@@ -22,6 +23,7 @@ private:
 	World() :width(0), height(0) {};
 public:
 	std::vector<HeroInstance*> vec_heros;
+	std::vector<TownInstance*> vec_town;
 	std::vector<std::vector<sf::Vector2i>> guardingCreaturePositions;
 
 	void initAllHeroes();
@@ -36,6 +38,7 @@ public:
 	void addBlockVisTiles(MP2::ObjectInstance * obj); // mozna zrobiæ zeby bylo ladniej
 	void removeBlockVisTiles(MP2::ObjectInstance * obj, bool total);
 	void addMapObject(MP2::ObjectInstance* obj);
+	void removeMapObject(MP2::ObjectInstance* obj);
 	void removeMapObject(sf::Vector2i pos);
 	void changeObjPos(int id, sf::Vector2i oldPos,sf::Vector2i newPos);
 	void revealTilesInRange(sf::Vector2i pos, int radious, int playerColor);
@@ -50,11 +53,12 @@ public:
 	Maps::Tile & GetTile(int x, int y);
 	Maps::Tile & GetTile(int index);
 	Maps::Tile & GetTile(sf::Vector2i pos);
-	MP2::ObjectInstance GetObject(int id);
+	MP2::ObjectInstance* GetObject(int id);
 	MP2::ObjectInstance* GetObjectByPos(sf::Vector2i pos);
 	std::vector<MP2::ObjectInstance*> & GetAllMapsObjects() { return vec_objects; }
 	Kingdom & GetKingdom(int color);
 	HeroInstance * getRandomHero();
+	HeroInstance * getHeroByName(HeroName name);
 	
 
 	int w() const;

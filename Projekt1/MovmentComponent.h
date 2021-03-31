@@ -33,6 +33,7 @@ public:
 
 	//Functions
 	const bool getState(const short unsigned state) const;
+	void fixSpritePos();
 	bool isHeroChangedPos();
 	bool isPathEnded();
 	bool setNewPath(std::shared_ptr<Path> path);

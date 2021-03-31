@@ -21,19 +21,14 @@ void GameState::initKeybinds()
 void GameState::initPlayers()
 {
 	//this->hero = new Hero(*graphics.heroOnMap);
-	for (auto & h : world.vec_heros)
-	{
-		h->pathfinder->initializeGraph();
-		this->calculatePaths(h);
-	}
-		
+	PI->canCalcuatePaths = true;
 }
 
 void GameState::initWorld()
 {
 
 	if (!world.load("startmap.txt"))
-		world.NewMaps(30, 20);	
+		world.NewMaps(90, 60);
 }
 
 void GameState::initGameArea()
@@ -58,8 +53,8 @@ GameState::GameState(StateData* state_data)
 	this->initTextutres();
 
 	this->initWorld();
-	this->initPlayers();
 	this->initGameArea();
+	this->initPlayers();
 	this->initButtonsArea();
 	
 }
@@ -85,17 +80,20 @@ void GameState::setToNextColor()
 
 void GameState::OnMouseLeftButtonClick()
 {
-	//if(GH.)
-	sf::Vector2i mousePos((int)this->mousePosView.x, (int)this->mousePosView.y);
-	if (Interface::GetGameArea().contains(mousePos))
+	if(GH.topWindow() == PI->gameArea)
+	if (Interface::GetGameArea().contains(this->mousePosWindow))
 	{
-		sf::Vector2i mapPos(mousePos.x / (int)TILEWIDTH, mousePos.y / (int)TILEWIDTH);
-		if (mapPos != this->mousePosTile)
-			std::cout << "nie zgadza sie o " << mapPos.x - mousePosTile.x << std::endl;
-		Interface::MouseCursorAreaClickLeft(mousePos);
-		
-		//std::cout<< tile.x <<" "<<tile.y <<std::endl;
+		Interface::MouseCursorAreaClickLeft(this->mousePosTile);
 	}
+}
+
+void GameState::OnMouseRightButtonClick()
+{
+	if(GH.topWindow() == PI->gameArea)
+		if (Interface::GetGameArea().contains(this->mousePosWindow))
+		{
+			Interface::MouseCursorAreaClickRight(this->mousePosTile);
+		}
 }
 
 void GameState::endState()
@@ -129,15 +127,16 @@ void GameState::updateInput(const float & dt)
 
 void GameState::update(const float& dt)
 {
-	this->updateMousePositions();
+	this->updateMousePositions(&Interface::GetGameArea().getView());
 	this->updateInput(dt);
 	this->updateKeytime(dt);
-	//Interface::GetGameArea().update(dt, this->mousePosWindow);
+	
 	this->updateView();
 
 	Interface::GetButtonsArea().update(this->mousePosWindow);
 	if (GH.empty())
 		return;
+	
 	GH.topWindow()->update(dt,this->mousePosWindow);
 	
 }

@@ -1,4 +1,4 @@
-﻿  MovmentComponent.cpp
-d:\projekt1\projekt1\movmentcomponent.cpp(146): warning C4244: "argument": konwersja z "double" do "int", możliwa utrata danych
-d:\projekt1\projekt1\movmentcomponent.cpp(145): warning C4244: "argument": konwersja z "double" do "int", możliwa utrata danych
+﻿  Fraction.cpp
+  TownInstance.cpp
+  Generowanie kodu...
   Projekt1.vcxproj -> D:\Projekt1\x64\Debug\Projekt1.exe

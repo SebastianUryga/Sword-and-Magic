@@ -2,21 +2,6 @@
 #include "interface_gamearea.h"
 #include "Tiles.h"
 
-void Interface::GameArea::setTexturesToAllSprites()
-{
-	
-	/*for (int x = 0; x < world.w(); x++)
-		for (int y = 0; y < world.h(); y++)
-		{
-			Maps::Tile & tile = world.GetTiles(x, y);
-			tile.setGroundTexture(*graphics.grounds[tile.GetGround()]);
-		}*/
-	/*for (auto &it : world.GetAllMapsObjects())
-	{
-		it->sprite.setTexture(*graphics.mapObjects[it->type]);
-	}*/
-}
-
 void Interface::GameArea::initView()
 {
 	this->view.setSize(
@@ -29,10 +14,28 @@ void Interface::GameArea::initView()
 	);
 }
 
+void Interface::GameArea::initHeroList()
+{
+	playerListOfHero = new HeroList(1250, 0);
+	for (auto& item : this->playerListOfHero->portraits)
+	{
+		this->interactiveElem.push_back(std::shared_ptr<HeroList::HeroItem>(item));
+	}
+	this->playerListOfHero->setHeroes(world.GetKingdom(PI->currentColorTurn).heroes);
+}
+
 HeroInstance * Interface::GameArea::curHero() const
 {
 	if (selection && selection->type == Obj::HERO)
 		return static_cast<HeroInstance *>(selection);
+	else
+		return nullptr;
+}
+
+TownInstance * Interface::GameArea::curTown() const
+{
+	if (selection && selection->type == Obj::TOWN)
+		return static_cast<TownInstance *>(selection);
 	else
 		return nullptr;
 }
@@ -52,6 +55,11 @@ sf::Vector2i Interface::GameArea::getScrollTileOffset() const
 	return (sf::Vector2i) (this->scrollOffset / TILEWIDTH);
 }
 
+sf::View Interface::GameArea::getView() const
+{
+	return this->view;
+}
+
 int Interface::GameArea::getMode() const
 {
 	return this->mode;
@@ -59,14 +67,14 @@ int Interface::GameArea::getMode() const
 
 void Interface::GameArea::focusOn(sf::Vector2f pos)
 {
-	this->scrollTime += 2.7;
+	this->scrollTime += 0.8;
 	this->scrollDirection = ((pos - this->scrollOffset) - sf::Vector2f(20*TILEWIDTH, 15* TILEWIDTH));
 }
 
 bool Interface::GameArea::needScroll()
 {
 	if (this->scrollDirection.x != 0 || this->scrollDirection.y != 0)
-		if (scrollTime > 3.f)
+		if (scrollTime > 1.f)
 		{
 			scrollTime = 0;
 			return true;
@@ -83,16 +91,12 @@ void Interface::GameArea::built(sf::RenderWindow* window,  int mode)
 {
 	this->window = window;
 	this->mode = mode;
-	this->rectMaps = sf::IntRect(0, 0, window->getSize().x, window->getSize().y);
+	this->rectMaps = sf::IntRect(0, 0, window->getSize().x-400, window->getSize().y);
 
 	this->background.setSize(sf::Vector2f(
 		(float)rectMaps.width, (float)rectMaps.height));
 
-	for (int x = 0; x < world.w(); x++)
-		for (int y = 0; y < world.h(); y++)
-		{
-			this->interactiveElem.push_back(std::shared_ptr<Maps::Tile>(&world.GetTile(x, y), [](Maps::Tile *){}));
-		}
+	this->initHeroList();
 
 	this->initView();
 	// taki tymczasowy kod
@@ -145,7 +149,7 @@ void Interface::GameArea::updateInput(const float dt, sf::Vector2i mousePosWindo
 		this->scrollDirection.y = -TILEWIDTH;
 	if (mousePosWindow.x > (int)this->window->getSize().x -10) // lol
 		this->scrollDirection.x = TILEWIDTH;
-	if (mousePosWindow.y > (int)this->window->getSize().y -30) // nie ograniam
+	if (mousePosWindow.y > (int)this->window->getSize().y -40) // nie ograniam
 		this->scrollDirection.y = TILEWIDTH;
 }
 
@@ -153,6 +157,7 @@ void Interface::GameArea::update(const float dt, sf::Vector2i mousePosWindow)
 {
 	this->updateInput(dt, mousePosWindow);
 	this->updateView();
+	
 	for (auto it : world.GetAllMapsObjects())
 	{
 		it->update(dt);
@@ -163,9 +168,16 @@ void Interface::GameArea::render(sf::RenderTarget * target)
 {
 	target->setView(this->view);
 	
-	for (int x = 0; x < world.w(); x++)
-		for (int y = 0; y < world.h(); y++)
-			world.GetTile(x, y).renderGround(target);
+	for (int x = std::max(0,this->getScrollTileOffset().x - 1);
+		x < std::min(world.w(), this->getScrollTileOffset().x + 51); x++)
+		for (int y = std::max(0, this->getScrollTileOffset().y - 1);
+			y < std::min(world.h(), this->getScrollTileOffset().y + 30); y++)
+	{
+		world.GetTile(x, y).renderGround(target);
+		if(y > 0)
+			world.GetTile(x, y-1).renderRoad(target);
+	}
+			
 	//
 	// mapObjects render();
 	for (auto it : world.GetAllMapsObjects())
@@ -190,10 +202,17 @@ void Interface::GameArea::render(sf::RenderTarget * target)
 				world.GetTile(x, y).renderFog(target); // rysujemy mgle wojny
 
 	target->setView(this->window->getDefaultView());
+	this->playerListOfHero->render(target);
 }
 
-void Interface::MouseCursorAreaClickLeft(const sf::Vector2i mousePos)
+void Interface::MouseCursorAreaClickLeft(const sf::Vector2i tile)
 {
+	PI->tileLClicked(tile);
+}
+
+void Interface::MouseCursorAreaClickRight(const sf::Vector2i tile)
+{
+	PI->tileRClicked(tile);
 }
 
 Interface::GameArea & Interface::GetGameArea()
@@ -241,7 +260,7 @@ void Interface::AdvMapArrows::calcuateArrows(std::shared_ptr<Path> path)
 
 	{TopRight_TopLeft		,TopRight_Top, TopRight_TopRight,
 	 TopRight_Left			,None				,TopRight_Right,
-	 None					, TopRight_Bottom	,TopRight_BottomRight},
+	 None					,TopRight_Bottom	,TopRight_BottomRight},
 
 	{Left_TopLeft			,Left_Top			,Left_TopRight,
 	 Left_Left				,None				,None,
@@ -337,5 +356,127 @@ void Interface::AdvMapArrows::eraseArrow(const sf::Vector2i & heroPos)
 	float x = this->back().sprite.getPosition().x;
 	float y = this->back().sprite.getPosition().y;
 	this->top().toDraw = false;
+	
+}
+
+Interface::HeroList::HeroList(float x, float y)
+{
+	this->selected = -1;
+	this->background.setPosition(x, y);
+	this->background.setSize(sf::Vector2f(50, 240));
+	this->background.setFillColor(sf::Color(130, 112, 155, 255));
+	for (int i = 0; i < 8; i++)
+	{
+		this->portraits.push_back(
+			new HeroItem(i, &this->selected, x + 10, (i * 30)+ y + 10, nullptr));
+	}	
+
+}
+
+void Interface::HeroList::addHero(HeroInstance * h)
+{
+	// check if there is already this hero
+	for(auto item : this->portraits) if(item->h && h && item->h->id == h->id)
+	{
+		std::cout << "hero already is in HeroList" << std::endl;
+		return;
+	}
+	int i = 0;
+	// put in next empty slot
+	while (i<8 && this->portraits[i]->h) i++; 
+	if(i<8)
+	{
+		portraits[i]->h = h;
+		this->update();
+	}
+}
+
+void Interface::HeroList::setHeroes(std::vector<HeroInstance*>& playerHeroes)
+{
+
+	if (playerHeroes.size() > 8)
+		std::cout << "za duzo cos tych herosow" << std::endl;
+	for (int i = 0; i < 8; i++)
+	{
+		if (i < playerHeroes.size())
+			this->portraits[i]->h = playerHeroes[i];
+		else
+			this->portraits[i]->h = nullptr;
+	}
+	this->update();
+}
+
+void Interface::HeroList::update()
+{
+	for (int i = 7; i > 0; i--)
+	{
+		if (portraits[i]->h && portraits[i - 1]->h == nullptr)
+		{
+			portraits[i - 1]->h = portraits[i]->h;
+			portraits[i]->h = nullptr;
+			this->update();
+			return;
+		}
+	}
+	for (auto& item : this->portraits)
+	{
+		if (item->h)
+			item->heroPortrait.setTextureRect(Graphics::selectSmallPortrait(item->h->name));
+
+	}
+	//updateing sprite
+	//updating move
+}
+
+void Interface::HeroList::render(sf::RenderTarget * target)
+{
+	target->draw(this->background);
+	for (auto& item : this->portraits)
+	{
+		if (item->h)
+		{
+			target->draw(item->heroPortrait);
+			target->draw(item->movment);
+		}
+			
+		if (selected == item->id)
+			target->draw(item->selectFrame);
+	}
+		
+}
+
+void Interface::HeroList::HeroItem::clickLeft(bool down, bool previousState)
+{
+	if (down && previousState == false && this->h)
+	{
+		if (*this->sel == this->id)
+			PI->openHeroWindow(this->h);
+		else
+		{
+			*this->sel = this->id;
+			PI->focusOn(this->h, true);
+			PI->gameArea->selection = this->h;
+			PI->canCalcuatePaths = true;
+
+		}
+	}
+}
+
+Interface::HeroList::HeroItem::HeroItem(int id, int* selected,float x, float y, HeroInstance * h)
+{
+	this->sel = selected;
+	this->shape = sf::FloatRect(x, y, 34, 23);
+	this->selectFrame.setPosition(x, y);
+	this->selectFrame.setSize(sf::Vector2f(34, 23));
+	this->selectFrame.setOutlineThickness(1);
+	this->selectFrame.setFillColor(sf::Color::Transparent);
+	this->selectFrame.setOutlineColor(sf::Color::Yellow);
+	this->movment.setPosition(x - 2, y + 23);
+	this->movment.setScale(1, -1);
+	this->movment.setSize(sf::Vector2f(2, 27));
+	this->heroPortrait.setPosition(x, y);
+	this->heroPortrait.setTexture(*graphics.allHeroesPortraits);
+	this->id = id;
+	this->h = nullptr;
 	
 }

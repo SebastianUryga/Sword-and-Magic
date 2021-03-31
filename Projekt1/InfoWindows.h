@@ -37,7 +37,7 @@ public:
 
 		void clickLeft(bool down, bool previousState) override;
 		void clickRight(bool down, bool previousState) override;
-		HeroPortrait(int& sel, int id, int x, int y, HeroInstance * H);
+		HeroPortrait(int& sel, int id, float x, float y, HeroInstance * H);
 
 		sf::RectangleShape selectFrame;
 		sf::Sprite portriat;

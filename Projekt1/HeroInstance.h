@@ -25,7 +25,7 @@ private:
 
 	MovmentComponent* movmentComponent;
 
-	
+	sf::Clock clock;
 public:
 	std::vector<Troop> troops;
 
@@ -47,15 +47,16 @@ public:
 	void initHero();
 
 	int getSightRadius() const override;
+	void setOwner(int ow) override;
 	void initObj() override;
 	void initObjAnimaiton() override;
 	void setTexture(sf::Texture& sheetTexture) override;
-	void setType(int type) override;
+	void setType(int type, int subType = 0) override;
 	void setTilePos(const sf::Vector2i& pos) override;
 	void afterAddToMap() override;
 	virtual std::string getObjectName() const;
 	std::string getHoverText(const HeroInstance* hero) const override;
-	void onHeroVisit(const HeroInstance * h) const override;
+	void onHeroVisit(const HeroInstance * h) override;
 	void animationUpdate(const float& dt) override;
 	void update(const float& dt) override;
 	virtual void render(sf::RenderTarget* target);

@@ -6,13 +6,13 @@ static int countID = 0;
 int MP2::ObjectInstance::getWidth() const
 {
 	if (this->getHeight() > 0)
-		return usedTiles[0].size();
+		return (int)usedTiles[0].size();
 	return 0;
 }
 
 int MP2::ObjectInstance::getHeight() const
 {
-	return usedTiles.size();
+	return (int)usedTiles.size();
 }
 
 bool MP2::ObjectInstance::visitableAt(int x, int y) const
@@ -50,7 +50,7 @@ int MP2::ObjectInstance::getSightRadius() const
 
 void MP2::ObjectInstance::setOwner(int ow)
 {
-	ownerColor = ow;
+	this->ownerColor = ow;
 }
 
 void MP2::ObjectInstance::setTexture(sf::Texture & sheetTexture)
@@ -70,87 +70,44 @@ void MP2::ObjectInstance::initObjAnimaiton()
 {
 	int heightPixel = this->getHeight()*(int)TILEWIDTH;
 	int widthPixel = this->getWidth()*(int)TILEWIDTH;
-	this->animationComponent = new AnimotionComponent(this->sprite, *graphics.mapObjects[this->type]);
+	if(type != Obj::DWELLING)
+		this->animationComponent = new AnimotionComponent(this->sprite, *graphics.mapObjects[{this->type, this->subType}]);
+	else
+		this->animationComponent = new AnimotionComponent(this->sprite, *graphics.mapDwelling[this->subType]);
 	this->animationComponent->addAnimotion("IDLE", 3.f, 0, 0, this->numberOfFrameAnimation, 0, widthPixel, heightPixel, false);
 
 }
 
 void MP2::ObjectInstance::initObj()
 {
-	switch (this->type)
-	{
-	case Obj::TAVERN:
-		this->setOwner(Color::UNUSED);
-		this->instanceName = "Tavern";
-		this->setSize(3, 4);
-		this->usedTiles = { {4,2,1},{1,1,1},{1,1,1},{1,1,1}};
-		this->visitDir = DIRECTION_BOTTOM_ROW | DIRECTION_CENTER_ROW;
-		this->numberOfFrameAnimation = 7;
-		this->blockVisit = true;
-		break;
-	case Obj::STABLES:
-		this->setOwner(Color::UNUSED);
-		this->instanceName = "Stables";
-		this->setSize(3, 2);
-		this->usedTiles = { {2,4,1},{1,4,1} }; // BLOCKED = 4, VISITABLE = 2,VISIBLE = 1
-		this->visitDir = DIRECTION_BOTTOM_ROW | DIRECTION_CENTER_ROW;
-		this->numberOfFrameAnimation = 6;
-		break;
-	case Obj::TRADING_POST:
-		this->setOwner(Color::UNUSED);
-		this->instanceName = "Trading Post";
-		this->setSize(3, 3);
-		this->usedTiles = { {2,4,1}, {1,1,1}, {1,1,1} };
-		this->visitDir = DIRECTION_BOTTOM_ROW | DIRECTION_CENTER_ROW;
-		this->numberOfFrameAnimation = 7;
-		break;
-	case Obj::CRATER:
-		this->setOwner(Color::UNUSED);
-		this->instanceName = "Crater";
-		this->setSize(2, 2);
-		this->usedTiles = { {4,4},{4,4} };
-		this->numberOfFrameAnimation = 0;
-		break;
-	case Obj::MOUNTS1:
-		this->setOwner(Color::UNUSED);
-		this->instanceName = "Mounts1";
-		this->setSize(4, 3);
-		this->usedTiles = { {1,4,1,1},{1,4,4,1},{1,4,4,4} };
-		this->visitDir = Direction::UNKNOWN;
-		this->numberOfFrameAnimation = 0;
-		break;
-	case Obj::MOUNTS2:
-		this->setOwner(Color::UNUSED);
-		this->instanceName = "Mounts2";
-		this->setSize(4, 2);
-		this->usedTiles = { {1,4,4,1},{1,1,4,4} };
-		this->numberOfFrameAnimation = 0;
-		break;
-	case Obj::ARENA:
-		this->setOwner(Color::UNUSED);
-		this->instanceName = "Arena";
-		this->setSize(3, 3);
-		this->usedTiles = { {4,2,4},{4,4,4},{1,1,1} };
-		this->visitDir = DIRECTION_BOTTOM_ROW | DIRECTION_CENTER_ROW;
-		this->numberOfFrameAnimation = 0;
-		break;
 
-	default:
+	if (mapObjectsStats.find({ this->type, this->subType }) == mapObjectsStats.end())
+	{
 		std::cout << "error: object type not exist" << this->type << std::endl;
 		assert(0);
-		break;
 	}
+	MapObjectParametrs& stats = mapObjectsStats[{this->type, this->subType}];
+	this->instanceName = stats.name;
+	this->setSize(stats.width, stats.height);
+	this->usedTiles = stats.usedTlies;
+	this->visitDir = stats.visitDir;
+	this->blockVisit = stats.blockVisit;
+	this->numberOfFrameAnimation = stats.frameAnimation;
+	this->setOwner(Color::UNUSED);
+
 	this->priority = 2;
-	//this->sprite.setOrigin( // change orgin to RIGHT-BOTTOM corner
-	//	this->sprite.getLocalBounds().width,
-	//	this->sprite.getLocalBounds().height);
-	this->setTexture(*graphics.mapObjects[type]);
+
+	if (this->type == Obj::DWELLING)
+		this->setTexture(*graphics.mapDwelling[this->subType]);
+	else
+		this->setTexture(*graphics.mapObjects[{this->type, this->subType}]);
 	this->initObjAnimaiton();
 }
 
-void MP2::ObjectInstance::setType(int32_t type)
+void MP2::ObjectInstance::setType(int32_t type, int subType)
 {
 	this->type = Obj(type);
+	this->subType = subType;
 }
 
 std::string MP2::ObjectInstance::getObjectName() const
@@ -177,7 +134,7 @@ void MP2::ObjectInstance::setTilePos(const sf::Vector2i& pos)
 		this->pos = pos;
 		this->sprite.setPosition(sf::Vector2f(pos.x*TILEWIDTH, pos.y*TILEWIDTH));
 	}
-	else std::cout<<"obiekt nie zostl wstawiony: Poza mapa"<<std::endl;
+	else std::cout<<"obiekt zostl wstawiony: Poza mape"<<std::endl;
 }
 
 bool MP2::ObjectInstance::isVisitable() const
@@ -207,7 +164,7 @@ sf::Vector2i MP2::ObjectInstance::getVisitablePos() const
 	return sf::Vector2i(0, 0);
 }
 
-void MP2::ObjectInstance::onHeroVisit(const HeroInstance * h) const
+void MP2::ObjectInstance::onHeroVisit(const HeroInstance * h)
 {
 	switch (type)
 	{
@@ -228,10 +185,11 @@ void MP2::ObjectInstance::load(std::fstream & file)
 {
 	int temp;
 	file >> pos.x >> pos.y;
-	setTilePos(sf::Vector2i(pos.x, pos.y));
+	this->setTilePos(sf::Vector2i(pos.x, pos.y));
 	file >> temp >> subType;
-	setType(temp);
-	file >> ownerColor;
+	this->setType(Obj(temp),subType);
+	file >> ownerColor >> id;
+	this->setOwner(this->ownerColor);
 	initObj();
 }
 
@@ -239,8 +197,12 @@ void MP2::ObjectInstance::save(std::fstream & file)
 {
 	file <<" "<< pos.x << " " << pos.y << " ";
 	file << type.num << " " << subType << " ";
-	file << ownerColor;
-	id = countID++;
+	file << ownerColor << " " << id << " ";
+}
+
+int & MP2::ObjectInstance::getCountID()
+{
+	return countID;
 }
 
 void MP2::ObjectInstance::animationUpdate(const float& dt)
@@ -267,6 +229,7 @@ MP2::ObjectInstance::ObjectInstance()
 	this->type = Obj::NO_OBJ;
 	this->subType = -1;
 	this->blockVisit = false;
+	this->numberOfFrameAnimation = 0;
 }
 
 MP2::ObjectInstance::~ObjectInstance()
