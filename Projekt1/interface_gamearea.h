@@ -2,14 +2,13 @@
 #include "MapObject.h"
 #include "ButtonsArea.h"
 #include "TownInstance.h"
-#include "Graphics.h"
+#include "BattleHandler.h"
 #include "Tiles.h"
 #include "PlayerInterface.h"
 #include "InfoWindows.h"
 #include "color.h"
 #include "Direction.h"
-
-
+#include "Graphics.h"
 class HeroInstance;
 class TownInstance;
 struct Path;
@@ -32,7 +31,7 @@ namespace Interface
 		int mode;
 		sf::IntRect rectMaps;
 		
-		sf::View view;
+		sf::View* view;
 		sf::RenderWindow* window;
 
 		/// Where to scroll, example (0,0) means dont need to scroll
@@ -55,7 +54,7 @@ namespace Interface
 		sf::Vector2f getScrollOffset() const;
 		sf::Vector2f getScrollDirection() const;
 		sf::Vector2i getScrollTileOffset() const;
-		sf::View getView() const;
+		sf::View* getView() const;
 		int getMode() const;
 		bool contains(sf::Vector2i point) const;
 

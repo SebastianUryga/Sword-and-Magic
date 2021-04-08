@@ -5,6 +5,7 @@ class Fraction
 public:
 	enum FractionType
 	{
+		None,
 		Random,
 		Castle,
 		Rampart,
@@ -18,9 +19,10 @@ public:
 	Fraction(FractionType& type) : type(type) {}
 	explicit Fraction(int type) : type(static_cast<FractionType>(type)) {}
 	bool operator==(Fraction& other) { return other.type == this->type; }
-	Fraction& operator=(Fraction & other) { this->type = other.type; return *this; }
+	Fraction& operator=(const Fraction & other) { this->type = other.type; return *this; }
+	Fraction& operator=(const FractionType & type) { this->type = type; return *this; }
 	operator FractionType() const { return type; }
-
+	Fraction() {}
 };
 
 enum BuildingID
@@ -33,6 +35,7 @@ enum BuildingID
 	VILLAGE_HALL,
 	TOWN_HALL,
 	CAPITOL,
+	WALLS,
 	GUARDHOUSE,
 	ARCHER_TOWER,
 	GRIFFIN_TOWER,

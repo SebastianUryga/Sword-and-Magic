@@ -99,7 +99,7 @@ void MainMenuState::updateInput(const float & dt)
 
 void MainMenuState::update(const float& dt)
 {
-	this->updateMousePositions();
+	this->updateMousePositions(nullptr);
 	this->updateInput(dt);
 	
 	this->updateButtons();

@@ -127,7 +127,7 @@ void GameState::updateInput(const float & dt)
 
 void GameState::update(const float& dt)
 {
-	this->updateMousePositions(&Interface::GetGameArea().getView());
+	this->updateMousePositions(Interface::GetGameArea().getView());
 	this->updateInput(dt);
 	this->updateKeytime(dt);
 	

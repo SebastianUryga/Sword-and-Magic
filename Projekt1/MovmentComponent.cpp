@@ -49,10 +49,10 @@ const bool MovmentComponent::getState(const short unsigned state) const
 void MovmentComponent::fixSpritePos()
 {
 	sf::Vector2f fixedPos = this->sprite.getPosition();
-	fixedPos /= 32.f;
+	fixedPos /= TILEWIDTH;
 	fixedPos.x = std::round(fixedPos.x);
 	fixedPos.y = std::round(fixedPos.y);
-	fixedPos *= 32.f;
+	fixedPos *= TILEWIDTH;
 	this->sprite.setPosition(fixedPos);
 }
 

@@ -13,6 +13,8 @@ State::State(StateData* stateData)
 	this->quit = false;
 	this->keytime = 0.f;
 	this->keytimeMax = 4.f;
+	
+	this->mouseMoved = false;
 }
 
 
@@ -53,7 +55,7 @@ void State::OnMouseRightButtonClick()
 {
 }
 
-void State::updateMousePositions(sf::View *view)
+void State::updateMousePositions(sf::View * view = nullptr)
 {
 	this->mousePosScreen = sf::Mouse::getPosition();
 	this->mousePosWindow = sf::Mouse::getPosition(*this->window);

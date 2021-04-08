@@ -1,6 +1,7 @@
 #pragma once
 #include"WindowObject.h"
 
+
 class HeroInstance;
 class WindowObject;
 class GuiHandler;

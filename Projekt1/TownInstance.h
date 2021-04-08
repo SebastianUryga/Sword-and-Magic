@@ -29,8 +29,9 @@ class TownInstance :
 	public MP2::ObjectInstance
 {
 public:
-	Fraction* fraction;
+	Fraction fraction;
 	std::vector<Building*> buldings;
+	Building* fortification;
 	std::vector<Troop> troops;
 	void putBuildingsOnMap(const sf::Vector2i pos);
 	void setObjectsToBuildings();

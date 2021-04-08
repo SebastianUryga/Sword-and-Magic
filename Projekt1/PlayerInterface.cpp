@@ -201,7 +201,12 @@ void PlayerInterface::bulid(BuildingID building, int slot)
 	if (town)
 	{
 		world.GetKingdom(currentColorTurn).spendMoney(buildingStats[building].cost);
-		town->buldings[slot]->setType(building);
+		if (slot < 6)
+			town->buldings[slot]->setType(building);
+		else
+		{
+			town->fortification->setType(building);
+		}
 	}
 }
 

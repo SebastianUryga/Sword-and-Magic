@@ -5,7 +5,8 @@ class State;
 class StateData
 {
 public:
-	StateData(){}
+	StateData() : window(nullptr),font(nullptr),states(nullptr)
+	{ }
 
 	//Variables
 	sf::RenderWindow* window;
@@ -51,7 +52,7 @@ public:
 	virtual void OnMouseRightButtonClick();
 
 	virtual void updateInput(const float& dt) = 0;
-	virtual void updateMousePositions(sf::View *view = nullptr);
+	virtual void updateMousePositions(sf::View * view);
 	virtual void updateKeytime(const float& dt);
 	virtual void update(const float& dt) = 0;
 	virtual void render(sf::RenderTarget* target = nullptr) = 0;

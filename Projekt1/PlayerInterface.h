@@ -47,7 +47,7 @@ public:
 	bool canRecruitHero(int player, const MP2::ObjectInstance * obj);
 	HeroInstance* getTavernHero(int player);
 
-	void bulid(BuildingID building, int slot);
+	void bulid(BuildingID building, int slot = 7);
 	//void initMovement(const TryMoveHero &details, const HeroInstance * ho, const int3 &hp);//initializing objects and performing first step of move
 	//void heroVisit(const HeroInstance * visitor, const ObjectInstance * visitedObj, bool start);
 	//void heroVisitsTown(const HeroInstance* hero, const TownInstance * town);

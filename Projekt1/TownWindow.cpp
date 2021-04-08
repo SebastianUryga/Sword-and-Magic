@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "TownWindow.h"
+#include "TownWindow.h" // moze tego nie trzeba
 #include "GuiHandler.h"
 
 void TownWindow::showListOfAvaibleBuildings(int slot)
@@ -66,27 +66,33 @@ void TownWindow::initButtons()
 		this->buttons["Slot" + std::to_string(i+1)] = std::make_shared<Button>(
 			this->background.getPosition().x + 30,
 			this->background.getPosition().y + 50,
-			100, 30, &this->font, temp
+			130, 30, &this->font, temp
 			);
 	}
 	this->buttons["Slot1"]->setPos(
-		this->background.getPosition().x + 30,
+		this->background.getPosition().x + 20,
 		this->background.getPosition().y + 50);
 	this->buttons["Slot2"]->setPos(
-		this->background.getPosition().x + 30,
+		this->background.getPosition().x + 20,
 		this->background.getPosition().y + 130);
 	this->buttons["Slot3"]->setPos(
-		this->background.getPosition().x + 150,
+		this->background.getPosition().x + 160,
 		this->background.getPosition().y + 130);
 	this->buttons["Slot4"]->setPos(
-		this->background.getPosition().x + 280,
+		this->background.getPosition().x + 300,
 		this->background.getPosition().y + 130);
 	this->buttons["Slot5"]->setPos(
-		this->background.getPosition().x + 410,
-		this->background.getPosition().y + 50);
-	this->buttons["Slot6"]->setPos(
-		this->background.getPosition().x + 410,
+		this->background.getPosition().x + 440,
 		this->background.getPosition().y + 130);
+	this->buttons["Slot6"]->setPos(
+		this->background.getPosition().x + 440,
+		this->background.getPosition().y + 50);
+
+	this->buttons["Town Upgrade"] = std::make_shared<Button>(
+		this->background.getPosition().x + 230,
+		this->background.getPosition().y + 20,
+		120, 100, &this->font, curTown->fortification->name
+		);
 
 	for (int i = 0; i < curTown->buldings.size(); i++)
 	{
@@ -103,6 +109,18 @@ void TownWindow::initButtons()
 		};
 		this->buttons["Slot" + std::to_string(i+1)]->addFuctionallity(fun);
 	}
+	if (buildingStats[curTown->fortification->upgrade].cost > world.GetKingdom(PI->getCurrentColor()).getMoney()
+		|| curTown->subType == TownLevel::Castle)
+		this->buttons["Town Upgrade"]->block(true);
+
+	std::function<void()> onYes = [=]() {PI->bulid(curTown->fortification->upgrade); this->initButtons(); };
+	this->buttons["Town Upgrade"]->addFuctionallity(
+		[=]()
+		{
+			if (curTown->fortification->upgrade != NONE)
+				PI->showYesNoDialog("Czy chcesz ulepszyc to miasto?", onYes, [=]() {});
+		}
+	);
 
 	this->buttons["Quit"] = std::make_shared<Button>(
 		this->background.getPosition().x + 400,
@@ -112,7 +130,7 @@ void TownWindow::initButtons()
 
 	this->buttons["Quit"]->addFuctionallity([=]() {this->close(); });
 
-
+	this->interactiveElem.push_back(this->buttons["Town Upgrade"]);
 	this->interactiveElem.push_back(this->buttons["Quit"]);
 	this->interactiveElem.push_back(this->buttons["Slot1"]);
 	this->interactiveElem.push_back(this->buttons["Slot2"]);
@@ -128,7 +146,7 @@ TownWindow::~TownWindow()
 }
 
 BuildingsList::BuildingsList(std::vector<BuildingID> list, int slot)
-	: WindowObject(400,300,200,500,GH.globalFont), avaibleBuildingList(list),slot(slot)
+	: WindowObject(400,300,300,500,GH.globalFont), avaibleBuildingList(list),slot(slot)
 {
 	this->background.setOutlineThickness(2);
 	this->background.setOutlineColor(sf::Color::Yellow);
@@ -154,7 +172,7 @@ void BuildingsList::addButton(std::shared_ptr<Button> btn)
 	std::string temp = "Build" + this->buttons.size();
 	this->buttons[temp] = btn;
 	this->buttons[temp]->setPos(
-		this->background.getPosition().x + 130,
+		this->background.getPosition().x + 200,
 		this->background.getPosition().y + (this->buttons.size() - 2) * 50.f + 30
 	);
 	this->interactiveElem.push_back(btn);

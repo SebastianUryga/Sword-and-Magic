@@ -30,7 +30,7 @@
 # Folders
 images/
 obj/
-
+Projekt1/*
 # Codeblocks
 *.cbp
 *.save

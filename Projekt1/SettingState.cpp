@@ -63,7 +63,7 @@ void SettingState::updateInput(const float & dt)
 
 void SettingState::update(const float& dt)
 {
-	this->updateMousePositions();
+	this->updateMousePositions(nullptr);
 	this->updateInput(dt);
 
 	this->updateButtons();

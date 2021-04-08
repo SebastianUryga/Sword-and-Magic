@@ -21,7 +21,7 @@ void Kingdom::clear()
 	this->color = Color::NONE;
 }
 
-Kingdom::Kingdom() : color(Color::NONE),race(Fraction::Castle)
+Kingdom::Kingdom() : color(Color::NONE),race(Fraction::Castle),money(300)
 {
 }
 

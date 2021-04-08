@@ -4,11 +4,11 @@
 
 void Interface::GameArea::initView()
 {
-	this->view.setSize(
+	this->view->setSize(
 		static_cast<float>(this->window->getSize().x),
 		static_cast<float>(this->window->getSize().y)
 	);
-	this->view.setCenter(
+	this->view->setCenter(
 		this->window->getSize().x / 2.f,
 		this->window->getSize().y / 2.f
 	);
@@ -55,7 +55,7 @@ sf::Vector2i Interface::GameArea::getScrollTileOffset() const
 	return (sf::Vector2i) (this->scrollOffset / TILEWIDTH);
 }
 
-sf::View Interface::GameArea::getView() const
+sf::View* Interface::GameArea::getView() const
 {
 	return this->view;
 }
@@ -114,6 +114,7 @@ void Interface::GameArea::built(sf::RenderWindow* window,  int mode)
 Interface::GameArea::GameArea()
 	:WindowObject(0,0,0,0,this->font)
 {
+	this->view = new sf::View();
 	this->rectMaps.top = 0.f;
 	this->rectMaps.left = 0.f;
 	this->scrollSpeed = 20.f;
@@ -132,7 +133,7 @@ void Interface::GameArea::updateView()
 {
 	if (this->needScroll())
 	{
-		this->view.move(this->getScrollDirection());
+		this->view->move(this->getScrollDirection());
 		this->scrollOffset += this->scrollDirection;
 		this->scrollDirection = sf::Vector2f(0, 0);
 	}
@@ -166,7 +167,7 @@ void Interface::GameArea::update(const float dt, sf::Vector2i mousePosWindow)
 
 void Interface::GameArea::render(sf::RenderTarget * target)
 {
-	target->setView(this->view);
+	target->setView(*this->view);
 	
 	for (int x = std::max(0,this->getScrollTileOffset().x - 1);
 		x < std::min(world.w(), this->getScrollTileOffset().x + 51); x++)

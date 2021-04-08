@@ -5,6 +5,7 @@ Graphics & graphics = Graphics::Get();
 
 Graphics::Graphics()
 {
+	this->battleBackgrouds = std::make_shared<sf::Texture>();
 	fogOfWarFullHide = std::make_shared<sf::Texture>();
 	fogOfWarPartialHide = std::make_shared<sf::Texture>();
 	heroMoveArrows = std::make_shared<sf::Texture>();
@@ -12,6 +13,7 @@ Graphics::Graphics()
 	this->castleTown = std::make_shared<sf::Texture>();
 	this->allHeroesPortraits = std::make_shared<sf::Texture>();
 	this->allCreaturePortraits = std::make_shared<sf::Texture>();
+	this->battleBackgrouds->setRepeated(true);
 	fogOfWarFullHide->setRepeated(true);
 	fogOfWarPartialHide->setRepeated(true);
 	heroOnMapSheet->setRepeated(true);
@@ -147,6 +149,9 @@ void Graphics::Init()
 	texture->loadFromImage(image);
 	roads[5].push_back(texture);
 
+	this->battleBackgrouds->loadFromFile("Textures\\CmBkDrMt.png");
+	this->battleUnitsSheets[Monster::PIKEMAN] = std::make_shared<sf::Texture>();
+	this->battleUnitsSheets[Monster::PIKEMAN]->loadFromFile("Textures\\Pikeman.png");
 	this->allHeroesPortraits->loadFromFile("Textures\\Heroes Portraits.png");
 	this->allCreaturePortraits->loadFromFile("Textures\\Creatures Portraits.png");
 	this->fogOfWarFullHide->loadFromFile("Textures\\fog.png");
@@ -188,12 +193,19 @@ void Graphics::Init()
 	sf::Color shadow = this->image.getPixel(30,60);
 	this->image.createMaskFromColor(tran, 0);
 	this->image.createMaskFromColor(shadow, 90);
-	this->image.create(2, 2, sf::Color(20, 20, 20, 90));
-	
+	this->mapDwelling[Dwelling::Guardhouse]->loadFromImage(this->image);
 	//this->image.createMaskFromColor();
-	this->mapDwelling[Dwelling::Guardhouse]->loadFromFile("Textures\\AVGpike0.png");
-	this->mapDwelling[Dwelling::ArchersTower]->loadFromFile("Textures\\AVGcros0.png");
-	this->mapDwelling[Dwelling::GriffinTower]->loadFromFile("Textures\\AVGgrff0.png");
+	
+	this->image.loadFromFile("Textures\\AVGcros0.png");
+	this->image.createMaskFromColor(tran, 0);
+	this->image.createMaskFromColor(shadow, 90);
+	this->mapDwelling[Dwelling::ArchersTower]->loadFromImage(this->image);
+
+	this->image.loadFromFile("Textures\\AVGgrff0.png");
+	this->image.createMaskFromColor(tran, 0);
+	this->image.createMaskFromColor(shadow, 90);
+	this->mapDwelling[Dwelling::GriffinTower]->loadFromImage(this->image);
+
 	this->mapDwelling[Dwelling::Barracks]->loadFromFile("Textures\\AVGswor0.png");
 	this->mapObjects[{Obj::TOWN, 0}] = this->castleTown;
 	this->grounds[Maps::Ground::DIRT] = std::make_shared<sf::Texture>();
@@ -203,7 +215,7 @@ void Graphics::Init()
 	this->grounds[Maps::Ground::GRASS]->loadFromFile("Textures\\Grass_(h)2.png");
 	this->grounds[Maps::Ground::GRASS]->setRepeated(true);
 
-	this->mapDwelling[Dwelling::Guardhouse]->loadFromImage(this->image);
+	
 }
 
 Graphics & Graphics::Get()

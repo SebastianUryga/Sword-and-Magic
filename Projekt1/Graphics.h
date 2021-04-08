@@ -6,6 +6,7 @@ public:
 	Graphics();
 	virtual ~Graphics();
 
+	std::shared_ptr<sf::Texture> battleBackgrouds;
 	std::shared_ptr<sf::Texture> fogOfWarFullHide;
 	std::shared_ptr<sf::Texture> fogOfWarPartialHide;
 	std::shared_ptr<sf::Texture> heroMoveArrows;
@@ -19,6 +20,7 @@ public:
 	std::shared_ptr<sf::Texture> allHeroesPortraits;
 	std::shared_ptr<sf::Texture> allCreaturePortraits;
 	std::map<Monster, sf::IntRect> creaturePortraits;
+	std::map<Monster, std::shared_ptr<sf::Texture>> battleUnitsSheets;
 	std::map<int, sf::Texture> primarySkills;
 	std::map<int, sf::IntRect> portriats;
 	std::map<int, sf::IntRect> smallPortraits;

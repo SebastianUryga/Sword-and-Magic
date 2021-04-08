@@ -31,6 +31,7 @@ void TownInstance::setObjectsToBuildings()
 		b->visibleMapObject = world.GetObject(b->objectId);
 		b->setType(b->id);
 	}
+	this->fortification->setType(this->fortification->id);
 }
 
 TownInstance::TownInstance()
@@ -39,10 +40,13 @@ TownInstance::TownInstance()
 	this->buldings.resize(6);
 	for (auto& i : this->buldings)
 		i = new Building();
-	
+	this->fortification = new Building();
+	this->fortification->id = BuildingID::VILLAGE_HALL;
+	//this->buldings.push_back(this->fortification); // makes many complications
 	this->ownerColor = Color::UNUSED;
 	this->type = Obj::TOWN;
 	this->subType = TownLevel::NoFort;
+	this->fraction = Fraction::None;
 }
 
 
@@ -81,8 +85,26 @@ void TownInstance::initObj()
 	this->visitDir = DIRECTION_BOTTOM_ROW;
 	this->blockVisit = false;
 	this->priority = 2;
-
-	
+	this->fortification->objectId = this->id;
+	this->fortification->visibleMapObject = this;
+	this->fortification->mapObjectPos = this->pos;
+	switch (this->subType)
+	{
+	case TownLevel::NoFort:
+		this->fortification->id = BuildingID::VILLAGE_HALL;
+		break;
+	case TownLevel::Fort:
+		this->fortification->id = BuildingID::FORT;
+		break;
+	case TownLevel::Citadel:
+		this->fortification->id = BuildingID::CITADEL;
+		break;
+	case TownLevel::Castle:
+		this->fortification->id = BuildingID::CASTLE;
+		break;
+	default:
+		break;
+	}
 	this->setTexture(*graphics.castleTown);
 	//this->initObjAnimaiton();
 }
@@ -150,12 +172,14 @@ void TownInstance::render(sf::RenderTarget * target)
 void TownInstance::save(std::fstream & file)
 {
 	MP2::ObjectInstance::save(file);
+	file << fraction << " ";
 	for (auto b : this->buldings)
 	{
 		file << b->visibleMapObject->id << " ";
 		file << b->mapObjectPos.x << " " << b->mapObjectPos.y << " ";
 		file << b->id << " ";
 	}
+	
 	for (auto& troop : this->troops)
 	{
 		file << " " << troop.monster.monster << " " << troop.count << " ";
@@ -166,6 +190,9 @@ void TownInstance::load(std::fstream & file)
 {
 	int type = 0;
 	MP2::ObjectInstance::load(file);
+	file >> type;
+	this->fraction = Fraction(type);
+	
 	for (auto b : this->buldings)
 	{
 		file >> b->objectId;
@@ -183,6 +210,7 @@ void TownInstance::load(std::fstream & file)
 
 Building::Building()
 {
+	this->objectId = -1;
 	this->id = BuildingID::NONE;
 	this->upgrade = BuildingID::NONE;
 	this->cost = 0;
@@ -204,7 +232,7 @@ void Building::setType(BuildingID id)
 	this->cost = stats.cost;
 	this->name = stats.name;
 	if (id == NONE)
-		this->visibleMapObject->setType(stats.type);
+		this->visibleMapObject->setType(stats.type,visibleMapObject->subType);
 	else
 		this->visibleMapObject->setType(stats.type, stats.subType);
 	this->visibleMapObject->initObj();

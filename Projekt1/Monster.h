@@ -9,6 +9,17 @@ struct MonsterStats
 	bool fly;
 	bool archer;
 };
+struct MonsterAnimationParametrs
+{
+	float animationTimer;
+	int start_frame_x;
+	int start_frame_y;
+	int frames_x;
+	int frames_y;
+	int width;
+	int height;
+	bool turn;
+};
 
 class Monster
 {
@@ -38,3 +49,4 @@ public:
 	MonsterType monster;
 };
 
+extern std::map<std::pair<Monster,std::string>, MonsterAnimationParametrs> animationParametrs;
