@@ -39,7 +39,7 @@ public:
 	bool setNewPath(std::shared_ptr<Path> path);
 	sf::Vector2i getActualHeroTilePos();
 
-	void DoMove(int x, int y);
+	void DoMove(float x, float y);
 	void startMoving();
 	void stopMoving();
 

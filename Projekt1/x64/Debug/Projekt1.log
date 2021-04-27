@@ -1,23 +1,2 @@
-﻿  Battlefield.cpp
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xutility(138,73): warning C4244: "argument": konwersja z "_Ty" do "float", możliwa utrata danych
-          with
-          [
-              _Ty=int
-          ]
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\memory(2186): message : zobacz odwołanie do kompilowanego tworzenia wystąpienia „void std::_Construct_in_place<_Ty,int,int,int,int,sf::Font*,const char(&)[5]>(_Ty &,int &&,int &&,int &&,int &&,sf::Font *&&,const char (&)[5]) noexcept(false)” funkcji szablon
-          with
-          [
-              _Ty=Button
-          ]
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\memory(2906): message : zobacz odwołanie do kompilowanego tworzenia wystąpienia „std::_Ref_count_obj2<_Ty>::_Ref_count_obj2<int,int,int,int,sf::Font*,const char(&)[5]>(int &&,int &&,int &&,int &&,sf::Font *&&,const char (&)[5])” funkcji szablon
-          with
-          [
-              _Ty=Button
-          ]
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\memory(2907): message : zobacz odwołanie do kompilowanego tworzenia wystąpienia „std::_Ref_count_obj2<_Ty>::_Ref_count_obj2<int,int,int,int,sf::Font*,const char(&)[5]>(int &&,int &&,int &&,int &&,sf::Font *&&,const char (&)[5])” funkcji szablon
-          with
-          [
-              _Ty=Button
-          ]
-C:\Users\Sebix\Desktop\Projekt1\Projekt1\Battlefield.cpp(9): message : zobacz odwołanie do kompilowanego tworzenia wystąpienia „std::shared_ptr<Button> std::make_shared<Button,int,int,int,int,sf::Font*,const char(&)[5]>(int &&,int &&,int &&,int &&,sf::Font *&&,const char (&)[5])” funkcji szablon
+﻿  BattleUnit.cpp
   Projekt1.vcxproj -> C:\Users\Sebix\Desktop\Projekt1\x64\Debug\Projekt1.exe

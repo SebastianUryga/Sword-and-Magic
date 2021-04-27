@@ -153,7 +153,7 @@ BuildingsList::BuildingsList(std::vector<BuildingID> list, int slot)
 	for (int i = 0 ; i < this->avaibleBuildingList.size() ; i++)
 	{
 		std::string name = buildingStats[avaibleBuildingList[i]].name;
-		this->addText(name, sf::Vector2f(30, 50 * i + 30));
+		this->addText(name, sf::Vector2f(30,  (float) 50 * i + 30));
 	}
 	this->buttons["Quit"] = std::make_shared<Button>(
 		this->background.getPosition().x + 250,

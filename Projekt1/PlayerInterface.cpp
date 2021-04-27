@@ -98,6 +98,7 @@ void PlayerInterface::tileLClicked(const sf::Vector2i mapPos)
 		else if (pn->turns == 255)
 		{
 			std::cout << "nie osiagalne" << pn->cost << std::endl;
+			
 			return;
 		}
 		else
@@ -113,7 +114,10 @@ void PlayerInterface::tileLClicked(const sf::Vector2i mapPos)
 					std::cout << "nowa sciezka" << currentHero->currentPath->endPos().x << " " <<
 					currentHero->currentPath->endPos().y << std::endl;
 				else
+				{
 					std::cout << " nie ma nowej sciezki" << std::endl;
+					BH.startBallte();
+				}
 			}
 		}
 	}
@@ -131,6 +135,7 @@ void PlayerInterface::tileRClicked(const sf::Vector2i mapPos)
 		if (obj->type == Obj::HERO)
 		{
 			// show small Hero Window
+
 		}
 		else if (obj->type == Obj::TOWN)
 		{
@@ -156,6 +161,7 @@ void PlayerInterface::dismissHero(HeroInstance * hero)
 	std::cout << "kiled hero" <<hero->id<< std::endl;
 	//remove from map
 	// set owner to unused
+	
 }
 
 void PlayerInterface::openHeroWindow(HeroInstance * hero)

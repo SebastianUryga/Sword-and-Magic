@@ -22,7 +22,7 @@ public:
 	void deactivate();
 	void activate();
 	void setPos(float x, float y);
-	void close();
+	virtual void close();
 
 	virtual void update(const float dt, const sf::Vector2i mousePos);
 	virtual void render(sf::RenderTarget* target);

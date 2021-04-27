@@ -6,8 +6,12 @@ struct MonsterStats
 	uint8_t defence;
 	uint8_t level;
 	uint16_t hp;
+	float speed;
+	float attackSpeed;
 	bool fly;
 	bool archer;
+	bool bigCreature;
+	
 };
 struct MonsterAnimationParametrs
 {
@@ -18,7 +22,8 @@ struct MonsterAnimationParametrs
 	int frames_y;
 	int width;
 	int height;
-	bool turn;
+	sf::Vector2f orgin;
+	float tileWidth;
 };
 
 class Monster
@@ -35,8 +40,9 @@ public:
 		MARKSMEN = 4,
 		GRIFFIN = 5,
 		ROYAL_GRIFFIN = 6,
-		SWORDMAN = 2,
-		CRUSADER = 4
+		SWORDSMAN = 7,
+		CRUSADER = 8,
+		ANGEL = 9,
 	};
 
 	Monster(MonsterType type = NO_CREATURE) : monster(type) {}
@@ -48,5 +54,5 @@ public:
 	bool operator<(const Monster& other) const { return monster < other.monster; }
 	MonsterType monster;
 };
-
+extern std::map<Monster,MonsterStats> creaturesStats;
 extern std::map<std::pair<Monster,std::string>, MonsterAnimationParametrs> animationParametrs;

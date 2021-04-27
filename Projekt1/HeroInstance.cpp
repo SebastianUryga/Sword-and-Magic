@@ -127,7 +127,7 @@ void HeroInstance::initObj()
 	switch (this->subType)
 	{
 	case HeroClass::KNIGHT:
-		troops = { {Monster::PIKEMAN, 5},{Monster::SWORDMAN, 4},{Monster::ARCHER, 2},
+		troops = { {Monster::PIKEMAN, 5},{Monster::SWORDSMAN, 4},{Monster::ARCHER, 2},
 		{Monster::ARCHER, 4} ,{Monster::PIKEMAN, 2}, {Monster::NO_CREATURE, 0} ,{Monster::NO_CREATURE, 0} };
 		break;
 	case HeroClass::CLERIC:
@@ -154,23 +154,39 @@ void HeroInstance::initObjAnimaiton()
 {
 	this->animationComponent = new AnimotionComponent(this->sprite, *graphics.heroOnMapSheet);
 	sf::IntRect squre = Graphics::selectHeroOnMap((HeroClass)this->subType);
-	
-	this->animationComponent->addAnimotion("IDLE_DOWN", 10.f, squre.left, squre.top, 0, 0, 96, 64, false);
-	this->animationComponent->addAnimotion("IDLE_DOWN_RIGHT", 10.f, squre.left+1, squre.top, 0, 0, 96, 64, false);
-	this->animationComponent->addAnimotion("IDLE_DOWN_LEFT", 10.f, 1, squre.top, 0, 0, 96, 64, true);
-	this->animationComponent->addAnimotion("IDLE_RIGHT", 10.f, 2, squre.top, 0, 0, 96, 64, false);
-	this->animationComponent->addAnimotion("IDLE_LEFT", 10.f, 2, squre.top, 0, 0, 96, 64, true);
-	this->animationComponent->addAnimotion("IDLE_UP_RIGHT", 10.f, 3, squre.top, 0, 0, 96, 64, false);
-	this->animationComponent->addAnimotion("IDLE_UP_LEFT", 10.f, 3, squre.top, 0, 0, 96, 64, true);
-	this->animationComponent->addAnimotion("IDLE_UP", 10.f, 4, squre.top, 0, 0, 96, 64, false);
-	this->animationComponent->addAnimotion("MOVE_DOWN", 1.f, 5, squre.top, 7, 0, 96, 64, false);
-	this->animationComponent->addAnimotion("MOVE_DOWN_RIGHT", 1.f, 13, squre.top, 7, 0, 96, 64, false);
-	this->animationComponent->addAnimotion("MOVE_DOWN_LEFT", 1.f, 13, squre.top, 7, 0, 96, 64, true);
-	this->animationComponent->addAnimotion("MOVE_RIGHT", 1.f, 21, squre.top, 7, 0, 96, 64, false);
-	this->animationComponent->addAnimotion("MOVE_LEFT", 1.f, 21, squre.top, 7, 0, 96, 64, true);
-	this->animationComponent->addAnimotion("MOVE_UP_RIGHT", 1.f, 29, squre.top, 7, 0, 96, 64, false);
-	this->animationComponent->addAnimotion("MOVE_UP_LEFT", 1.f, 29, squre.top, 7, 0, 96, 64, true);
-	this->animationComponent->addAnimotion("MOVE_UP", 1.f, 37, squre.top, 7, 0, 96, 64, false);
+	sf::Vector2f orgin(TILEWIDTH, TILEWIDTH);
+	this->animationComponent->addAnimotion("IDLE_DOWN",10.f,squre.left,
+		squre.top, 0, 0, 96, 64, false, orgin,TILEWIDTH);
+	this->animationComponent->addAnimotion("IDLE_DOWN_RIGHT", 10.f, squre.left+1,
+		squre.top, 0, 0, 96, 64, false, orgin, TILEWIDTH);
+	this->animationComponent->addAnimotion("IDLE_DOWN_LEFT", 10.f, 1,
+		squre.top, 0, 0, 96, 64, true, orgin, TILEWIDTH);
+	this->animationComponent->addAnimotion("IDLE_RIGHT", 10.f, 2,
+		squre.top, 0, 0, 96, 64, false, orgin, TILEWIDTH);
+	this->animationComponent->addAnimotion("IDLE_LEFT", 10.f, 2,
+		squre.top, 0, 0, 96, 64, true, orgin, TILEWIDTH);
+	this->animationComponent->addAnimotion("IDLE_UP_RIGHT", 10.f, 3,
+		squre.top, 0, 0, 96, 64, false, orgin, TILEWIDTH);
+	this->animationComponent->addAnimotion("IDLE_UP_LEFT", 10.f, 3,
+		squre.top, 0, 0, 96, 64, true, orgin, TILEWIDTH);
+	this->animationComponent->addAnimotion("IDLE_UP", 10.f, 4,
+		squre.top, 0, 0, 96, 64, false, orgin, TILEWIDTH);
+	this->animationComponent->addAnimotion("MOVE_DOWN", 1.f, 5,
+		squre.top, 7, 0, 96, 64, false, orgin, TILEWIDTH);
+	this->animationComponent->addAnimotion("MOVE_DOWN_RIGHT", 1.f, 13,
+		squre.top, 7, 0, 96, 64, false, orgin, TILEWIDTH);
+	this->animationComponent->addAnimotion("MOVE_DOWN_LEFT", 1.f, 13,
+		squre.top, 7, 0, 96, 64, true, orgin, TILEWIDTH);
+	this->animationComponent->addAnimotion("MOVE_RIGHT", 1.f, 21,
+		squre.top, 7, 0, 96, 64, false, orgin, TILEWIDTH);
+	this->animationComponent->addAnimotion("MOVE_LEFT", 1.f, 21,
+		squre.top, 7, 0, 96, 64, true, orgin, TILEWIDTH);
+	this->animationComponent->addAnimotion("MOVE_UP_RIGHT", 1.f, 29,
+		squre.top, 7, 0, 96, 64, false, orgin, TILEWIDTH);
+	this->animationComponent->addAnimotion("MOVE_UP_LEFT", 1.f, 29,
+		squre.top, 7, 0, 96, 64, true, orgin, TILEWIDTH);
+	this->animationComponent->addAnimotion("MOVE_UP", 1.f, 37,
+		squre.top, 7, 0, 96, 64, false, orgin, TILEWIDTH);
 
 }
 
@@ -241,60 +257,60 @@ void HeroInstance::animationUpdate(const float & dt)
 	if (this->movmentComponent->getState(IDLE))
 	{
 		if (lastMove == MOVING_DOWN)
-			this->animationComponent->paly("IDLE_DOWN", dt);
+			this->animationComponent->play("IDLE_DOWN", dt, false);
 		if (lastMove == MOVING_UP)
-			this->animationComponent->paly("IDLE_UP", dt);
+			this->animationComponent->play("IDLE_UP", dt,false);
 		if (lastMove == MOVING_UP_RIGHT)
-			this->animationComponent->paly("IDLE_UP_RIGHT", dt);
+			this->animationComponent->play("IDLE_UP_RIGHT", dt, false);
 		if (lastMove == MOVING_DOWN_RIGHT)
-			this->animationComponent->paly("IDLE_DOWN_RIGHT", dt);
+			this->animationComponent->play("IDLE_DOWN_RIGHT", dt, false);
 		if (lastMove == MOVING_RIGHT)
-			this->animationComponent->paly("IDLE_RIGHT", dt);
+			this->animationComponent->play("IDLE_RIGHT", dt, false);
 		if (lastMove == MOVING_LEFT)
-			this->animationComponent->paly("IDLE_LEFT", dt);
+			this->animationComponent->play("IDLE_LEFT", dt, true);
 		if (lastMove == MOVING_DOWN_LEFT)
-			this->animationComponent->paly("IDLE_DOWN_LEFT", dt);
+			this->animationComponent->play("IDLE_DOWN_LEFT", dt, true);
 		if (lastMove == MOVING_UP_LEFT)
-			this->animationComponent->paly("IDLE_UP_LEFT", dt);
+			this->animationComponent->play("IDLE_UP_LEFT", dt, true);
 	}
 	else if (this->movmentComponent->getState(MOVING_UP_RIGHT))
 	{
-		this->animationComponent->paly("MOVE_UP_RIGHT", dt);
+		this->animationComponent->play("MOVE_UP_RIGHT", dt, false);
 		lastMove = MOVING_UP_RIGHT;
 	}
 	else if (this->movmentComponent->getState(MOVING_RIGHT))
 	{
-		this->animationComponent->paly("MOVE_RIGHT", dt);
+		this->animationComponent->play("MOVE_RIGHT", dt, false);
 		lastMove = MOVING_RIGHT;
 	}
 	else if (this->movmentComponent->getState(MOVING_DOWN_RIGHT))
 	{
-		this->animationComponent->paly("MOVE_DOWN_RIGHT", dt);
+		this->animationComponent->play("MOVE_DOWN_RIGHT", dt, false);
 		lastMove = MOVING_DOWN_RIGHT;
 	}
 	else if (this->movmentComponent->getState(MOVING_LEFT))
 	{
-		this->animationComponent->paly("MOVE_LEFT", dt);
+		this->animationComponent->play("MOVE_LEFT", dt, true);
 		lastMove = MOVING_LEFT;
 	}
 	else if (this->movmentComponent->getState(MOVING_DOWN))
 	{
-		this->animationComponent->paly("MOVE_DOWN", dt);
+		this->animationComponent->play("MOVE_DOWN", dt, false);
 		lastMove = MOVING_DOWN;
 	}
 	else if (this->movmentComponent->getState(MOVING_UP))
 	{
-		this->animationComponent->paly("MOVE_UP", dt);
+		this->animationComponent->play("MOVE_UP", dt, false);
 		lastMove = MOVING_UP;
 	}
 	else if (this->movmentComponent->getState(MOVING_DOWN_LEFT))
 	{
-		this->animationComponent->paly("MOVE_DOWN_LEFT", dt);
+		this->animationComponent->play("MOVE_DOWN_LEFT", dt, true);
 		lastMove = MOVING_DOWN_LEFT;
 	}
 	else if (this->movmentComponent->getState(MOVING_UP_LEFT))
 	{
-		this->animationComponent->paly("MOVE_UP_LEFT", dt);
+		this->animationComponent->play("MOVE_UP_LEFT", dt, true);
 		lastMove = MOVING_UP_LEFT;
 	}
 }

@@ -115,8 +115,8 @@ Interface::GameArea::GameArea()
 	:WindowObject(0,0,0,0,this->font)
 {
 	this->view = new sf::View();
-	this->rectMaps.top = 0.f;
-	this->rectMaps.left = 0.f;
+	this->rectMaps.top = 0;
+	this->rectMaps.left = 0;
 	this->scrollSpeed = 20.f;
 	this->scrollTime = 10.f;
 	this->scrollOffset = sf::Vector2f(0, 0);

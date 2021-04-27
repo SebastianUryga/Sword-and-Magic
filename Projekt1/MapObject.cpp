@@ -74,7 +74,7 @@ void MP2::ObjectInstance::initObjAnimaiton()
 		this->animationComponent = new AnimotionComponent(this->sprite, *graphics.mapObjects[{this->type, this->subType}]);
 	else
 		this->animationComponent = new AnimotionComponent(this->sprite, *graphics.mapDwelling[this->subType]);
-	this->animationComponent->addAnimotion("IDLE", 3.f, 0, 0, this->numberOfFrameAnimation, 0, widthPixel, heightPixel, false);
+	this->animationComponent->addAnimotion("IDLE", 3.f, 0, 0, this->numberOfFrameAnimation, 0, widthPixel, heightPixel, false, sprite.getOrigin(),TILEWIDTH);
 
 }
 
@@ -208,7 +208,7 @@ int & MP2::ObjectInstance::getCountID()
 void MP2::ObjectInstance::animationUpdate(const float& dt)
 {
 	if(this->animationComponent)
-		this->animationComponent->paly("IDLE", dt);
+		this->animationComponent->play("IDLE", dt, false);
 }
 
 void MP2::ObjectInstance::update(const float & dt)

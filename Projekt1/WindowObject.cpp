@@ -40,7 +40,7 @@ void WindowObject::setPos(float x, float y)
 	float difX, difY;
 	difX = x - this->background.getPosition().x;
 	difY = y - this->background.getPosition().y;
-	this->background.setPosition((int)x, (int)y);
+	this->background.setPosition(x, y);
 	for (auto &btn : this->buttons)
 		btn.second->move(difX, difY);
 	for (auto &text : this->texts)

@@ -102,11 +102,10 @@ sf::Vector2i MovmentComponent::getActualHeroTilePos()
 	return sf::Vector2i(-1,-1);
 }
 
-
-void MovmentComponent::DoMove(int x, int y)
+void MovmentComponent::DoMove(float x, float y)
 {
 	this->positionChanged = true;
-	this->velocity = sf::Vector2f((float)x, (float)y);
+	this->velocity = sf::Vector2f(x, y);
 
 }
 

@@ -37,7 +37,7 @@ Graphics::Graphics()
 	this->creaturePortraits[Monster::MARKSMEN] = sf::IntRect(194, 6, 58, 64);
 	this->creaturePortraits[Monster::GRIFFIN] = sf::IntRect(256, 6, 58, 64);
 	this->creaturePortraits[Monster::ROYAL_GRIFFIN] = sf::IntRect(320, 6, 58, 64);
-	this->creaturePortraits[Monster::SWORDMAN] = sf::IntRect(386, 6, 58, 64);
+	this->creaturePortraits[Monster::SWORDSMAN] = sf::IntRect(386, 6, 58, 64);
 	this->creaturePortraits[Monster::CRUSADER] = sf::IntRect(456, 6, 58, 64);
 }
 
@@ -148,10 +148,20 @@ void Graphics::Init()
 	texture = std::make_shared<sf::Texture>();
 	texture->loadFromImage(image);
 	roads[5].push_back(texture);
-
+	
 	this->battleBackgrouds->loadFromFile("Textures\\CmBkDrMt.png");
 	this->battleUnitsSheets[Monster::PIKEMAN] = std::make_shared<sf::Texture>();
+	this->battleUnitsSheets[Monster::MARKSMEN] = std::make_shared<sf::Texture>();
+	this->battleUnitsSheets[Monster::ARCHER] = std::make_shared<sf::Texture>();
+	this->battleUnitsSheets[Monster::SWORDSMAN] = std::make_shared<sf::Texture>();
+	this->battleUnitsSheets[Monster::CRUSADER] = std::make_shared<sf::Texture>();
+	this->battleUnitsSheets[Monster::ANGEL] = std::make_shared<sf::Texture>();
 	this->battleUnitsSheets[Monster::PIKEMAN]->loadFromFile("Textures\\Pikeman.png");
+	this->battleUnitsSheets[Monster::ARCHER]->loadFromFile("Textures\\Archer.png");
+	this->battleUnitsSheets[Monster::MARKSMEN]->loadFromFile("Textures\\Marksman.png");
+	this->battleUnitsSheets[Monster::SWORDSMAN]->loadFromFile("Textures\\Swordsman.png");
+	this->battleUnitsSheets[Monster::CRUSADER]->loadFromFile("Textures\\Crusader.png");
+	this->battleUnitsSheets[Monster::ANGEL]->loadFromFile("Textures\\Angel.png");
 	this->allHeroesPortraits->loadFromFile("Textures\\Heroes Portraits.png");
 	this->allCreaturePortraits->loadFromFile("Textures\\Creatures Portraits.png");
 	this->fogOfWarFullHide->loadFromFile("Textures\\fog.png");
