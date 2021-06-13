@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31129.286
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BattlefieldH3", "BattlefieldH3\BattlefieldH3.vcxproj", "{F8D20886-29DA-40D3-B9EC-C6221EA93A2B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F8D20886-29DA-40D3-B9EC-C6221EA93A2B}.Debug|x64.ActiveCfg = Debug|x64
+		{F8D20886-29DA-40D3-B9EC-C6221EA93A2B}.Debug|x64.Build.0 = Debug|x64
+		{F8D20886-29DA-40D3-B9EC-C6221EA93A2B}.Debug|x86.ActiveCfg = Debug|Win32
+		{F8D20886-29DA-40D3-B9EC-C6221EA93A2B}.Debug|x86.Build.0 = Debug|Win32
+		{F8D20886-29DA-40D3-B9EC-C6221EA93A2B}.Release|x64.ActiveCfg = Release|x64
+		{F8D20886-29DA-40D3-B9EC-C6221EA93A2B}.Release|x64.Build.0 = Release|x64
+		{F8D20886-29DA-40D3-B9EC-C6221EA93A2B}.Release|x86.ActiveCfg = Release|Win32
+		{F8D20886-29DA-40D3-B9EC-C6221EA93A2B}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {22EBC5EE-C75B-437A-96B3-082134FB9FFE}
+	EndGlobalSection
+EndGlobal
