@@ -302,9 +302,7 @@ void Battlefield::clickLeft(bool down, bool previousState)
 		{
 			this->selectingArea.setSize(sf::Vector2f(0,0));
 			this->selectingArea.setFillColor(sf::Color(120, 120, 120, 120));
-			this->selectingArea.setPosition(
-				sf::Mouse::getPosition().x,
-				sf::Mouse::getPosition().y);
+			this->selectingArea.setPosition(GH.mousePosWindow);
 		}
 	}
 	if (previousState && down == false)
@@ -333,7 +331,7 @@ void Battlefield::clickRight(bool down, bool previousState)
 {
 	if (previousState && down == false)
 	{
-		auto pos = sf::Mouse::getPosition() / (int)B_TILE_WIDTH - sf::Vector2i{ 1,3 };
+		auto pos = (sf::Vector2i)GH.mousePosWindow / (int)B_TILE_WIDTH - sf::Vector2i{ 1,3 };
 		if (!this->containsIsBattlefield(pos)) return;
 		BattleTile& clickedTile = this->getTile(pos);
 		for (auto u : this->selectedUnits)
