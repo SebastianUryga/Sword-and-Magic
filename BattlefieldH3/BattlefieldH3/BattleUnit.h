@@ -60,6 +60,12 @@ private:
     bool lastDirection; // false - left, true - right
     std::shared_ptr <Battle::PathFinder> pathfinder;
     TileSet neighbourTilePos;
+    struct DamageText
+    {
+        sf::Text number;
+        float displayTimeRemain;
+    };
+    std::list<DamageText> damageTexts;
     std::shared_ptr<Missle> missle;
     sf::RectangleShape lineHP;
     BattleUnit* target;
@@ -70,7 +76,7 @@ private:
     AnimationComponent* animation;
     void initAnimation();
     void initStatistic();
-
+    void initTextDmg(const int dmg);
 public:
     bool isShouter() const;
     bool isBig() const;
@@ -87,14 +93,14 @@ public:
 
     void idle();
     void doMove(sf::Vector2f diraction);
-    bool makeAttack(sf::Vector2i target);
-    bool makeShot(sf::Vector2i target);
-    void reciveDamage(sf::Vector2i from);
-    void makeBlock(sf::Vector2i from);
+    bool makeAttack(const sf::Vector2i target);
+    bool makeShot(const sf::Vector2i target);
+    void reciveDamage(const sf::Vector2i from, const int dmg);
+    void makeBlock(const sf::Vector2i from, const int dmg);
     void dieing();
     void turn();
 
-    void fixSpritePos();
+    void fixSpritePos(); 
     bool giveDestenation(sf::Vector2i des);
     bool choseTarget(BattleUnit* t);
     void setPathfinder(Battlefield* field);

@@ -21,7 +21,6 @@ public:
 
 	static Graphics& Get();
 	static sf::IntRect selectPortrait(Monster type);
-	///set matching road textures to neighobur tiles
 
 };
 

@@ -75,6 +75,16 @@ void BattleUnit::initStatistic()
 	this->speed = (float)(rand() % 4) + stats.speed;
 }
 
+void BattleUnit::initTextDmg(const int dmg)
+{
+	//initializate number of damge to display
+	DamageText text;
+	text.displayTimeRemain = 1.f;
+	text.number = sf::Text(std::to_string(dmg), GH.globalFont, 20);
+	text.number.setPosition(this->text.getPosition() + sf::Vector2f(0, -4));
+	this->damageTexts.push_back(text);
+}
+
 bool BattleUnit::isShouter() const
 {
 	return this->shouter;
@@ -177,12 +187,13 @@ void BattleUnit::doMove(sf::Vector2f diraction)
 		if (diraction.x > 0) this->lastDirection = false;
 		if (diraction.x < 0) this->lastDirection = true;
 	}
+		
 	if (abs(diraction.x) == 1 && abs(diraction.y) == 1)
 		diraction /= 1.41f;
 	this->setVelocity(diraction);
 }
 
-bool BattleUnit::makeAttack(sf::Vector2i target)
+bool BattleUnit::makeAttack(const sf::Vector2i target)
 {
 	if (this->animationState == AnimationState::ATTACKING)
 		return false;
@@ -195,7 +206,7 @@ bool BattleUnit::makeAttack(sf::Vector2i target)
 	return true;
 }
 
-bool BattleUnit::makeShot(sf::Vector2i target)
+bool BattleUnit::makeShot(const sf::Vector2i target)
 {
 	if (!this->shouter) return false;
 	if (this->animationState == AnimationState::SHOOTHING) return false;
@@ -207,18 +218,24 @@ bool BattleUnit::makeShot(sf::Vector2i target)
 	return true;
 }
 
-void BattleUnit::reciveDamage(sf::Vector2i from)
+void BattleUnit::reciveDamage(const sf::Vector2i from, const int dmg)
 {
-	if (this->animationState == AnimationState::RECIVING_DMG)
+	this->initTextDmg(dmg);
+
+	if (this->animationState == AnimationState::RECIVING_DMG ||
+		(dmg * 100) / this->maxHp < 20)
 		return;
 	if (pos.x < from.x) this->lastDirection = false;
 	if (pos.x > from.x) this->lastDirection = true;
 	this->animationState = AnimationState::RECIVING_DMG;
 }
 
-void BattleUnit::makeBlock(sf::Vector2i from)
+void BattleUnit::makeBlock(const sf::Vector2i from, const int dmg)
 {
-	if (this->animationState == AnimationState::BLOCKING)
+	this->initTextDmg(dmg);
+
+	if (this->animationState == AnimationState::BLOCKING ||
+		(dmg * 100) / this->maxHp < 10)
 		return;
 	if (pos.x < from.x) this->lastDirection = false;
 	if (pos.x > from.x) this->lastDirection = true;
@@ -471,6 +488,22 @@ void BattleUnit::update(const float& dt)
 		// tworzymy strukure  info o obrarzeniach
 
 	}
+	if (!this->damageTexts.empty())
+	{
+		auto it = this->damageTexts.begin();
+
+		for (int i = 0; i < this->damageTexts.size(); i++)
+		{
+			it->displayTimeRemain -= dt;
+			it->number.move(0, -1 * dt * 50);
+			if (it->displayTimeRemain <= 0)
+			{
+				this->damageTexts.erase(it);
+				break;
+			}
+			it++;
+		}
+	}
 	if (hp < 1)
 	{
 		hp = 0;
@@ -486,6 +519,8 @@ void BattleUnit::render(sf::RenderTarget* target)
 		this->missle->render(target);
 	target->draw(this->lineHP);
 	target->draw(text);
+	for (auto text : this->damageTexts)
+		target->draw(text.number);
 }
 
 Missle::Missle(BattleUnit* unit)

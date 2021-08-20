@@ -15,13 +15,19 @@ Graphics::Graphics()
 	this->battleObsticles[BattleObstacle::Type::SCIELETON1] = std::make_shared<sf::Texture>();
 	this->creaturePortraits[Monster::NO_CREATURE] = sf::IntRect(386, 627, 58, 64);
 	this->creaturePortraits[Monster::PIKEMAN] = sf::IntRect(8, 6, 58, 64);
-	this->creaturePortraits[Monster::HALBERDIER] = sf::IntRect(70, 6, 58, 64);
+	this->creaturePortraits[Monster::HALBERDIER] = sf::IntRect(71, 6, 58, 64);
 	this->creaturePortraits[Monster::ARCHER] = sf::IntRect(134, 6, 58, 64);
-	this->creaturePortraits[Monster::MARKSMEN] = sf::IntRect(194, 6, 58, 64);
-	this->creaturePortraits[Monster::GRIFFIN] = sf::IntRect(256, 6, 58, 64);
-	this->creaturePortraits[Monster::ROYAL_GRIFFIN] = sf::IntRect(320, 6, 58, 64);
+	this->creaturePortraits[Monster::MARKSMEN] = sf::IntRect(197, 6, 58, 64);
+	this->creaturePortraits[Monster::GRIFFIN] = sf::IntRect(260, 6, 58, 64);
+	this->creaturePortraits[Monster::ROYAL_GRIFFIN] = sf::IntRect(323, 6, 58, 64);
 	this->creaturePortraits[Monster::SWORDSMAN] = sf::IntRect(386, 6, 58, 64);
-	this->creaturePortraits[Monster::CRUSADER] = sf::IntRect(456, 6, 58, 64);
+	this->creaturePortraits[Monster::CRUSADER] = sf::IntRect(449, 6, 58, 64);
+	this->creaturePortraits[Monster::MONK] = sf::IntRect(512, 6, 58, 64);
+	this->creaturePortraits[Monster::ZEALOT] = sf::IntRect(575, 6, 58, 64);
+	this->creaturePortraits[Monster::CAVALIER] = sf::IntRect(638, 6, 58, 64);
+	this->creaturePortraits[Monster::ANGEL] = sf::IntRect(764, 6, 58, 64);
+	this->creaturePortraits[Monster::MINOTAUR] = sf::IntRect(512, 351, 58, 64);
+	this->creaturePortraits[Monster::BLACK_DRAGON] = sf::IntRect(827, 351, 58, 64);
 }
 
 
@@ -47,6 +53,8 @@ void Graphics::Init()
 	this->battleUnitsSheets[Monster::ZEALOT] = std::make_shared<sf::Texture>();
 	this->battleUnitsSheets[Monster::CAVALIER] = std::make_shared<sf::Texture>();
 	this->battleUnitsSheets[Monster::ANGEL] = std::make_shared<sf::Texture>();
+	this->battleUnitsSheets[Monster::MINOTAUR] = std::make_shared<sf::Texture>();
+	this->battleUnitsSheets[Monster::BLACK_DRAGON] = std::make_shared<sf::Texture>();
 	this->battleUnitsSheets[Monster::PIKEMAN]->loadFromFile("Textures\\Pikeman.png");
 	this->battleUnitsSheets[Monster::HALBERDIER]->loadFromFile("Textures\\Halberdier.png");
 	this->battleUnitsSheets[Monster::ARCHER]->loadFromFile("Textures\\Archer.png");
@@ -59,6 +67,8 @@ void Graphics::Init()
 	this->battleUnitsSheets[Monster::ZEALOT]->loadFromFile("Textures\\Zealot.png");
 	this->battleUnitsSheets[Monster::CAVALIER]->loadFromFile("Textures\\Cavalier.png");
 	this->battleUnitsSheets[Monster::ANGEL]->loadFromFile("Textures\\Angel.png");
+	this->battleUnitsSheets[Monster::MINOTAUR]->loadFromFile("Textures\\Minotaur.png");
+	this->battleUnitsSheets[Monster::BLACK_DRAGON]->loadFromFile("Textures\\Black Dragon.png");
 	this->allCreaturePortraits->loadFromFile("Textures\\Creatures Portraits.png");
 	this->battleObsticles[BattleObstacle::Type::ROCK1]->loadFromFile("Textures\\ObDRk01.png");
 	this->battleObsticles[BattleObstacle::Type::ROCK2]->loadFromFile("Textures\\ObDRk02.png");

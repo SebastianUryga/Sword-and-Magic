@@ -26,16 +26,6 @@ void WindowObject::addText(std::string text, sf::Vector2f pos)
 	texts.back().setStyle(sf::Text::Italic);
 }
 
-void WindowObject::deactivate()
-{
-	this->active = false;
-}
-
-void WindowObject::activate()
-{
-	this->active = true;
-}
-
 void WindowObject::setPos(float x, float y)
 {
 	//do przetestowania
@@ -47,6 +37,16 @@ void WindowObject::setPos(float x, float y)
 		btn.second->move(difX, difY);
 	for (auto& text : this->texts)
 		text.move(difX, difY);
+}
+
+void WindowObject::deactivate()
+{
+	this->active = false;
+}
+
+void WindowObject::activate()
+{
+	this->active = true;
 }
 
 void WindowObject::close()

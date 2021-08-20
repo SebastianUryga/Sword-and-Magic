@@ -138,6 +138,7 @@ void Game::gameState()
 void Game::editorState()
 {
 	auto battlefield = std::make_shared<Battlefield>(GameMode::Editor);
+	battlefield->load("startMap.txt");
 	battlefield->interactiveElem.push_back(battlefield);
 	GH.pushWindow(battlefield);
 

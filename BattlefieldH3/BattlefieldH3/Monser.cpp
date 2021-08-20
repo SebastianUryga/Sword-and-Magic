@@ -1,5 +1,22 @@
 #include "GuiHandler.h"
 
+std::map<Monster, std::string> creatureToString = {
+	{Monster::NO_CREATURE,"No Creature"},
+	{Monster::PIKEMAN,"Pikeman"},
+	{Monster::HALBERDIER,"Halberdier"},
+	{Monster::SWORDSMAN,"Swordsman"},
+	{Monster::CRUSADER,"Crusader"},
+	{Monster::ARCHER,"Archer"},
+	{Monster::MARKSMEN,"Marsman"},
+	{Monster::GRIFFIN,"Griffin"},
+	{Monster::ROYAL_GRIFFIN,"Royal Griffin"},
+	{Monster::MONK,"Monk"},
+	{Monster::ZEALOT,"Zealot"},
+	{Monster::CAVALIER,"Cavalier"},
+	{Monster::ANGEL,"Angel"},
+	{Monster::MINOTAUR,"Minotaur"},
+	{Monster::BLACK_DRAGON,"Black Dragon"}
+};
 std::map<Monster, MonsterStats> creaturesStats = {
 	{Monster::NO_CREATURE,{0,0,0,0,0,0,0.f,0.f,false,false,false}},
 	{Monster::PIKEMAN,{5,5,4,1,0,15,60.f,0.4f,false,false,false}},
@@ -8,12 +25,14 @@ std::map<Monster, MonsterStats> creaturesStats = {
 	{Monster::CRUSADER,{10,12,10,4,0,35,60.f,0.7f,false,false,false}},
 	{Monster::ARCHER,{3,5,3,2,12,15,50.f,0.25f,false,true,false}},
 	{Monster::MARKSMEN,{3,5,3,2,16,15,50.f,0.35f,false,true,false}},
-	{Monster::GRIFFIN,{7,8,6,3,0,35,120.f,0.6f,true,false,true }},
-	{Monster::ROYAL_GRIFFIN,{7,9,9,3,0,40,120.f,0.7f,true,false,true }},
+	{Monster::GRIFFIN,{7,8,6,3,0,35,130.f,0.6f,true,false,true }},
+	{Monster::ROYAL_GRIFFIN,{7,9,9,3,0,40,140.f,0.7f,true,false,true }},
 	{Monster::MONK,{7,10,5,5,14,20,40.f,0.30f,false,true,false }},
 	{Monster::ZEALOT,{7,10,5,5,14,20,40.f,0.30f,false,true,false }},
 	{Monster::CAVALIER,{13,13,10,6,0,60,90.f,0.5f,false,false,true }},
-	{Monster::ANGEL,{20,16,13,7,0,100,130.f,0.5f,true,false,false }}
+	{Monster::ANGEL,{20,16,13,7,0,100,130.f,0.5f,true,false,false }},
+	{Monster::MINOTAUR,{12,10,8,5,0,50,70.f,0.3f,false,false,false }},
+	{Monster::BLACK_DRAGON,{13,17,12,7,0,200,170.f,0.9f,true,false,true }}
 };
 float attackTime = 0.8f;
 float moveTime = 0.8f;
@@ -76,7 +95,7 @@ std::map<std::pair<Monster, std::string>, MonsterAnimationParametrs> animationPa
 	{{Monster::ARCHER,"IDLE"},{1.f,0,0,8,0,104,100,{18,50},50}},
 	{{Monster::ARCHER,"START_MOVE"},{moveTime,0,4,2,0,104,100,{18,50},50} },
 	{{Monster::ARCHER,"MOVE1"},{moveTime,3,4,2,0,104,100,{18,50},50} },
-	{{Monster::ARCHER,"MOVE2"},{moveTime,0,5,5,0,104,100,{18,50},50}},
+	{{Monster::ARCHER,"MOVE2"},{moveTime,0,5,4,0,104,100,{18,50},50}},
 	{{Monster::ARCHER,"ATTACK_UP"},{1.f,6,2,5,0,104,100,{18,50},50}},
 	{{Monster::ARCHER,"ATTACK"},{1.f,6,1,5,0,104,100,{18,50},50}},
 	{{Monster::ARCHER,"ATTACK_DOWN"},{1.f,6,3,5,0,104,100,{18,50},50}},
@@ -90,8 +109,8 @@ std::map<std::pair<Monster, std::string>, MonsterAnimationParametrs> animationPa
 
 	{{Monster::MARKSMEN,"IDLE"},{1.f,0,0,8,0,104,100,{18,50},50}},
 	{{Monster::MARKSMEN,"START_MOVE"},{moveTime,0,4,2,0,104,100,{18,50},50} },
-	{{Monster::MARKSMEN,"MOVE1"},{moveTime,2,4,3,0,104,100,{18,50},50} },
-	{{Monster::MARKSMEN,"MOVE2"},{moveTime,0,5,5,0,104,100,{18,50},50}},
+	{{Monster::MARKSMEN,"MOVE1"},{moveTime,3,4,3,0,104,100,{18,50},50} },
+	{{Monster::MARKSMEN,"MOVE2"},{moveTime,0,5,3,0,104,100,{18,50},50}},
 	{{Monster::MARKSMEN,"ATTACK_UP"},{1.f,6,2,5,0,104,100,{18,50},50}},
 	{{Monster::MARKSMEN,"ATTACK"},{1.f,6,1,5,0,104,100,{18,50},50}},
 	{{Monster::MARKSMEN,"ATTACK_DOWN"},{1.f,6,3,5,0,104,100,{18,50},50}},
@@ -135,7 +154,7 @@ std::map<std::pair<Monster, std::string>, MonsterAnimationParametrs> animationPa
 	{ {Monster::ZEALOT,"IDLE"},{1.f,0,0,6,0,92,128,{18,60},50} },
 	{ {Monster::ZEALOT,"START_MOVE"},{moveTime,0,1,0,0,92,128,{18,60},50} },
 	{ {Monster::ZEALOT,"MOVE1"},{moveTime,1,1,2,0,92,128,{18,60},50} },
-	{ {Monster::ZEALOT,"MOVE2"},{moveTime,1,4,1,0,92,128,{18,60},50} },
+	{ {Monster::ZEALOT,"MOVE2"},{moveTime,4,1,1,0,92,128,{18,60},50} },
 	{ {Monster::ZEALOT,"ATTACK_UP"},{1.f,0,3,6,0,92,128,{18,60},50} },
 	{ {Monster::ZEALOT,"ATTACK"},{1.f,0,4,5,0,92,128,{18,60},50} },
 	{ {Monster::ZEALOT,"ATTACK_DOWN"},{1.f,0,5,7,0,92,128,{18,60},50} },
@@ -173,5 +192,33 @@ std::map<std::pair<Monster, std::string>, MonsterAnimationParametrs> animationPa
 	{{Monster::ANGEL,"BLOCK"},{0.9f,0,7,3,0,130,130,{40,78},50}},
 	{{Monster::ANGEL,"SHOT_UP"},{0,0,0,0,0,0,0,{0,0},0}},
 	{{Monster::ANGEL,"SHOT"},{0,0,0,0,0,0,0,{0,0},0}},
-	{{Monster::ANGEL,"SHOT_DOWN"},{0,0,0,0,0,0,0,{0,0},0}}
+	{{Monster::ANGEL,"SHOT_DOWN"},{0,0,0,0,0,0,0,{0,0},0}},
+	
+	{{Monster::MINOTAUR,"IDLE"},{1.f,0,0,7,0,104,118,{30,60},50}},
+	{{Monster::MINOTAUR,"START_MOVE"},{moveTime,0,1,2,0,104,118,{30,60},50}},
+	{{Monster::MINOTAUR,"MOVE1"},{moveTime,3,1,2,0,104,118,{30,60},50}},
+	{{Monster::MINOTAUR,"MOVE2"},{moveTime,0,1,2,0,104,118,{30,60},50}},
+	{{Monster::MINOTAUR,"ATTACK_UP"},{attackTime,0,3,5,0,104,118,{30,60},50}},
+	{{Monster::MINOTAUR,"ATTACK"},{attackTime,0,4,5,0,104,118,{5,60},50}},
+	{{Monster::MINOTAUR,"ATTACK_DOWN"},{attackTime,0,5,5,0,104,118,{30,60},50}},
+	{{Monster::MINOTAUR,"DIE"},{1.f,0,7,6,0,104,118,{30,60},50}},
+	{{Monster::MINOTAUR,"DAMAGED"},{0.7f,0,6,6,0,104,118,{30,60},50}},
+	{{Monster::MINOTAUR,"BLOCK"},{0.9f,2,2,3,0,104,118,{30,60},50}},
+	{{Monster::MINOTAUR,"SHOT_UP"},{0,0,0,0,0,0,0,{0,0},0}},
+	{{Monster::MINOTAUR,"SHOT"},{0,0,0,0,0,0,0,{0,0},0}},
+	{{Monster::MINOTAUR,"SHOT_DOWN"},{0,0,0,0,0,0,0,{0,0},0}},
+	
+	{{Monster::BLACK_DRAGON,"IDLE"},{1.f,0,0,5,0,114,172,{60,80},0}},
+	{{Monster::BLACK_DRAGON,"START_MOVE"},{moveTime,0,1,2,0,188,172,{80,80},0}},
+	{{Monster::BLACK_DRAGON,"MOVE1"},{moveTime,3,1,1,0,188,172,{80,80},0}},
+	{{Monster::BLACK_DRAGON,"MOVE2"},{moveTime,5,1,1,0,188,172,{80,80},0}},
+	{{Monster::BLACK_DRAGON,"ATTACK_UP"},{attackTime,0,3,7,0,220,172,{100,80},0}},
+	{{Monster::BLACK_DRAGON,"ATTACK"},{attackTime,0,4,5,0,220,172,{100,80},0}},
+	{{Monster::BLACK_DRAGON,"ATTACK_DOWN"},{attackTime,0,5,9,0,220,172,{100,80},0}},
+	{{Monster::BLACK_DRAGON,"DIE"},{1.f,4,2,6,0,188,172,{90,80},0}},
+	{{Monster::BLACK_DRAGON,"DAMAGED"},{0.7f,0,2,4,0,188,172,{100,80},0}},
+	{{Monster::BLACK_DRAGON,"BLOCK"},{0.9f,5,0,5,0,188,172,{120,80},0}},
+	{{Monster::BLACK_DRAGON,"SHOT_UP"},{0,0,0,0,0,0,0,{0,0},0}},
+	{{Monster::BLACK_DRAGON,"SHOT"},{0,0,0,0,0,0,0,{0,0},0}},
+	{{Monster::BLACK_DRAGON,"SHOT_DOWN"},{0,0,0,0,0,0,0,{0,0},0}}
 };

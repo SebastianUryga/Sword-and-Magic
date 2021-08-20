@@ -1,5 +1,4 @@
 #include "GuiHandler.h"
-#include "Battlefiled.h"
 
 void Battlefield::initButtons()
 {
@@ -284,6 +283,16 @@ void Battlefield::close()
 {
 	WindowObject::close();
 	BH.battlefield = nullptr;
+}
+
+void Battlefield::activate()
+{
+	WindowObject::activate();
+	if (this->mode == GameMode::Editor)
+	{
+		gar1->updateSlots();
+		gar2->updateSlots();
+	}
 }
 
 void Battlefield::clickLeft(bool down, bool previousState)

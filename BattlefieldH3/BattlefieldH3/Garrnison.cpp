@@ -74,7 +74,7 @@ void GarrnisonSlot::setPos(sf::Vector2f pos)
 
 void GarrnisonSlot::setTroop(Troop* troop)
 {
-	stack = troop;
+	this->stack = troop;
 	this->sprite.setTextureRect(Graphics::selectPortrait(troop->monster));
 	std::string count = std::to_string(troop->count);
 	this->number.setString(count);
@@ -90,12 +90,13 @@ void GarrnisonSlot::clickLeft(bool down, bool previousState)
 			if (this == owner->getSelected())
 			{
 				// open creature window 
-
+				GH.pushWindowT<SelectionWindow>(*owner->selected->stack);
+				owner->updateSlots();
 				owner->selectSlot(nullptr);
 			}
 			else
 			{
-				if (stack->monster == owner->selected->stack->monster)
+				if (this->stack->monster == owner->selected->stack->monster)
 				{
 					owner->mergeStacks(owner->selected->id, this->id);
 					owner->updateSlots();
@@ -109,8 +110,13 @@ void GarrnisonSlot::clickLeft(bool down, bool previousState)
 				}
 			}
 		}
-		else if (!(stack->monster == Monster::NO_CREATURE))
-			owner->selectSlot(this);
+		else
+		{
+			if (this->stack->monster == Monster::NO_CREATURE)
+				GH.pushWindowT<SelectionWindow>(*this->stack);
+			else
+				owner->selectSlot(this);
+		}
 	}
 }
 

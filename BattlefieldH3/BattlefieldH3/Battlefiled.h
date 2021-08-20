@@ -1,8 +1,8 @@
 #pragma once
 #include "BattleUnit.h"
 #include "WindowObject.h"
+#include "SelectionWindow.h"
 #include "Garrnison.h"
-
 class BattleUnit;
 
 #define B_TILE_WIDTH 50.f
@@ -66,6 +66,7 @@ public:
 
     virtual void keyPressed(const sf::Keyboard& key) {}
 
+    virtual void activate() override;
     virtual void clickLeft(bool down, bool previousState) override;
     virtual void clickRight(bool down, bool previousState) override;
     virtual void hover(bool on) override;

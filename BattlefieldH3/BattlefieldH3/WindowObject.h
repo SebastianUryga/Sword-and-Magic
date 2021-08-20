@@ -18,9 +18,9 @@ public:
 
 	bool contains(const sf::Vector2i& mousePos);
 	void addText(std::string text, sf::Vector2f pos);
-	void deactivate();
-	void activate();
 	void setPos(float x, float y);
+	void deactivate();
+	virtual void activate();
 	virtual void close();
 
 	virtual void update(const float dt);

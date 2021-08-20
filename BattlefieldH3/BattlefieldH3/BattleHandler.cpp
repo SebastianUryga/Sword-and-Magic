@@ -13,8 +13,7 @@ void BattleHandler::startBallte()
 {
 	if (!this->battlefield)
 		battlefield = std::make_shared<Battlefield>(GameMode::Game);
-	/*if (!battlefield->load("startMap.txt"))
-		battlefield->initStartUnits();*/
+	battlefield->load("startMap.txt");
 	this->initArmyQueque();
 	this->battlefield->interactiveElem.push_back(this->battlefield);
 	GH.pushWindow(this->battlefield);
@@ -36,7 +35,8 @@ sf::Vector2i BattleHandler::choseMoveDirection(BattleUnit* unit) const
 		Battle::BPath path;
 		unit->pathfinder->getPath(path, unit->destenation);
 
-		if (path.nextPos() != sf::Vector2i(-1, -1))
+		if (path.nextPos() != sf::Vector2i(-1, -1) &&
+			!battlefield->isTileBlocked(path.nextPos()))
 			dir = path.nextPos() - unit->getPos();
 		else
 			unit->order = Order::AGRESIVE_POSITION;
@@ -149,10 +149,10 @@ void BattleHandler::unitAttakced(BattleUnit* unit)
 
 	int damage = this->calculateDamage(unit, target, attackBlocked);
 	if (attackBlocked)
-		target->makeBlock(unit->pos);
+		target->makeBlock(unit->pos,damage);
 	else
-		target->reciveDamage(unit->pos);
-	target->hp -= (int)damage;
+		target->reciveDamage(unit->pos, damage);
+	target->hp -= damage;
 	if (target->hp < 1)
 		this->unitKilled(target);
 }
@@ -198,9 +198,9 @@ void BattleHandler::updateMissle(BattleUnit* unit)
 
 			int damage = this->calculateDamage(unit, target, attackBlocked);
 			if (attackBlocked)
-				target->makeBlock(unit->pos);
+				target->makeBlock(unit->pos, damage);
 			else
-				target->reciveDamage(unit->pos);
+				target->reciveDamage(unit->pos, damage);
 			target->hp -= (int)damage;
 			if (target->hp < 1)
 				this->unitKilled(target);
@@ -238,6 +238,32 @@ void BattleHandler::update(const float& dt)
 			}
 		}
 		this->updateQueque();
+
+		if (this->nuberUnitsInBattle[0] <= 0 ||
+			this->nuberUnitsInBattle[1] <= 0)
+		{
+			std::shared_ptr<WindowObject> win;
+			win = std::make_shared<WindowObject>(300, 300, 300, 300, GH.globalFont);
+			win->addText("Battle Result", {100, 10});
+			float i = 0;
+			for (auto crature : this->battlefield->units)
+			{
+				if (!crature->alive)
+				{
+					win->addText(creatureToString[crature->getType()], { 10, 30 + i });
+					i += 20;
+				}
+			}
+			win->buttons["OK"] = std::make_shared<Button>
+				(250+ 300, 260+300,40,30, &win->font, "OK");
+			win->buttons["OK"]->addFuctionallity([=]() {
+				battlefield->close();
+				win->close();
+			});
+			win->interactiveElem.push_back(win->buttons["OK"]);
+			GH.Get().pushWindow(win);
+		}
+		
 	}
 }
 
@@ -297,7 +323,7 @@ void BattleHandler::updateQueque()
 			do
 			{
 				int temp = rand() % BATTLEFIELD_HEIGHT;
-				pos = { i * (BATTLEFIELD_WIDHT - 4) + 1,temp };
+				pos = { i * (BATTLEFIELD_WIDHT - 3) + 1,temp };
 			} while (this->battlefield->isTileBlocked(pos) && conut++ < 60);
 			
 			this->battlefield->addUnit(std::make_shared<BattleUnit>(creature), pos,(bool) i);

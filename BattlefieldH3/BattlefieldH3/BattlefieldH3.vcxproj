@@ -175,6 +175,7 @@
     <ClCompile Include="InterfaceElem.cpp" />
     <ClCompile Include="Monser.cpp" />
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="SelectionWindow.cpp" />
     <ClCompile Include="WindowObject.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -192,6 +193,7 @@
     <ClInclude Include="InterfaceElem.h" />
     <ClInclude Include="Monser.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="SelectionWindow.h" />
     <ClInclude Include="WindowObject.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
