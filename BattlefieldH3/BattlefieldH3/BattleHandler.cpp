@@ -21,9 +21,7 @@ void BattleHandler::startBallte()
 
 sf::Vector2i BattleHandler::choseMoveDirection(BattleUnit* unit) const
 {
-	if ((unit->order == Order::AGRESIVE_POSITION ||
-		unit->order == Order::ATTACK) && unit->target)
-		unit->destenation = unit->target->getPos();
+
 	sf::Vector2i velocity = { 0,0 };
 	sf::Vector2i dir = sf::Vector2i(0, 0);
 	if (this->battlefield->containsIsBattlefield( unit->destenation))
@@ -32,14 +30,33 @@ sf::Vector2i BattleHandler::choseMoveDirection(BattleUnit* unit) const
 		dir = unit->destenation - unit->getPos();
 		unit->pathfinder->initializeGraph();
 		unit->pathfinder->calculatePaths();
+
+		if ((unit->order == Order::AGRESIVE_POSITION ||
+			unit->order == Order::ATTACK) && unit->target)
+		{
+			// finding the neerest tile next ot target
+			unit->destenation = unit->getTarget()->getPos();
+			for (auto item : unit->getTarget()->neighbourTilePos)
+			{
+				if (!this->battlefield->containsIsBattlefield(item) || this->battlefield->isTileBlocked(item)) continue;
+				if (unit->pathfinder->getNode(item)->getCost() <
+					unit->pathfinder->getNode(unit->destenation)->getCost())
+					unit->destenation = item;
+			}
+		}
 		Battle::BPath path;
 		unit->pathfinder->getPath(path, unit->destenation);
+		
 
 		if (path.nextPos() != sf::Vector2i(-1, -1) &&
-			!battlefield->isTileBlocked(path.nextPos()))
+			(!battlefield->isTileBlocked(path.nextPos()) ||
+			battlefield->getTile(path.nextPos()).unit == unit))
 			dir = path.nextPos() - unit->getPos();
 		else
-			unit->order = Order::AGRESIVE_POSITION;
+		{
+
+			unit->giveOrder(Order::DEFENSIVE_POS);
+		}
 
 		if (dir.x > 0) velocity.x = 1;
 		if (dir.x < 0) velocity.x = -1;
@@ -103,15 +120,42 @@ BattleUnit* BattleHandler::findNeerestEnemy(BattleUnit* unit)
 	return result;
 }
 
+BattleUnit* BattleHandler::calculateBestTarget(BattleUnit* unit)
+{
+	BattleUnit* result = nullptr;
+	float max = -10000;
+	for (auto u : this->battlefield->units)
+	{
+		if (unit->enemy == u->enemy || !u->getAlive()) continue;
+
+		float cost =
+			unit->pathfinder->getNode(u->getPos())->getCost();
+		cost = std::min(cost, unit->pathfinder->getNode(u->getPos2())->getCost());
+		float value = 100;
+		value += (10.f * (float)u->damage * (1/u->attackCoulddown)) - ((float)u->hp * 3.f);
+		value += (float) u->attack - u->defence;
+		value += u->speed * 0.1f;
+		if (u->isShouter()) value *= 1.2f;
+		if (unit->isShouter()) cost /= 10;
+		value -= (cost/(unit->speed*0.01f));
+		if (max < value) { result = u.get(); max = value; }
+	}
+
+	return result;
+}
+
 void BattleHandler::makeDecision(BattleUnit* unit)
 {
 	//if (!unit->target || !unit->target->alive)
 	bool result = false;
 	switch (unit->order)
 	{
-	case Order::AGRESIVE_POSITION:
 	case Order::DEFENSIVE_POS:
-		unit->target = this->findNeerestEnemy(unit);
+		unit->idle();
+	case Order::AGRESIVE_POSITION:
+		unit->choseTarget(this->calculateBestTarget(unit));
+		if(unit->getTarget() == nullptr)
+			unit->choseTarget(this->findNeerestEnemy(unit));
 	case Order::ATTACK:
 		if (this->nextToEachOther(unit, unit->target))
 		{
@@ -119,7 +163,7 @@ void BattleHandler::makeDecision(BattleUnit* unit)
 			if (result == false)
 				unit->idle();
 		}
-		else if (unit->shouter && unit->target && unit->arrows > 0)
+		else if (unit->shooter && unit->target && unit->arrows > 0)
 		{
 			result = unit->makeShot(unit->target->pos);
 			if (result == false)
@@ -142,9 +186,10 @@ void BattleHandler::makeDecision(BattleUnit* unit)
 void BattleHandler::unitAttakced(BattleUnit* unit)
 {
 	auto target = unit->getTarget();
+	if (!target->getAlive()) return;
 	bool attackBlocked = false;
 	if (target->haveDefensePosition())
-		if (rand() % 100 < (target->defence - unit->attack) * 3 + 50)
+		if (rand() % 100 < ((target->defence < 0 ? 0 : target->defence) - unit->attack) * 3 + 50)
 			attackBlocked = true;
 
 	int damage = this->calculateDamage(unit, target, attackBlocked);
@@ -153,7 +198,7 @@ void BattleHandler::unitAttakced(BattleUnit* unit)
 	else
 		target->reciveDamage(unit->pos, damage);
 	target->hp -= damage;
-	if (target->hp < 1)
+	if (target->alive && !target->getAlive())
 		this->unitKilled(target);
 }
 
@@ -243,22 +288,33 @@ void BattleHandler::update(const float& dt)
 			this->nuberUnitsInBattle[1] <= 0)
 		{
 			std::shared_ptr<WindowObject> win;
-			win = std::make_shared<WindowObject>(300, 300, 300, 300, GH.globalFont);
-			win->addText("Battle Result", {100, 10});
-			float i = 0;
-			for (auto crature : this->battlefield->units)
+			win = std::make_shared<WindowObject>(500, 300, 400, 400, GH.globalFont);
+			win->addText("Battle Result", {150, 10});
+			float i = 0,j = 0;
+			for (auto type : allMonseters)
 			{
-				if (!crature->alive)
+				int number[2] = { 0,0 };
+				for (auto creature : this->battlefield->units)
 				{
-					win->addText(creatureToString[crature->getType()], { 10, 30 + i });
+					if (creature->getType() == type && !creature->getAlive())
+						number[creature->enemy]++;
+				}
+				if (number[0] != 0) {
+					win->addText(creatureToString[type] + " " + std::to_string(number[0]), { 10, 30 + i });
 					i += 20;
 				}
+				if (number[1] != 0)
+				{
+					win->addText(creatureToString[type] + " " + std::to_string(number[1]), { 220, 30 + j });
+					j += 20;
+				}
 			}
+
 			win->buttons["OK"] = std::make_shared<Button>
-				(250+ 300, 260+300,40,30, &win->font, "OK");
+				(350+ 600, 260+400,40,30, &win->font, "OK");
 			win->buttons["OK"]->addFuctionallity([=]() {
-				battlefield->close();
 				win->close();
+				battlefield->close();
 			});
 			win->interactiveElem.push_back(win->buttons["OK"]);
 			GH.Get().pushWindow(win);

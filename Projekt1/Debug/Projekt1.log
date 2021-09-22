@@ -1,2 +1,0 @@
-﻿  Projekt1.cpp
-sfml-graphics-d.lib(sfml-graphics-d-2.dll) : fatal error LNK1112: wystąpił konflikt typu maszyny modułu „x64” z typem maszyny docelowej „x86”

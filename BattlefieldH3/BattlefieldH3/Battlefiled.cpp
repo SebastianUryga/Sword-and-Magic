@@ -32,6 +32,14 @@ void Battlefield::initButtons()
 			}
 		});
 		this->interactiveElem.push_back(this->buttons["Agresive"]);
+
+		this->buttons["SpellBook"] = std::make_shared<Button>(
+			500, 770, 170, 30, &this->font, "Spell Book"
+			);
+		this->buttons["SpellBook"]->addFuctionallity([=]() {
+			GH.pushWindowT<SpellBook>(this->spellToCast);
+		});
+		this->interactiveElem.push_back(this->buttons["SpellBook"]);
 	}
 	if (this->mode == GameMode::Editor)
 	{
@@ -74,25 +82,7 @@ void Battlefield::initStartUnits()
 	this->addObsticle(BattleObstacle::Type::ROCK2, sf::Vector2i(3, 2));
 	this->addObsticle(BattleObstacle::Type::ROCK3, sf::Vector2i(1, 3));
 	this->addObsticle(BattleObstacle::Type::ROCK4, sf::Vector2i(16, 8));
-	/*this->addUnit(std::make_shared<BattleUnit>(Monster::ANGEL), sf::Vector2i(1, 10), false);
-	this->addUnit(std::make_shared<BattleUnit>(Monster::CAVALIER), sf::Vector2i(2, 0), false);
-	this->addUnit(std::make_shared<BattleUnit>(Monster::CRUSADER), sf::Vector2i(19, 0), true);
-	this->addUnit(std::make_shared<BattleUnit>(Monster::CRUSADER), sf::Vector2i(3, 4), false);
-	this->addUnit(std::make_shared<BattleUnit>(Monster::SWORDSMAN), sf::Vector2i(1, 7), false);
-	this->addUnit(std::make_shared<BattleUnit>(Monster::ARCHER), sf::Vector2i(22, 2), false);
-	this->addUnit(std::make_shared<BattleUnit>(Monster::GRIFFIN), sf::Vector2i(21, 11), true);
-	this->addUnit(std::make_shared<BattleUnit>(Monster::GRIFFIN), sf::Vector2i(1, 5),true);
-	this->addUnit(std::make_shared<BattleUnit>(Monster::MARKSMEN), sf::Vector2i(21, 9), true);
-	this->addUnit(std::make_shared<BattleUnit>(Monster::ARCHER), sf::Vector2i(22, 8), true);
-	this->addUnit(std::make_shared<BattleUnit>(Monster::ARCHER), sf::Vector2i(0, 8), false);
-	this->addUnit(std::make_shared<BattleUnit>(Monster::ARCHER), sf::Vector2i(1, 1), false);
-	this->addUnit(std::make_shared<BattleUnit>(Monster::CAVALIER), sf::Vector2i(23, 6), true);
-	this->addUnit(std::make_shared<BattleUnit>(Monster::CAVALIER), sf::Vector2i(22, 10), true);
-	this->addUnit(std::make_shared<BattleUnit>(Monster::HALBERDIER), sf::Vector2i(6, 7), true);
-	this->addUnit(std::make_shared<BattleUnit>(Monster::HALBERDIER), sf::Vector2i(6, 9), true);
-	this->addUnit(std::make_shared<BattleUnit>(Monster::HALBERDIER), sf::Vector2i(7, 9), true);
-	this->addUnit(std::make_shared<BattleUnit>(Monster::PIKEMAN), sf::Vector2i(0, 9), false);
-	*/
+	
 	this->addUnit(std::make_shared<BattleUnit>(Monster::CAVALIER), sf::Vector2i(22, 10), true);
 
 	this->addUnit(std::make_shared<BattleUnit>(Monster::HALBERDIER), sf::Vector2i(6, 7), true);
@@ -255,6 +245,7 @@ void Battlefield::addObsticle(BattleObstacle::Type type, sf::Vector2i pos)
 				if (obj->usedTiles[y][x])
 				{
 					tile.blocked = true;
+					tile.obstacles.push_back(obj);
 				}
 			}
 		}
@@ -276,7 +267,9 @@ void Battlefield::removeObsticle(std::shared_ptr<BattleObstacle> obs)
 {
 	for (int i = 0; i < this->obstacles.size(); i++)
 		if (obs == this->obstacles[i])
+		{
 			this->obstacles.erase(this->obstacles.begin() + i);
+		}
 }
 
 void Battlefield::close()
@@ -301,7 +294,7 @@ void Battlefield::clickLeft(bool down, bool previousState)
 	{
 		if (this->mode == GameMode::Editor)
 		{
-			auto pos = sf::Mouse::getPosition() / (int)B_TILE_WIDTH - sf::Vector2i{ 1,3 };
+			auto pos = (sf::Vector2i)sf::Mouse::getPosition() / (int)B_TILE_WIDTH - sf::Vector2i{ 1,3 };
 			if (!this->containsIsBattlefield(pos)) return;
 			BattleTile& clickedTile = this->getTile(pos );
 			if(!clickedTile.blocked && !clickedTile.unit)
@@ -318,6 +311,17 @@ void Battlefield::clickLeft(bool down, bool previousState)
 	{
 		if (this->mode == GameMode::Game)
 		{
+			if (this->spellToCast != Spell::SpellType::NONE)
+			{
+				auto pos = (sf::Vector2i)GH.mousePosWindow / (int)B_TILE_WIDTH - sf::Vector2i{ 1,3 };
+				if (!this->containsIsBattlefield(pos)) return;
+				BattleTile& clickedTile = this->getTile(pos);
+				if (clickedTile.unit && clickedTile.unit->getAlive())
+				{
+					Spell::castSpellOnUnit(*clickedTile.unit, this->spellToCast);
+					this->spellToCast = Spell::SpellType::NONE;
+				}
+			}
 			this->selectingArea.setFillColor(sf::Color(120, 120, 120, 0));
 			this->selectedUnits.clear();
 			sf::FloatRect bounds = this->selectingArea.getGlobalBounds();
@@ -338,13 +342,29 @@ void Battlefield::clickLeft(bool down, bool previousState)
 
 void Battlefield::clickRight(bool down, bool previousState)
 {
+
 	if (previousState && down == false)
 	{
-		auto pos = (sf::Vector2i)GH.mousePosWindow / (int)B_TILE_WIDTH - sf::Vector2i{ 1,3 };
+		this->spellToCast = Spell::SpellType::NONE;
+
+		auto pos = ((sf::Vector2i)GH.mousePosWindow / (int)B_TILE_WIDTH) - sf::Vector2i{ 1,3 };
 		if (!this->containsIsBattlefield(pos)) return;
 		BattleTile& clickedTile = this->getTile(pos);
+
+		if (this->mode == GameMode::Editor)
+		{
+			if (!clickedTile.obstacles.empty())
+			{
+				this->removeObsticle(clickedTile.obstacles.front());
+				clickedTile.obstacles.erase(clickedTile.obstacles.begin());
+			}
+		}
+
 		for (auto u : this->selectedUnits)
 		{
+			int i = 0;
+			int p = std::floor(sqrt(this->selectedUnits.size()));
+			auto temp = clickedTile.pos + sf::Vector2i{i%p, i/p};
 			if (clickedTile.unit && clickedTile.blocked)
 			{
 				if (u->choseTarget(clickedTile.unit))
@@ -352,10 +372,13 @@ void Battlefield::clickRight(bool down, bool previousState)
 			}
 			else
 			{
-				if (u->giveDestenation(clickedTile.pos))
+				if (u->giveDestenation(temp))
+				{
 					u->giveOrder(Order::MOVE);
+					clickedTile.shape.setFillColor(sf::Color::Green);
+				}
 			}
-
+			i++;
 		}
 	}
 }
@@ -367,7 +390,7 @@ void Battlefield::hover(bool on)
 		if (this->mode == GameMode::Game)
 		{
 			this->selectingArea.setSize(
-				-1.f * (selectingArea.getPosition() - (sf::Vector2f)sf::Mouse::getPosition()));
+				-1.f * (selectingArea.getPosition() - GH.mousePosWindow));
 
 		}
 	}
@@ -406,6 +429,7 @@ Battlefield::Battlefield(GameMode mode)
 	this->backgroud.setScale(1.5, 1.5);
 	this->backgroud.setTextureRect(sf::IntRect(0, 0, 900, 500));
 
+	this->spellToCast = Spell::SpellType::NONE;
 }
 
 Battlefield::~Battlefield()
@@ -428,13 +452,19 @@ void Battlefield::render(sf::RenderTarget* target)
 {
 	WindowObject::render(target);
 	target->draw(this->backgroud);
+	
 	for (auto v : this->tiles)
 		for (auto tile : v)
 		{
 			if (tile.unit)
 			{
+
 				tile.shape.setFillColor(sf::Color(120, 120, 120, 70));
-				if(this->selectedUnits.find(tile.unit) != this->selectedUnits.end())
+				for (auto u : this->selectedUnits)
+					if (u->getTarget() && u->getTarget()->getPos() == tile.pos)
+						tile.shape.setFillColor(sf::Color(240, 5, 5, 100));
+
+				if (this->selectedUnits.find(tile.unit) != this->selectedUnits.end())
 					tile.shape.setFillColor(sf::Color(190, 190, 190, 200));
 			}
 			else if(tile.blocked)
@@ -443,6 +473,7 @@ void Battlefield::render(sf::RenderTarget* target)
 				tile.shape.setFillColor(sf::Color(20, 20, 20, 20));
 			target->draw(tile.shape);
 		}
+	
 	for (auto& obj : this->obstacles)
 		target->draw(obj->sprite);
 	for (auto& unit : this->units)

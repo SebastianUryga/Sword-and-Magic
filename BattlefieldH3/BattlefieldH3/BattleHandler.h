@@ -17,6 +17,7 @@ public:
 	sf::Vector2i choseMoveDirection(BattleUnit* unit) const;
 	bool nextToEachOther(BattleUnit* u1, BattleUnit* u2);
 	BattleUnit* findNeerestEnemy(BattleUnit* unit);
+	BattleUnit* calculateBestTarget(BattleUnit* unit);
 	void makeDecision(BattleUnit* unit);
 	void unitAttakced(BattleUnit* unit);
 	void unitMadeShot(BattleUnit* unit);

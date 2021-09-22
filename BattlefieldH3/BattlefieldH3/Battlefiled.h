@@ -3,6 +3,8 @@
 #include "WindowObject.h"
 #include "SelectionWindow.h"
 #include "Garrnison.h"
+#include "SpellBook.h"
+
 class BattleUnit;
 
 #define B_TILE_WIDTH 50.f
@@ -13,12 +15,11 @@ class BattleUnit;
 
 struct BattleTile
 {
-
     sf::Vector2i pos;
     sf::RectangleShape shape;
     BattleUnit* unit;
     bool blocked;
-
+    std::list<std::shared_ptr<BattleObstacle>> obstacles;
 };
 
 enum class GameMode {Editor, Game};
@@ -47,6 +48,7 @@ private:
     void sortUnits();
 
     Monster selectedUnitType;
+    Spell spellToCast;
     sf::RectangleShape selectingArea;
 public:
     bool containsIsBattlefield(sf::Vector2i pos) const;

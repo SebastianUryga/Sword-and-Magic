@@ -21,18 +21,18 @@ std::map<Monster, MonsterStats> creaturesStats = {
 	{Monster::NO_CREATURE,{0,0,0,0,0,0,0.f,0.f,false,false,false}},
 	{Monster::PIKEMAN,{5,5,4,1,0,15,60.f,0.4f,false,false,false}},
 	{Monster::HALBERDIER,{5,6,6,1,0,20,60.f,0.5f,false,false,false}},
-	{Monster::SWORDSMAN,{9,10,8,4,0,35,60.f,0.6f,false,false,false}},
-	{Monster::CRUSADER,{10,12,10,4,0,35,60.f,0.7f,false,false,false}},
-	{Monster::ARCHER,{3,5,3,2,12,15,50.f,0.25f,false,true,false}},
-	{Monster::MARKSMEN,{3,5,3,2,16,15,50.f,0.35f,false,true,false}},
-	{Monster::GRIFFIN,{7,8,6,3,0,35,130.f,0.6f,true,false,true }},
-	{Monster::ROYAL_GRIFFIN,{7,9,9,3,0,40,140.f,0.7f,true,false,true }},
+	{Monster::SWORDSMAN,{7,10,8,4,0,35,60.f,0.6f,false,false,false}},
+	{Monster::CRUSADER,{8,12,10,4,0,35,60.f,0.7f,false,false,false}},
+	{Monster::ARCHER,{4,5,3,2,12,15,50.f,0.25f,false,true,false}},
+	{Monster::MARKSMEN,{4,5,3,2,16,15,50.f,0.35f,false,true,false}},
+	{Monster::GRIFFIN,{6,8,6,3,0,35,130.f,0.6f,true,false,true }},
+	{Monster::ROYAL_GRIFFIN,{6,9,9,3,0,40,140.f,0.7f,true,false,true }},
 	{Monster::MONK,{7,10,5,5,14,20,40.f,0.30f,false,true,false }},
 	{Monster::ZEALOT,{7,10,5,5,14,20,40.f,0.30f,false,true,false }},
-	{Monster::CAVALIER,{13,13,10,6,0,60,90.f,0.5f,false,false,true }},
-	{Monster::ANGEL,{20,16,13,7,0,100,130.f,0.5f,true,false,false }},
-	{Monster::MINOTAUR,{12,10,8,5,0,50,70.f,0.3f,false,false,false }},
-	{Monster::BLACK_DRAGON,{13,17,12,7,0,200,170.f,0.9f,true,false,true }}
+	{Monster::CAVALIER,{11,13,10,6,0,60,90.f,0.5f,false,false,true }},
+	{Monster::ANGEL,{18,16,13,7,0,100,130.f,0.4f,true,false,false }},
+	{Monster::MINOTAUR,{13,10,8,5,0,50,70.f,0.3f,false,false,false }},
+	{Monster::BLACK_DRAGON,{12,17,12,7,0,180,170.f,0.9f,true,false,true }}
 };
 float attackTime = 0.8f;
 float moveTime = 0.8f;
@@ -138,7 +138,7 @@ std::map<std::pair<Monster, std::string>, MonsterAnimationParametrs> animationPa
 
 	{{Monster::ROYAL_GRIFFIN,"IDLE"},{1.f,0,0,5,0,224,166,{94,84},0}},
 	{{Monster::ROYAL_GRIFFIN,"END_MOVE"},{moveTime,6,1,1,0,224,166,{94,84},0}},
-	{{Monster::ROYAL_GRIFFIN,"START_MOVE"},{1.3f,0,1,2,0,224,166,{94,84},0}},
+	{{Monster::ROYAL_GRIFFIN,"START_MOVE"},{0.8f,0,1,2,0,224,166,{94,84},0}},
 	{{Monster::ROYAL_GRIFFIN,"MOVE1"},{moveTime,3,1,2,0,224,166,{94,84},0}},
 	{{Monster::ROYAL_GRIFFIN,"MOVE2"},{moveTime,4,1,0,0,224,166,{94,84},0}},
 	{{Monster::ROYAL_GRIFFIN,"ATTACK_UP"},{attackTime,0,2,5,0,224,166,{94,84},0}},

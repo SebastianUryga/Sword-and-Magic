@@ -26,11 +26,20 @@ enum class Order
 {
     AGRESIVE_POSITION, DEFENSIVE_POS, MOVE, ATTACK
 };
+
+struct CastedSpell 
+{ 
+    float timeRemain;
+    Spell type;
+    CastedSpell(Spell s, float t = 0) : timeRemain(t),type(s) {}
+    bool operator==(const CastedSpell& s) { return type == s.type; }
+};
+
 class BattleUnit :
     public InterfaceElem
 {
 private:
-    sf::Sprite sprite;
+    
     sf::Vector2i pos;
     sf::Vector2i pos2;
     sf::Vector2f velocity;
@@ -46,7 +55,7 @@ private:
     bool alive;
     bool enemy;
     bool bigCreature;
-    bool shouter;
+    bool shooter;
     AnimationState animationState;
     Order order;
     bool moving;
@@ -59,6 +68,7 @@ private:
     bool recivingDamage;
     bool lastDirection; // false - left, true - right
     std::shared_ptr <Battle::PathFinder> pathfinder;
+    float timeToUpdatePathfinder;
     TileSet neighbourTilePos;
     struct DamageText
     {
@@ -66,6 +76,7 @@ private:
         float displayTimeRemain;
     };
     std::list<DamageText> damageTexts;
+    std::list<CastedSpell> castedSpellList;
     std::shared_ptr<Missle> missle;
     sf::RectangleShape lineHP;
     BattleUnit* target;
@@ -73,7 +84,11 @@ private:
     sf::Vector2i destenation;
     float attackCoulddown;
     float actualAttackCoulddown;
+    Spell spellToAnimate;
+    sf::Sprite sprite;
+    sf::Sprite spellEffect;
     AnimationComponent* animation;
+    AnimationComponent* spellEffectAnimation;
     void initAnimation();
     void initStatistic();
     void initTextDmg(const int dmg);
@@ -114,12 +129,14 @@ public:
     BattleUnit(Monster type);
     virtual ~BattleUnit();
 
+    void updatePathfinder(const float& dt);
     void updateNeighbourPos();
     void updateAnimation(const float& dt);
     void update(const float& dt);
     void render(sf::RenderTarget* target);
 
     friend class BattleHandler;
+    friend class Spell;
 };
 
 class Missle

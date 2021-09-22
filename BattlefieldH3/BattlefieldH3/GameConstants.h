@@ -4,6 +4,8 @@ class GameConstants
 {
 };
 
+
+
 struct BattleObstacle
 {
     enum class Type : int

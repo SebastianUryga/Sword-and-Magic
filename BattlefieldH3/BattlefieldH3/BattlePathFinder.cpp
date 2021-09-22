@@ -78,6 +78,8 @@ void Battle::PathFinder::calculatePaths()
 			auto destination = neighbour;
 			float cost = this->getMovementCost(source->coord, destination->coord);
 			float costAtNextTile = source->getCost() + static_cast<float>(cost);
+			if (source->accessible == PathNode::Accessibility::BLOCKVIS)
+				costAtNextTile += 1000;
 			if (destination->getCost() > costAtNextTile)
 			{
 				destination->setCost(costAtNextTile);
@@ -89,8 +91,8 @@ void Battle::PathFinder::calculatePaths()
 				continue;
 			auto neighbour2 = this->getNode(pos2);
 			
-			if ((destination->coord == source->coord - sf::Vector2i(bigCreature, 0) || neighbour->accessible == PathNode::Accessibility::ACCESSIBLE) &&
-				(pos2 == source->coord || neighbour2->accessible == PathNode::Accessibility::ACCESSIBLE))
+			if ((destination->coord == source->coord - sf::Vector2i(bigCreature, 0) || neighbour->accessible == PathNode::Accessibility::ACCESSIBLE || neighbour->accessible == PathNode::Accessibility::BLOCKVIS) &&
+				(pos2 == source->coord || neighbour2->accessible == PathNode::Accessibility::ACCESSIBLE || neighbour->accessible == PathNode::Accessibility::BLOCKVIS))
 				push(neighbour);
 		}
 	}

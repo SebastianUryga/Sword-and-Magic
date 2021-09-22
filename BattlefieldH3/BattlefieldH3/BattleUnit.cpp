@@ -1,6 +1,16 @@
 #include "GuiHandler.h"
 void BattleUnit::initAnimation()
 {
+	this->spellEffectAnimation =
+		new AnimationComponent(this->spellEffect, *graphics.battleEffectsSheet);
+	for (auto s : allSpells)
+	{
+		struct EffectsAnimationParametrs stat = batteEffectsAnimationParamets[s];
+		this->spellEffectAnimation->addAnimotion(
+			spellToString[s], stat.animationTimer, stat.start_frame_x, stat.start_frame_y,
+			stat.frames_x, stat.frames_y, stat.width, stat.height, false, { 6,50}, stat.tileWidth);
+	}
+		
 	this->animation =
 		new AnimationComponent(this->sprite, *graphics.battleUnitsSheets[this->type]);
 	struct MonsterAnimationParametrs stat =
@@ -64,7 +74,7 @@ void BattleUnit::initStatistic()
 {
 	struct MonsterStats stats = creaturesStats[type];
 	this->bigCreature = stats.bigCreature;
-	this->shouter = stats.archer;
+	this->shooter = stats.archer;
 	this->maxHp = stats.hp;
 	this->hp = this->maxHp;
 	this->arrows = stats.arrows;
@@ -81,13 +91,13 @@ void BattleUnit::initTextDmg(const int dmg)
 	DamageText text;
 	text.displayTimeRemain = 1.f;
 	text.number = sf::Text(std::to_string(dmg), GH.globalFont, 20);
-	text.number.setPosition(this->text.getPosition() + sf::Vector2f(0, -4));
+	text.number.setPosition(this->sprite.getPosition() + sf::Vector2f(20, -20));
 	this->damageTexts.push_back(text);
 }
 
 bool BattleUnit::isShouter() const
 {
-	return this->shouter;
+	return this->shooter;
 }
 
 bool BattleUnit::isBig() const
@@ -208,7 +218,7 @@ bool BattleUnit::makeAttack(const sf::Vector2i target)
 
 bool BattleUnit::makeShot(const sf::Vector2i target)
 {
-	if (!this->shouter) return false;
+	if (!this->shooter) return false;
 	if (this->animationState == AnimationState::SHOOTHING) return false;
 	if (this->actualAttackCoulddown > 0) return false;
 	if (pos.x < target.x) this->lastDirection = false;
@@ -257,6 +267,7 @@ void BattleUnit::fixSpritePos()
 	fixedPos.y = std::round(fixedPos.y);
 	fixedPos *= B_TILE_WIDTH;
 	this->sprite.setPosition(fixedPos);
+	this->spellEffect.setPosition(fixedPos);
 	this->lineHP.setPosition(fixedPos - sf::Vector2f{ 0, 50 });
 	this->text.setPosition(fixedPos - sf::Vector2f(0, 60));
 }
@@ -264,12 +275,12 @@ void BattleUnit::fixSpritePos()
 bool BattleUnit::giveDestenation(sf::Vector2i des)
 {
 	this->destenation = des;
-	return true;;
+	return true;
 }
 
 bool BattleUnit::choseTarget(BattleUnit* t)
 {
-	if (t->isEnemy() == this->isEnemy())
+	if (t && t->isEnemy() == this->isEnemy())
 		return false;
 
 	this->target = t;
@@ -279,6 +290,7 @@ bool BattleUnit::choseTarget(BattleUnit* t)
 void BattleUnit::setPathfinder(Battlefield* field)
 {
 	this->pathfinder = std::make_shared<Battle::PathFinder>(field, this);
+	this->timeToUpdatePathfinder = 100;
 }
 
 void BattleUnit::setPos(sf::Vector2i pos)
@@ -286,6 +298,7 @@ void BattleUnit::setPos(sf::Vector2i pos)
 	if (!this->moving)
 	{
 		this->sprite.setPosition(pos.x * B_TILE_WIDTH + 50, pos.y * B_TILE_HEIGHT + 150);
+		this->spellEffect.setPosition(pos.x * B_TILE_WIDTH + 50, pos.y * B_TILE_HEIGHT + 150);
 		this->lineHP.setPosition(pos.x * B_TILE_WIDTH + 50, pos.y * B_TILE_HEIGHT + 100);
 		this->text.setPosition(sprite.getPosition() - sf::Vector2f(0, 60));
 	}
@@ -300,7 +313,6 @@ void BattleUnit::setPos(sf::Vector2i pos)
 void BattleUnit::setVelocity(sf::Vector2f direction)
 {
 	this->velocity = direction;
-
 }
 
 void BattleUnit::setEnemy(bool enemy)
@@ -324,6 +336,7 @@ BattleUnit::BattleUnit(Monster type)
 	this->initStatistic();
 	this->target = nullptr;
 	this->order = Order::AGRESIVE_POSITION;
+	this->spellToAnimate = Spell::SpellType::NONE;
 	this->destenation = { 0,0 };
 	this->attacking = false;
 	this->attacked = false;
@@ -348,6 +361,17 @@ BattleUnit::BattleUnit(Monster type)
 
 BattleUnit::~BattleUnit()
 {
+}
+
+void BattleUnit::updatePathfinder(const float& dt)
+{
+	this->timeToUpdatePathfinder += dt * this->speed;
+	if (timeToUpdatePathfinder > 100)
+	{
+		this->pathfinder->initializeGraph();
+		this->pathfinder->calculatePaths();
+		this->timeToUpdatePathfinder = 0;
+	}
 }
 
 void BattleUnit::updateNeighbourPos()
@@ -458,35 +482,50 @@ void BattleUnit::updateAnimation(const float& dt)
 		this->animation->play(action, dt, this->lastDirection, playReversly);
 	else
 		this->animationState = AnimationState::IDLE;
-
-
 }
 
 void BattleUnit::update(const float& dt)
 {
 	if (this->alive)
 		this->updateAnimation(dt);
-	if (shouter && missle)
+	this->updatePathfinder(dt);
+	if (this->spellToAnimate.spell != Spell::SpellType::NONE)
+	{
+		if (spellEffectAnimation->playedOnce(spellToString[this->spellToAnimate.spell]))
+			this->spellToAnimate.spell = Spell::SpellType::NONE;
+		else
+			spellEffectAnimation->play(spellToString[this->spellToAnimate.spell], dt, false);
+	}
+	for (auto& s : this->castedSpellList)
+	{
+		s.timeRemain -= dt;
+
+		if (s.timeRemain < 0)
+		{
+			Spell::takeOffSpellFromUnit(*this, s.type);
+			break;
+		}
+	}
+	if (shooter && missle)
 		this->missle->update(dt);
 	if (actualAttackCoulddown > 0) actualAttackCoulddown -= dt;
 	if (Order::ATTACK == this->order && !target->getAlive())
 		this->giveOrder(Order::AGRESIVE_POSITION);
-	this->sprite.move(this->velocity * dt * this->speed);
-	this->lineHP.move(this->velocity * dt * this->speed);
-	this->text.move(this->velocity * dt * this->speed);
-	this->offset += (this->velocity * dt * this->speed);
+	sf::Vector2f toMove = this->velocity * dt * this->speed;
+	this->sprite.move(toMove);
+	this->spellEffect.move(toMove);
+	this->lineHP.move(toMove);
+	this->text.move(toMove);
+	this->offset += (toMove);
 	if (B_TILE_WIDTH < abs(this->offset.x) || B_TILE_HEIGHT < abs(this->offset.y))
 	{
 		this->moving = false;
 		//this->moving2 = false;
+		if (this->order == Order::DEFENSIVE_POS)
+			this->idle();
 		this->offset = { 0,0 };
 		setVelocity(sf::Vector2f(0, 0));
 		this->fixSpritePos();
-	}
-	if (this->attacking)
-	{
-		// tworzymy strukure  info o obrarzeniach
-
 	}
 	if (!this->damageTexts.empty())
 	{
@@ -504,6 +543,7 @@ void BattleUnit::update(const float& dt)
 			it++;
 		}
 	}
+	
 	if (hp < 1)
 	{
 		hp = 0;
@@ -515,12 +555,15 @@ void BattleUnit::update(const float& dt)
 void BattleUnit::render(sf::RenderTarget* target)
 {
 	target->draw(this->sprite);
-	if (this->shouter && this->missle)
+	if (this->shooter && this->missle)
 		this->missle->render(target);
+	if (this->spellToAnimate.spell != Spell::SpellType::NONE)
+		target->draw(this->spellEffect);
 	target->draw(this->lineHP);
 	target->draw(text);
 	for (auto text : this->damageTexts)
 		target->draw(text.number);
+
 }
 
 Missle::Missle(BattleUnit* unit)
