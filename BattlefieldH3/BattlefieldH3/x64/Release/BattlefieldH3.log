@@ -2,33 +2,53 @@
 C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\AnimationComponent.cpp(41,14): warning C4244: "inicjowanie": konwersja z "float" do "int", możliwa utrata danych
   BattlefieldH3.cpp
   Battlefiled.cpp
-C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefiled.cpp(41,3): error C2143: błąd składniowy: brakuje „;” przed „}”
-C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefiled.cpp(42,2): error C2143: błąd składniowy: brakuje „;” przed „}”
-C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefiled.cpp(143,52): warning C4267: "argument": konwersja z "size_t" do "T", możliwa utrata danych
+C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefiled.cpp(144,52): warning C4267: "argument": konwersja z "size_t" do "T", możliwa utrata danych
           with
           [
               T=int
           ]
-C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefiled.cpp(234,103): warning C4244: "argument": konwersja z "unsigned __int64" do "T", możliwa utrata danych
+C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefiled.cpp(235,103): warning C4244: "argument": konwersja z "unsigned __int64" do "T", możliwa utrata danych
           with
           [
               T=float
           ]
-C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefiled.cpp(234,77): warning C4244: "argument": konwersja z "unsigned __int64" do "T", możliwa utrata danych
+C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefiled.cpp(235,77): warning C4244: "argument": konwersja z "unsigned __int64" do "T", możliwa utrata danych
           with
           [
               T=float
           ]
-C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefiled.cpp(325,15): warning C4244: "inicjowanie": konwersja z "T" do "int", możliwa utrata danych
+C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefiled.cpp(328,15): warning C4244: "inicjowanie": konwersja z "T" do "int", możliwa utrata danych
           with
           [
               T=float
           ]
-C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefiled.cpp(326,16): warning C4244: "inicjowanie": konwersja z "T" do "int", możliwa utrata danych
+C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefiled.cpp(329,16): warning C4244: "inicjowanie": konwersja z "T" do "int", możliwa utrata danych
           with
           [
               T=float
           ]
+C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefiled.cpp(366,10): warning C4244: "inicjowanie": konwersja z "double" do "int", możliwa utrata danych
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xutility(138,73): warning C4244: "argument": konwersja z "_Ty" do "float", możliwa utrata danych
+          with
+          [
+              _Ty=int
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\memory(2186): message : zobacz odwołanie do kompilowanego tworzenia wystąpienia „void std::_Construct_in_place<_Ty,int,int,int,int,sf::Font*,const char(&)[5]>(_Ty &,int &&,int &&,int &&,int &&,sf::Font *&&,const char (&)[5]) noexcept(false)” funkcji szablon
+          with
+          [
+              _Ty=Button
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\memory(2906): message : zobacz odwołanie do kompilowanego tworzenia wystąpienia „std::_Ref_count_obj2<_Ty>::_Ref_count_obj2<int,int,int,int,sf::Font*,const char(&)[5]>(int &&,int &&,int &&,int &&,sf::Font *&&,const char (&)[5])” funkcji szablon
+          with
+          [
+              _Ty=Button
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\memory(2907): message : zobacz odwołanie do kompilowanego tworzenia wystąpienia „std::_Ref_count_obj2<_Ty>::_Ref_count_obj2<int,int,int,int,sf::Font*,const char(&)[5]>(int &&,int &&,int &&,int &&,sf::Font *&&,const char (&)[5])” funkcji szablon
+          with
+          [
+              _Ty=Button
+          ]
+C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefiled.cpp(7): message : zobacz odwołanie do kompilowanego tworzenia wystąpienia „std::shared_ptr<Button> std::make_shared<Button,int,int,int,int,sf::Font*,const char(&)[5]>(int &&,int &&,int &&,int &&,sf::Font *&&,const char (&)[5])” funkcji szablon
   BattleHandler.cpp
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xutility(138,73): warning C4244: "argument": konwersja z "_Ty" do "float", możliwa utrata danych
           with
@@ -50,9 +70,9 @@ C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.2
           [
               _Ty=WindowObject
           ]
-C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\BattleHandler.cpp(246): message : zobacz odwołanie do kompilowanego tworzenia wystąpienia „std::shared_ptr<WindowObject> std::make_shared<WindowObject,int,int,int,int,sf::Font&>(int &&,int &&,int &&,int &&,sf::Font &)” funkcji szablon
+C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\BattleHandler.cpp(291): message : zobacz odwołanie do kompilowanego tworzenia wystąpienia „std::shared_ptr<WindowObject> std::make_shared<WindowObject,int,int,int,int,sf::Font&>(int &&,int &&,int &&,int &&,sf::Font &)” funkcji szablon
   BattlePathFinder.cpp
-C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\BattlePathFinder.cpp(139,14): warning C4305: "*=": obcięcie z "double" do "float"
+C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\BattlePathFinder.cpp(141,14): warning C4305: "*=": obcięcie z "double" do "float"
   BattleUnit.cpp
   Button.cpp
   Game.cpp
@@ -141,25 +161,34 @@ C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.2
           ]
 C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\SelectionWindow.cpp(30): message : zobacz odwołanie do kompilowanego tworzenia wystąpienia „std::shared_ptr<Button> std::make_shared<Button,int,int,int,int,sf::Font*,const char(&)[2]>(int &&,int &&,int &&,int &&,sf::Font *&&,const char (&)[2])” funkcji szablon
   Spell.cpp
+C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Spell.cpp(34,30): warning C4305: "*=": obcięcie z "double" do "float"
+C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Spell.cpp(66,31): warning C4305: "/=": obcięcie z "double" do "float"
   SpellBook.cpp
-C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\SpellBook.cpp(9,28): error C2398: Element „1”: konwersja z „int” do „T” wymaga konwersji zawężającej
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xutility(138,73): warning C4244: "argument": konwersja z "_Ty" do "float", możliwa utrata danych
           with
           [
-              T=float
+              _Ty=int
           ]
-C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\SpellBook.cpp(9,46): error C2398: Element „2”: konwersja z „int” do „T” wymaga konwersji zawężającej
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\memory(2186): message : zobacz odwołanie do kompilowanego tworzenia wystąpienia „void std::_Construct_in_place<_Ty,int,int,int,int,sf::Font*,const char(&)[3]>(_Ty &,int &&,int &&,int &&,int &&,sf::Font *&&,const char (&)[3]) noexcept(false)” funkcji szablon
           with
           [
-              T=float
+              _Ty=Button
           ]
-C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\SpellBook.cpp(9,46): warning C4244: "argument": konwersja z "int" do "T", możliwa utrata danych
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\memory(2906): message : zobacz odwołanie do kompilowanego tworzenia wystąpienia „std::_Ref_count_obj2<_Ty>::_Ref_count_obj2<int,int,int,int,sf::Font*,const char(&)[3]>(int &&,int &&,int &&,int &&,sf::Font *&&,const char (&)[3])” funkcji szablon
           with
           [
-              T=float
+              _Ty=Button
           ]
-C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\SpellBook.cpp(9,28): warning C4244: "argument": konwersja z "int" do "T", możliwa utrata danych
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\memory(2907): message : zobacz odwołanie do kompilowanego tworzenia wystąpienia „std::_Ref_count_obj2<_Ty>::_Ref_count_obj2<int,int,int,int,sf::Font*,const char(&)[3]>(int &&,int &&,int &&,int &&,sf::Font *&&,const char (&)[3])” funkcji szablon
           with
           [
-              T=float
+              _Ty=Button
           ]
+C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\SpellBook.cpp(16): message : zobacz odwołanie do kompilowanego tworzenia wystąpienia „std::shared_ptr<Button> std::make_shared<Button,int,int,int,int,sf::Font*,const char(&)[3]>(int &&,int &&,int &&,int &&,sf::Font *&&,const char (&)[3])” funkcji szablon
   WindowObject.cpp
+  Trwa generowanie kodu
+  691 of 4278 functions (16.2%) were compiled, the rest were copied from previous compilation.
+    282 functions were new in current compilation
+    648 functions had inline decision re-evaluated but remain unchanged
+  Zakończono generowanie kodu
+  BattlefieldH3.vcxproj -> C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\x64\Release\BattlefieldH3.exe
