@@ -185,6 +185,7 @@ void Game::updateEvents()
 	
 		if (sfEvent.type == sf::Event::MouseButtonReleased)
 		{
+			
 			GH.handleMouseButtonClick(sf::Mouse::Left, false);
 			GH.handleMouseButtonClick(sf::Mouse::Right, false);
 		}

@@ -16,10 +16,11 @@ public:
 	WindowObject(float x, float y, float width, float height, sf::Font& font);
 	virtual ~WindowObject();
 
-	bool contains(const sf::Vector2i& mousePos);
 	void addText(std::string text, sf::Vector2f pos);
 	void setPos(float x, float y);
 	void deactivate();
+
+	virtual bool contains(const sf::Vector2i& mousePos);
 	virtual void activate();
 	virtual void close();
 
@@ -39,7 +40,7 @@ public:
 		iner = std::make_shared<T>(args);
 	}
 
-	bool contains(sf::Vector2f mousePos) override { return true; }
+	bool contains(const sf::Vector2f& mousePos) override { return true; }
 	void clickRight(bool down, bool previousState) override;
 	PopupWindow();
 	virtual ~PopupWindow();

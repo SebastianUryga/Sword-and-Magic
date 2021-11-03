@@ -157,3 +157,5 @@ public:
     void update(const float& dt);
     void render(sf::RenderTarget* target);
 };
+
+static std::vector<AnimationComponent> setupMonsterAnimations;

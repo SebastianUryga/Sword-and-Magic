@@ -14,9 +14,18 @@ void BattleHandler::startBallte()
 	if (!this->battlefield)
 		battlefield = std::make_shared<Battlefield>(GameMode::Game);
 	battlefield->load("startMap.txt");
+	this->setupUnitsAnimations();
 	this->initArmyQueque();
 	this->battlefield->interactiveElem.push_back(this->battlefield);
 	GH.pushWindow(this->battlefield);
+}
+
+void BattleHandler::setupUnitsAnimations()
+{
+	for (auto unit : this->battlefield->units)
+	{
+		unit->initAnimation();
+	}
 }
 
 sf::Vector2i BattleHandler::choseMoveDirection(BattleUnit* unit) const

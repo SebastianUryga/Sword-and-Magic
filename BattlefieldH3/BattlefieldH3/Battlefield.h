@@ -64,7 +64,9 @@ public:
     void removeUnit(std::shared_ptr<BattleUnit> unit);
     void removeObsticle(std::shared_ptr<BattleObstacle> obs);
 
-    void close() override;
+    virtual bool contains(const sf::Vector2f& mousePos) override;
+
+    virtual void close() override;
 
     virtual void keyPressed(const sf::Keyboard& key) {}
 
@@ -72,6 +74,7 @@ public:
     virtual void clickLeft(bool down, bool previousState) override;
     virtual void clickRight(bool down, bool previousState) override;
     virtual void hover(bool on) override;
+    
 
     Battlefield(GameMode mode);
     virtual ~Battlefield();

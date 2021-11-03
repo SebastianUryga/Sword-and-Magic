@@ -4,17 +4,7 @@ Graphics& graphics = Graphics::Get();
 
 Graphics::Graphics()
 {
-	this->menuBackgroud = std::make_shared<sf::Texture>();
-	this->battleBackgrouds = std::make_shared<sf::Texture>();
-	this->allCreaturePortraits = std::make_shared<sf::Texture>();
-	this->battleEffectsSheet = std::make_shared<sf::Texture>();
-	this->allSpellIcons = std::make_shared<sf::Texture>();
-	this->battleBackgrouds->setRepeated(true);
-	this->battleObsticles[BattleObstacle::Type::ROCK2] = std::make_shared<sf::Texture>();
-	this->battleObsticles[BattleObstacle::Type::ROCK3] = std::make_shared<sf::Texture>();
-	this->battleObsticles[BattleObstacle::Type::ROCK4] = std::make_shared<sf::Texture>();
-	this->battleObsticles[BattleObstacle::Type::SCIELETON1] = std::make_shared<sf::Texture>();
-	this->battleObsticles[BattleObstacle::Type::ROCK1] = std::make_shared<sf::Texture>();
+	
 	this->creaturePortraits[Monster::NO_CREATURE] = sf::IntRect(386, 627, 58, 64);
 	this->creaturePortraits[Monster::PIKEMAN] = sf::IntRect(8, 6, 58, 64);
 	this->creaturePortraits[Monster::HALBERDIER] = sf::IntRect(71, 6, 58, 64);
@@ -50,6 +40,19 @@ Graphics::~Graphics()
 
 void Graphics::Init()
 {
+
+	this->menuBackgroud = std::make_shared<sf::Texture>();
+	this->battleBackgrouds = std::make_shared<sf::Texture>();
+	this->allCreaturePortraits = std::make_shared<sf::Texture>();
+	this->battleEffectsSheet = std::make_shared<sf::Texture>();
+	this->allSpellIcons = std::make_shared<sf::Texture>();
+	this->battleBackgrouds->setRepeated(true);
+	this->battleObsticles[BattleObstacle::Type::ROCK2] = std::make_shared<sf::Texture>();
+	this->battleObsticles[BattleObstacle::Type::ROCK3] = std::make_shared<sf::Texture>();
+	this->battleObsticles[BattleObstacle::Type::ROCK4] = std::make_shared<sf::Texture>();
+	this->battleObsticles[BattleObstacle::Type::SCIELETON1] = std::make_shared<sf::Texture>();
+	this->battleObsticles[BattleObstacle::Type::ROCK1] = std::make_shared<sf::Texture>();
+
 	this->image.loadFromFile("Textures\\SpellIcons.png");
 	this->image.createMaskFromColor(this->image.getPixel(1, 1));
 	this->allSpellIcons->loadFromImage(this->image);

@@ -332,7 +332,6 @@ void BattleUnit::clickLeft(bool down, bool previousState)
 BattleUnit::BattleUnit(Monster type)
 	:type(type), velocity(sf::Vector2f(0, 0)), alive(true), enemy(false)
 {
-	this->initAnimation();
 	this->initStatistic();
 	this->target = nullptr;
 	this->order = Order::AGRESIVE_POSITION;

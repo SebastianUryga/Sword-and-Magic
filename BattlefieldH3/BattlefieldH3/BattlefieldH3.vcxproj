@@ -82,8 +82,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)Extensions\SFML\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Extensions\SFML\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(VCInstallDir)Auxiliary\VS\UnitTest\include;$(SolutionDir)Extensions\SFML\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(VCInstallDir)Auxiliary\VS\UnitTest\lib;$(SolutionDir)Extensions\SFML\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -130,7 +130,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Extensions\SFML\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(VCInstallDir)UnitTest\include;$(SolutionDir)Extensions\SFML\include</AdditionalIncludeDirectories>
       <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
@@ -162,7 +162,7 @@
   <ItemGroup>
     <ClCompile Include="AnimationComponent.cpp" />
     <ClCompile Include="BattlefieldH3.cpp" />
-    <ClCompile Include="Battlefiled.cpp" />
+    <ClCompile Include="Battlefield.cpp" />
     <ClCompile Include="BattleHandler.cpp" />
     <ClCompile Include="BattlePathFinder.cpp" />
     <ClCompile Include="BattleUnit.cpp" />
@@ -182,7 +182,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationComponent.h" />
-    <ClInclude Include="Battlefiled.h" />
+    <ClInclude Include="Battlefield.h" />
     <ClInclude Include="BattleHandler.h" />
     <ClInclude Include="BattlePathFinder.h" />
     <ClInclude Include="BattleUnit.h" />
@@ -195,10 +195,17 @@
     <ClInclude Include="InterfaceElem.h" />
     <ClInclude Include="Monser.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="SelectionWindow.h" />
     <ClInclude Include="Spell.h" />
     <ClInclude Include="SpellBook.h" />
     <ClInclude Include="WindowObject.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="BattlefieldH3.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\CMakeLists.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

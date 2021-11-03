@@ -1,0 +1,192 @@
+﻿  Building Custom Rule C:/Users/Sebix/Desktop/Projekt1/BattlefieldH3/CMakeLists.txt
+  BattlefieldH3.cpp
+  AnimationComponent.cpp
+C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\AnimationComponent.cpp(41,14): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  Game.cpp
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xutility(138,73): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+          with
+          [
+              _Ty=unsigned int
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\memory(2194): message : see reference to function template instantiation 'void std::_Construct_in_place<_Ty,float,float,unsigned int,unsigned int,sf::Font&>(_Ty &,float &&,float &&,unsigned int &&,unsigned int &&,sf::Font &) noexcept(false)' being compiled
+          with
+          [
+              _Ty=WindowObject
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\memory(2907): message : see reference to function template instantiation 'std::_Ref_count_obj2<_Ty>::_Ref_count_obj2<float,float,unsigned int,unsigned int,sf::Font&>(float &&,float &&,unsigned int &&,unsigned int &&,sf::Font &)' being compiled
+          with
+          [
+              _Ty=WindowObject
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\memory(2907): message : see reference to function template instantiation 'std::_Ref_count_obj2<_Ty>::_Ref_count_obj2<float,float,unsigned int,unsigned int,sf::Font&>(float &&,float &&,unsigned int &&,unsigned int &&,sf::Font &)' being compiled
+          with
+          [
+              _Ty=WindowObject
+          ]
+C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Game.cpp(71): message : see reference to function template instantiation 'std::shared_ptr<WindowObject> std::make_shared<WindowObject,float,float,T,T,sf::Font&>(float &&,float &&,T &&,T &&,sf::Font &)' being compiled
+          with
+          [
+              T=unsigned int
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xutility(138,73): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\memory(2194): message : see reference to function template instantiation 'void std::_Construct_in_place<_Ty,int,int,int,int,sf::Font*&,const char(&)[9]>(_Ty &,int &&,int &&,int &&,int &&,sf::Font *&,const char (&)[9]) noexcept(false)' being compiled
+          with
+          [
+              _Ty=Button
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\memory(2907): message : see reference to function template instantiation 'std::_Ref_count_obj2<_Ty>::_Ref_count_obj2<int,int,int,int,sf::Font*&,const char(&)[9]>(int &&,int &&,int &&,int &&,sf::Font *&,const char (&)[9])' being compiled
+          with
+          [
+              _Ty=Button
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\memory(2907): message : see reference to function template instantiation 'std::_Ref_count_obj2<_Ty>::_Ref_count_obj2<int,int,int,int,sf::Font*&,const char(&)[9]>(int &&,int &&,int &&,int &&,sf::Font *&,const char (&)[9])' being compiled
+          with
+          [
+              _Ty=Button
+          ]
+C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Game.cpp(77): message : see reference to function template instantiation 'std::shared_ptr<Button> std::make_shared<Button,int,int,int,int,sf::Font*&,const char(&)[9]>(int &&,int &&,int &&,int &&,sf::Font *&,const char (&)[9])' being compiled
+  Battlefield.cpp
+C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefield.cpp(147,52): warning C4267: 'argument': conversion from 'size_t' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefield.cpp(238,103): warning C4244: 'argument': conversion from 'unsigned __int64' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefield.cpp(238,77): warning C4244: 'argument': conversion from 'unsigned __int64' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefield.cpp(331,15): warning C4244: 'initializing': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefield.cpp(332,16): warning C4244: 'initializing': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefield.cpp(369,10): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xutility(138,73): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\memory(2194): message : see reference to function template instantiation 'void std::_Construct_in_place<_Ty,int,int,int,int,sf::Font*,const char(&)[5]>(_Ty &,int &&,int &&,int &&,int &&,sf::Font *&&,const char (&)[5]) noexcept(false)' being compiled
+          with
+          [
+              _Ty=Button
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\memory(2907): message : see reference to function template instantiation 'std::_Ref_count_obj2<_Ty>::_Ref_count_obj2<int,int,int,int,sf::Font*,const char(&)[5]>(int &&,int &&,int &&,int &&,sf::Font *&&,const char (&)[5])' being compiled
+          with
+          [
+              _Ty=Button
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\memory(2907): message : see reference to function template instantiation 'std::_Ref_count_obj2<_Ty>::_Ref_count_obj2<int,int,int,int,sf::Font*,const char(&)[5]>(int &&,int &&,int &&,int &&,sf::Font *&&,const char (&)[5])' being compiled
+          with
+          [
+              _Ty=Button
+          ]
+C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefield.cpp(10): message : see reference to function template instantiation 'std::shared_ptr<Button> std::make_shared<Button,int,int,int,int,sf::Font*,const char(&)[5]>(int &&,int &&,int &&,int &&,sf::Font *&&,const char (&)[5])' being compiled
+  BattleHandler.cpp
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xutility(138,73): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\memory(2194): message : see reference to function template instantiation 'void std::_Construct_in_place<_Ty,int,int,int,int,sf::Font&>(_Ty &,int &&,int &&,int &&,int &&,sf::Font &) noexcept(false)' being compiled
+          with
+          [
+              _Ty=WindowObject
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\memory(2907): message : see reference to function template instantiation 'std::_Ref_count_obj2<_Ty>::_Ref_count_obj2<int,int,int,int,sf::Font&>(int &&,int &&,int &&,int &&,sf::Font &)' being compiled
+          with
+          [
+              _Ty=WindowObject
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\memory(2907): message : see reference to function template instantiation 'std::_Ref_count_obj2<_Ty>::_Ref_count_obj2<int,int,int,int,sf::Font&>(int &&,int &&,int &&,int &&,sf::Font &)' being compiled
+          with
+          [
+              _Ty=WindowObject
+          ]
+C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\BattleHandler.cpp(291): message : see reference to function template instantiation 'std::shared_ptr<WindowObject> std::make_shared<WindowObject,int,int,int,int,sf::Font&>(int &&,int &&,int &&,int &&,sf::Font &)' being compiled
+  BattlePathFinder.cpp
+C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\BattlePathFinder.cpp(141,14): warning C4305: '*=': truncation from 'double' to 'float'
+  BattleUnit.cpp
+  Button.cpp
+  GameConstants.cpp
+  Graphics.cpp
+  GuiHandler.cpp
+  Garrnison.cpp
+  InterfaceElem.cpp
+  Monser.cpp
+  pch.cpp
+  SelectionWindow.cpp
+C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\SelectionWindow.cpp(18,65): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\SelectionWindow.cpp(18,32): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xutility(138,73): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\memory(2194): message : see reference to function template instantiation 'void std::_Construct_in_place<_Ty,int,int,int,int,sf::Font*,const char(&)[2]>(_Ty &,int &&,int &&,int &&,int &&,sf::Font *&&,const char (&)[2]) noexcept(false)' being compiled
+          with
+          [
+              _Ty=Button
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\memory(2907): message : see reference to function template instantiation 'std::_Ref_count_obj2<_Ty>::_Ref_count_obj2<int,int,int,int,sf::Font*,const char(&)[2]>(int &&,int &&,int &&,int &&,sf::Font *&&,const char (&)[2])' being compiled
+          with
+          [
+              _Ty=Button
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\memory(2907): message : see reference to function template instantiation 'std::_Ref_count_obj2<_Ty>::_Ref_count_obj2<int,int,int,int,sf::Font*,const char(&)[2]>(int &&,int &&,int &&,int &&,sf::Font *&&,const char (&)[2])' being compiled
+          with
+          [
+              _Ty=Button
+          ]
+C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\SelectionWindow.cpp(30): message : see reference to function template instantiation 'std::shared_ptr<Button> std::make_shared<Button,int,int,int,int,sf::Font*,const char(&)[2]>(int &&,int &&,int &&,int &&,sf::Font *&&,const char (&)[2])' being compiled
+  Spell.cpp
+C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Spell.cpp(34,30): warning C4305: '*=': truncation from 'double' to 'float'
+C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Spell.cpp(66,31): warning C4305: '/=': truncation from 'double' to 'float'
+  SpellBook.cpp
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xutility(138,73): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\memory(2194): message : see reference to function template instantiation 'void std::_Construct_in_place<_Ty,int,int,int,int,sf::Font*,const char(&)[3]>(_Ty &,int &&,int &&,int &&,int &&,sf::Font *&&,const char (&)[3]) noexcept(false)' being compiled
+          with
+          [
+              _Ty=Button
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\memory(2907): message : see reference to function template instantiation 'std::_Ref_count_obj2<_Ty>::_Ref_count_obj2<int,int,int,int,sf::Font*,const char(&)[3]>(int &&,int &&,int &&,int &&,sf::Font *&&,const char (&)[3])' being compiled
+          with
+          [
+              _Ty=Button
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\memory(2907): message : see reference to function template instantiation 'std::_Ref_count_obj2<_Ty>::_Ref_count_obj2<int,int,int,int,sf::Font*,const char(&)[3]>(int &&,int &&,int &&,int &&,sf::Font *&&,const char (&)[3])' being compiled
+          with
+          [
+              _Ty=Button
+          ]
+C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\SpellBook.cpp(16): message : see reference to function template instantiation 'std::shared_ptr<Button> std::make_shared<Button,int,int,int,int,sf::Font*,const char(&)[3]>(int &&,int &&,int &&,int &&,sf::Font *&&,const char (&)[3])' being compiled
+  WindowObject.cpp
+  Generating Code...
+  BattlefieldH3Engine.vcxproj -> C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\Release\BattlefieldH3Engine.exe

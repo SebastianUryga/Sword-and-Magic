@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\BattlefieldH3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\AnimationComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefield.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\BattleHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\BattlePathFinder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\BattleUnit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Button.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\GameConstants.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Graphics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\GuiHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Garrnison.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\InterfaceElem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Monser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\SelectionWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Spell.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\SpellBook.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\WindowObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\AnimationComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefield.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\BattleHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\BattlePathFinder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\BattleUnit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\GameConstants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Graphics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Button.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\GuiHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Garrnison.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\InterfaceElem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Monser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\pch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\SelectionWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Spell.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\SpellBook.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\WindowObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{C44D397B-81E9-3896-A1B8-091C9145AF0A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{E783C187-6F41-39FD-BE27-847BC30FA3DD}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

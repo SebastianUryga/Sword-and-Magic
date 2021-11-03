@@ -1,5 +1,8 @@
 #include "GuiHandler.h"
 
+
+
+
 void Battlefield::initButtons()
 {
 	this->buttons["Quit"] = std::make_shared<Button>(
@@ -272,6 +275,11 @@ void Battlefield::removeObsticle(std::shared_ptr<BattleObstacle> obs)
 		}
 }
 
+bool Battlefield::contains(const sf::Vector2f& mousePos)
+{
+	return true;
+}
+
 void Battlefield::close()
 {
 	WindowObject::close();
@@ -389,6 +397,7 @@ void Battlefield::hover(bool on)
 	{
 		if (this->mode == GameMode::Game)
 		{
+			if(InterfaceElem::contains(GuiHandler::Get().mousePosWindow))
 			this->selectingArea.setSize(
 				-1.f * (selectingArea.getPosition() - GH.mousePosWindow));
 
@@ -534,7 +543,7 @@ bool Battlefield::load(const std::string& path)
 	bool enemy, alive;
 	file >> temp;
 	if (temp < 0) return false;
-	this->units.resize(temp);
+	this->units.reserve(temp);
 	for (int i = 0; i < temp; i++)
 	{
 		file >> type;

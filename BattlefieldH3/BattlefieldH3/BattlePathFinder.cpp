@@ -76,24 +76,37 @@ void Battle::PathFinder::calculatePaths()
 				continue;
 
 			auto destination = neighbour;
+			auto pos2 = destination->coord - sf::Vector2i(bigCreature, 0);
+			if (!battlefield->containsIsBattlefield(pos2))
+				continue;
+
+			auto destination2 = this->getNode(pos2);
+			pos2 = source->coord - sf::Vector2i(bigCreature, 0);
+			auto source2 = this->getNode(pos2);
+
 			float cost = this->getMovementCost(source->coord, destination->coord);
 			float costAtNextTile = source->getCost() + static_cast<float>(cost);
-			if (source->accessible == PathNode::Accessibility::BLOCKVIS)
-				costAtNextTile += 1000;
+
+			if (destination->accessible == PathNode::Accessibility::BLOCKVIS ||
+				destination2->accessible == PathNode::Accessibility::BLOCKVIS)
+				if(destination2->coord != source->coord && destination->coord != source2->coord)
+					costAtNextTile += 1000;
+
 			if (destination->getCost() > costAtNextTile)
 			{
 				destination->setCost(costAtNextTile);
 				destination->theNodeBefore = source;
 			}
-			auto pos2 = neighbour->coord - sf::Vector2i(bigCreature, 0);
 			
-			if (!battlefield->containsIsBattlefield(pos2))
-				continue;
-			auto neighbour2 = this->getNode(pos2);
 			
-			if ((destination->coord == source->coord - sf::Vector2i(bigCreature, 0) || neighbour->accessible == PathNode::Accessibility::ACCESSIBLE || neighbour->accessible == PathNode::Accessibility::BLOCKVIS) &&
-				(pos2 == source->coord || neighbour2->accessible == PathNode::Accessibility::ACCESSIBLE || neighbour->accessible == PathNode::Accessibility::BLOCKVIS))
+			if((destination2->accessible == PathNode::Accessibility::ACCESSIBLE ||
+				destination2->accessible == PathNode::Accessibility::BLOCKVIS ||
+				destination2->coord == source->coord) &&
+				(destination->accessible == PathNode::Accessibility::ACCESSIBLE ||
+				destination->accessible == PathNode::Accessibility::BLOCKVIS) ||
+				source2->coord == destination->coord)
 				push(neighbour);
+			
 		}
 	}
 }
