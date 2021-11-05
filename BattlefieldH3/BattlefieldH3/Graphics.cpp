@@ -4,7 +4,17 @@ Graphics& graphics = Graphics::Get();
 
 Graphics::Graphics()
 {
-	
+	this->menuBackgroud = std::make_shared<sf::Texture>();
+	this->battleBackgrouds = std::make_shared<sf::Texture>();
+	this->allCreaturePortraits = std::make_shared<sf::Texture>();
+	this->battleEffectsSheet = std::make_shared<sf::Texture>();
+	this->allSpellIcons = std::make_shared<sf::Texture>();
+	this->battleBackgrouds->setRepeated(true);
+	this->battleObsticles[BattleObstacle::Type::ROCK2] = std::make_shared<sf::Texture>();
+	this->battleObsticles[BattleObstacle::Type::ROCK3] = std::make_shared<sf::Texture>();
+	this->battleObsticles[BattleObstacle::Type::ROCK4] = std::make_shared<sf::Texture>();
+	this->battleObsticles[BattleObstacle::Type::SCIELETON1] = std::make_shared<sf::Texture>();
+	this->battleObsticles[BattleObstacle::Type::ROCK1] = std::make_shared<sf::Texture>();
 	this->creaturePortraits[Monster::NO_CREATURE] = sf::IntRect(386, 627, 58, 64);
 	this->creaturePortraits[Monster::PIKEMAN] = sf::IntRect(8, 6, 58, 64);
 	this->creaturePortraits[Monster::HALBERDIER] = sf::IntRect(71, 6, 58, 64);
@@ -40,25 +50,12 @@ Graphics::~Graphics()
 
 void Graphics::Init()
 {
-
-	this->menuBackgroud = std::make_shared<sf::Texture>();
-	this->battleBackgrouds = std::make_shared<sf::Texture>();
-	this->allCreaturePortraits = std::make_shared<sf::Texture>();
-	this->battleEffectsSheet = std::make_shared<sf::Texture>();
-	this->allSpellIcons = std::make_shared<sf::Texture>();
-	this->battleBackgrouds->setRepeated(true);
-	this->battleObsticles[BattleObstacle::Type::ROCK2] = std::make_shared<sf::Texture>();
-	this->battleObsticles[BattleObstacle::Type::ROCK3] = std::make_shared<sf::Texture>();
-	this->battleObsticles[BattleObstacle::Type::ROCK4] = std::make_shared<sf::Texture>();
-	this->battleObsticles[BattleObstacle::Type::SCIELETON1] = std::make_shared<sf::Texture>();
-	this->battleObsticles[BattleObstacle::Type::ROCK1] = std::make_shared<sf::Texture>();
-
-	this->image.loadFromFile("Textures\\SpellIcons.png");
+	this->image.loadFromFile("Textures/SpellIcons.png");
 	this->image.createMaskFromColor(this->image.getPixel(1, 1));
 	this->allSpellIcons->loadFromImage(this->image);
-	this->menuBackgroud->loadFromFile("Textures\\background.jpg");
-	this->battleBackgrouds->loadFromFile("Textures\\CmBkDrMt.png");
-	this->image.loadFromFile("Textures\\BattleEffects.png");
+	this->menuBackgroud->loadFromFile("Textures/background.jpg");
+	this->battleBackgrouds->loadFromFile("Textures/CmBkDrMt.png");
+	this->image.loadFromFile("Textures/BattleEffects.png");
 	this->image.createMaskFromColor(this->image.getPixel(1, 1));
 	this->battleEffectsSheet->loadFromImage(this->image);
 	this->battleUnitsSheets[Monster::PIKEMAN] = std::make_shared<sf::Texture>();
@@ -75,26 +72,26 @@ void Graphics::Init()
 	this->battleUnitsSheets[Monster::ANGEL] = std::make_shared<sf::Texture>();
 	this->battleUnitsSheets[Monster::MINOTAUR] = std::make_shared<sf::Texture>();
 	this->battleUnitsSheets[Monster::BLACK_DRAGON] = std::make_shared<sf::Texture>();
-	this->battleUnitsSheets[Monster::PIKEMAN]->loadFromFile("Textures\\Pikeman.png");
-	this->battleUnitsSheets[Monster::HALBERDIER]->loadFromFile("Textures\\Halberdier.png");
-	this->battleUnitsSheets[Monster::ARCHER]->loadFromFile("Textures\\Archer.png");
-	this->battleUnitsSheets[Monster::MARKSMEN]->loadFromFile("Textures\\Marksman.png");
-	this->battleUnitsSheets[Monster::GRIFFIN]->loadFromFile("Textures\\Griffin.png");
-	this->battleUnitsSheets[Monster::ROYAL_GRIFFIN]->loadFromFile("Textures\\Royal Griffin.png");
-	this->battleUnitsSheets[Monster::SWORDSMAN]->loadFromFile("Textures\\Swordsman.png");
-	this->battleUnitsSheets[Monster::CRUSADER]->loadFromFile("Textures\\Crusader.png");
-	this->battleUnitsSheets[Monster::MONK]->loadFromFile("Textures\\Monk.png");
-	this->battleUnitsSheets[Monster::ZEALOT]->loadFromFile("Textures\\Zealot.png");
-	this->battleUnitsSheets[Monster::CAVALIER]->loadFromFile("Textures\\Cavalier.png");
-	this->battleUnitsSheets[Monster::ANGEL]->loadFromFile("Textures\\Angel.png");
-	this->battleUnitsSheets[Monster::MINOTAUR]->loadFromFile("Textures\\Minotaur.png");
-	this->battleUnitsSheets[Monster::BLACK_DRAGON]->loadFromFile("Textures\\Black Dragon.png");
-	this->allCreaturePortraits->loadFromFile("Textures\\Creatures Portraits.png");
-	this->battleObsticles[BattleObstacle::Type::ROCK1]->loadFromFile("Textures\\ObDRk01.png");
-	this->battleObsticles[BattleObstacle::Type::ROCK2]->loadFromFile("Textures\\ObDRk02.png");
-	this->battleObsticles[BattleObstacle::Type::ROCK3]->loadFromFile("Textures\\ObDRk03.png");
-	this->battleObsticles[BattleObstacle::Type::ROCK4]->loadFromFile("Textures\\ObDRk04.png");
-	this->battleObsticles[BattleObstacle::Type::SCIELETON1]->loadFromFile("Textures\\ObDino3.png");
+	this->battleUnitsSheets[Monster::PIKEMAN]->loadFromFile("Textures/Pikeman.png");
+	this->battleUnitsSheets[Monster::HALBERDIER]->loadFromFile("Textures/Halberdier.png");
+	this->battleUnitsSheets[Monster::ARCHER]->loadFromFile("Textures/Archer.png");
+	this->battleUnitsSheets[Monster::MARKSMEN]->loadFromFile("Textures/Marksman.png");
+	this->battleUnitsSheets[Monster::GRIFFIN]->loadFromFile("Textures/Griffin.png");
+	this->battleUnitsSheets[Monster::ROYAL_GRIFFIN]->loadFromFile("Textures/Royal Griffin.png");
+	this->battleUnitsSheets[Monster::SWORDSMAN]->loadFromFile("Textures/Swordsman.png");
+	this->battleUnitsSheets[Monster::CRUSADER]->loadFromFile("Textures/Crusader.png");
+	this->battleUnitsSheets[Monster::MONK]->loadFromFile("Textures/Monk.png");
+	this->battleUnitsSheets[Monster::ZEALOT]->loadFromFile("Textures/Zealot.png");
+	this->battleUnitsSheets[Monster::CAVALIER]->loadFromFile("Textures/Cavalier.png");
+	this->battleUnitsSheets[Monster::ANGEL]->loadFromFile("Textures/Angel.png");
+	this->battleUnitsSheets[Monster::MINOTAUR]->loadFromFile("Textures/Minotaur.png");
+	this->battleUnitsSheets[Monster::BLACK_DRAGON]->loadFromFile("Textures/Black Dragon.png");
+	this->allCreaturePortraits->loadFromFile("Textures/Creatures Portraits.png");
+	this->battleObsticles[BattleObstacle::Type::ROCK1]->loadFromFile("Textures/ObDRk01.png");
+	this->battleObsticles[BattleObstacle::Type::ROCK2]->loadFromFile("Textures/ObDRk02.png");
+	this->battleObsticles[BattleObstacle::Type::ROCK3]->loadFromFile("Textures/ObDRk03.png");
+	this->battleObsticles[BattleObstacle::Type::ROCK4]->loadFromFile("Textures/ObDRk04.png");
+	this->battleObsticles[BattleObstacle::Type::SCIELETON1]->loadFromFile("Textures/ObDino3.png");
 }
 
 Graphics& Graphics::Get()

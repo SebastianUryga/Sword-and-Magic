@@ -3,7 +3,7 @@
 SpellBook::SpellBook(Spell& selectedSpell)
 	:WindowObject(400,200,700,400,GH.globalFont), spellToCast(selectedSpell)
 {
-	for (int i = 0; i < allSpells.size(); i++)
+	for (size_t i = 0; i < allSpells.size(); i++)
 	{
 		auto pos = this->background.getPosition();
 		pos += sf::Vector2f{ 20.f + (i % 7) * 90,10.f + (i / 7) * 70 };

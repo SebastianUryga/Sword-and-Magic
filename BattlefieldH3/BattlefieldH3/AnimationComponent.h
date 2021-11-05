@@ -8,11 +8,19 @@ private:
 		Animation(sf::Sprite& sprite, sf::Texture& textureSheet,
 			float animationTimer, int start_frame_x, int start_frame_y,
 			int frames_x, int frames_y, int width, int height,
-			bool turn, sf::Vector2f orgin, float tileWidth)
-			:sprite(sprite), textureSheet(textureSheet), animationTimer(animationTimer),
-			first_frame(start_frame_x), last_frame(start_frame_x + frames_x),
-			row(start_frame_y), width(width), height(height),
-			turn(turn), orgin(orgin), tileWidth(tileWidth)
+			bool turn, sf::Vector2f orgin, float tileWidth) :
+			sprite(sprite),
+			textureSheet(textureSheet),
+			animationTimer(animationTimer),
+			first_frame(start_frame_x),
+			last_frame(start_frame_x + frames_x),
+			row(start_frame_y),
+			width(width),
+			height(height),
+			turn(turn),
+			orgin(orgin),
+			tileWidth(tileWidth),
+			frames_y(frames_y)
 		{
 			this->playedOnce = false;
 			this->timer = 0.f;
@@ -22,21 +30,22 @@ private:
 			this->sprite.setTextureRect(currnet_frame);
 		}
 		//Variables
-		sf::Texture& textureSheet;
 		sf::Sprite& sprite;
-		sf::Vector2f orgin;
-		float tileWidth;
-		bool turn;
-		bool playedOnce;
+		sf::Texture& textureSheet;
+		float animationTimer;
+		int first_frame;
+		int last_frame;
+		int row;
 		int width;
 		int height;
+		bool turn;
+		sf::Vector2f orgin;
+		float tileWidth;
+		int frames_y;
+		bool playedOnce;
 		float timer;
-		float animationTimer;
 		float speed;
-		int row;
-		int first_frame;
 		sf::IntRect currnet_frame;
-		int last_frame;
 		//Functions
 		void play(const float& dt, bool inversely)
 		{
@@ -49,8 +58,7 @@ private:
 				//reset timer;
 				this->timer = 0.f;
 				//Animate
-				if ((!inversely && this->currnet_frame.left < last_frame * width) ||
-					(inversely && this->currnet_frame.left > first_frame * width))
+				if ((!inversely && this->currnet_frame.left < last_frame * width) || (inversely && this->currnet_frame.left > first_frame * width))
 				{
 
 					if (inversely)
@@ -84,6 +92,7 @@ private:
 	sf::Texture& textureSheet;
 	std::map<std::string, Animation*> animations;
 	Animation* lastAnimation;
+
 public:
 	AnimationComponent(sf::Sprite& sprite, sf::Texture& textureSheet);
 	virtual ~AnimationComponent();
@@ -97,4 +106,3 @@ public:
 	bool playedOnce(const std::string key);
 	bool playedHalf(const std::string key);
 };
-

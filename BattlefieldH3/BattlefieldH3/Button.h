@@ -3,12 +3,17 @@
 
 class WindowObject;
 
-enum class Button_states { BTN_IDLE = 0, BTN_HOVER, BTN_PRESSED, BTN_BLOCK };
+enum class Button_states
+{
+	BTN_IDLE = 0,
+	BTN_HOVER,
+	BTN_PRESSED,
+	BTN_BLOCK
+};
 
 class Button : public InterfaceElem
 {
 private:
-
 	Button_states buttonState;
 
 	sf::RectangleShape background;
@@ -22,6 +27,7 @@ private:
 
 	std::function<void()> onClick;
 	std::shared_ptr<WindowObject> popupWindow;
+
 public:
 	Button(float x, float y, float width, float height,
 		sf::Font* font, std::string text,
@@ -32,7 +38,7 @@ public:
 	virtual ~Button();
 
 	//Accesor
-	const bool isPressed() const;
+	bool isPressed() const;
 	bool isBlocked();
 
 	void clickRight(bool down, bool previousState) override;
@@ -49,5 +55,4 @@ public:
 	void move(float x, float y);
 	void update();
 	void render(sf::RenderTarget* target);
-
 };

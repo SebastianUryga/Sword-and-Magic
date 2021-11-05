@@ -1,5 +1,5 @@
-#include "pch.h"
 #include "GuiHandler.h"
+#include "PCH.hpp"
 
 Button::Button(float x, float y, float width, float height,
 	sf::Font* font, std::string text, sf::Color idleColor,
@@ -18,8 +18,7 @@ Button::Button(float x, float y, float width, float height,
 	this->text.setCharacterSize(22);
 	this->text.setPosition(
 		this->background.getPosition().x + (this->background.getGlobalBounds().width / 2.f) - this->text.getGlobalBounds().width / 2.f,
-		this->background.getPosition().y + (this->background.getGlobalBounds().height / 2.f) - this->text.getGlobalBounds().height / 2.f
-	);
+		this->background.getPosition().y + (this->background.getGlobalBounds().height / 2.f) - this->text.getGlobalBounds().height / 2.f);
 
 	this->activeColor = activeColor;
 	this->hoverColor = hoverColor;
@@ -33,9 +32,8 @@ Button::~Button()
 {
 }
 
-
 //Accesor
-const bool Button::isPressed() const
+bool Button::isPressed() const
 {
 	return buttonState == Button_states::BTN_PRESSED;
 }
@@ -45,7 +43,7 @@ bool Button::isBlocked()
 	return this->buttonState == Button_states::BTN_BLOCK;
 }
 
-void Button::clickRight(bool pressed, bool previousState)
+void Button::clickRight(bool pressed, [[maybe_unused]] bool previousState)
 {
 	if (pressed && popupWindow)
 		GH.makePopup(popupWindow);
@@ -106,8 +104,7 @@ void Button::setPos(float x, float y)
 	this->background.setPosition(sf::Vector2f(x, y));
 	this->text.setPosition(
 		this->background.getPosition().x + (this->background.getGlobalBounds().width / 2.f) - this->text.getGlobalBounds().width / 2.f,
-		this->background.getPosition().y + (this->background.getGlobalBounds().height / 2.f) - this->text.getGlobalBounds().height / 2.f
-	);
+		this->background.getPosition().y + (this->background.getGlobalBounds().height / 2.f) - this->text.getGlobalBounds().height / 2.f);
 }
 
 void Button::setText(std::string t)
@@ -127,21 +124,21 @@ void Button::update()
 {
 	switch (buttonState)
 	{
-	case Button_states::BTN_HOVER:
-		this->background.setFillColor(this->hoverColor);
-		break;
-	case Button_states::BTN_IDLE:
-		this->background.setFillColor(this->idleColor);
-		break;
-	case Button_states::BTN_PRESSED:
-		this->background.setFillColor(this->activeColor);
-		break;
-	case Button_states::BTN_BLOCK:
-		this->background.setFillColor(this->blockColor);
-		break;
-	default:
-		this->background.setFillColor(sf::Color::Red);
-		break;
+		case Button_states::BTN_HOVER:
+			this->background.setFillColor(this->hoverColor);
+			break;
+		case Button_states::BTN_IDLE:
+			this->background.setFillColor(this->idleColor);
+			break;
+		case Button_states::BTN_PRESSED:
+			this->background.setFillColor(this->activeColor);
+			break;
+		case Button_states::BTN_BLOCK:
+			this->background.setFillColor(this->blockColor);
+			break;
+		default:
+			this->background.setFillColor(sf::Color::Red);
+			break;
 	}
 }
 

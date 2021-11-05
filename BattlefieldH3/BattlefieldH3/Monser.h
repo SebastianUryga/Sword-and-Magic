@@ -12,7 +12,6 @@ struct MonsterStats
 	bool fly;
 	bool archer;
 	bool bigCreature;
-	
 };
 struct MonsterAnimationParametrs
 {
@@ -30,7 +29,6 @@ struct MonsterAnimationParametrs
 class Monster
 {
 public:
-
 	enum MonsterType : int
 	{
 		NO_CREATURE = 0,
@@ -51,22 +49,34 @@ public:
 		BLACK_DRAGON = 15,
 	};
 
-	Monster(MonsterType type = NO_CREATURE) : monster(type) {}
-	Monster(const Monster& other) : monster(other.monster) {}
-	Monster& operator=(const Monster& other) { monster = other.monster; return *this; }
-	explicit Monster(int type) { monster = static_cast<MonsterType>(type); }
-	operator Monster() const { return monster; }
-	bool operator==(const Monster& other) const { return monster == other.monster; }
-	bool operator<(const Monster& other) const { return monster < other.monster; }
+	Monster(MonsterType type = NO_CREATURE) :
+		monster(type)
+	{}
+	Monster(const Monster& other) :
+		monster(other.monster)
+	{}
+	Monster& operator=(const Monster& other)
+	{
+		monster = other.monster;
+		return *this;
+	}
+	explicit Monster(int type)
+	{
+		monster = static_cast<MonsterType>(type);
+	}
+	bool operator==(const Monster& other) const
+	{
+		return monster == other.monster;
+	}
+	bool operator<(const Monster& other) const
+	{
+		return monster < other.monster;
+	}
 	MonsterType monster;
 };
 extern std::map<Monster, std::string> creatureToString;
 extern std::map<Monster, MonsterStats> creaturesStats;
 extern std::map<std::pair<Monster, std::string>, MonsterAnimationParametrs> animationParametrs;
-static std::vector<Monster> allMonseters =
-{
-	Monster::NO_CREATURE, Monster::PIKEMAN,Monster::HALBERDIER, Monster::SWORDSMAN,
-	Monster::CRUSADER, Monster::ARCHER, Monster::MARKSMEN, Monster::GRIFFIN,
-	Monster::ROYAL_GRIFFIN, Monster::MONK, Monster::ZEALOT, Monster::CAVALIER,
-	Monster::ANGEL, Monster::MINOTAUR, Monster::BLACK_DRAGON
+static std::vector<Monster> allMonseters = {
+	Monster::NO_CREATURE, Monster::PIKEMAN, Monster::HALBERDIER, Monster::SWORDSMAN, Monster::CRUSADER, Monster::ARCHER, Monster::MARKSMEN, Monster::GRIFFIN, Monster::ROYAL_GRIFFIN, Monster::MONK, Monster::ZEALOT, Monster::CAVALIER, Monster::ANGEL, Monster::MINOTAUR, Monster::BLACK_DRAGON
 };

@@ -6,7 +6,7 @@ set(SRCS
 	BattlefieldH3/BattlefieldH3.cpp
 	BattlefieldH3/AnimationComponent.cpp
 	BattlefieldH3/Game.cpp
-	BattlefieldH3/Battlefield.cpp
+	BattlefieldH3/Battlefiled.cpp
 	BattlefieldH3/BattleHandler.cpp
 	BattlefieldH3/BattlePathFinder.cpp
 	BattlefieldH3/BattleUnit.cpp
@@ -25,7 +25,7 @@ set(SRCS
 )
 set(HEADERS
 	BattlefieldH3/AnimationComponent.h
-	BattlefieldH3/Battlefield.h
+	BattlefieldH3/Battlefiled.h
 	BattlefieldH3/BattleHandler.h
 	BattlefieldH3/BattlePathFinder.h
 	BattlefieldH3/BattleUnit.h

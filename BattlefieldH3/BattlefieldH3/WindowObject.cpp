@@ -56,7 +56,7 @@ void WindowObject::close()
 	GH.popWindow(GH.topWindow());
 }
 
-void WindowObject::update(const float dt)
+void WindowObject::update([[maybe_unused]] const float dt)
 {
 	//update buttons
 	for (auto& btn : this->buttons)
@@ -72,7 +72,7 @@ void WindowObject::render(sf::RenderTarget* target)
 		btn.second->render(target);
 }
 
-void PopupWindow::clickRight(bool down, bool previousState)
+void PopupWindow::clickRight(bool down, [[maybe_unused]] bool previousState)
 {
 	if (down == false)
 		GH.closePopup();
@@ -82,7 +82,6 @@ PopupWindow::PopupWindow()
 {
 	this->iner = nullptr;
 }
-
 
 PopupWindow::~PopupWindow()
 {

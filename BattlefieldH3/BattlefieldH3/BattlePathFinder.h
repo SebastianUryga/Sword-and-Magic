@@ -40,7 +40,7 @@ namespace Battle
 			if (value == this->cost)
 				return;
 
-			bool getUpNode = value < this->cost;
+			//bool getUpNode = value < this->cost;
 			this->cost = value;
 			// If the node is in the heap, update the heap.
 			if (this->inPQ)

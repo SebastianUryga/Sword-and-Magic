@@ -1,4 +1,7 @@
 #include "GuiHandler.h"
+
+class BattleUnit;
+
 void BattleUnit::initAnimation()
 {
 	this->spellEffectAnimation =
@@ -7,67 +10,169 @@ void BattleUnit::initAnimation()
 	{
 		struct EffectsAnimationParametrs stat = batteEffectsAnimationParamets[s];
 		this->spellEffectAnimation->addAnimotion(
-			spellToString[s], stat.animationTimer, stat.start_frame_x, stat.start_frame_y,
-			stat.frames_x, stat.frames_y, stat.width, stat.height, false, { 6,50}, stat.tileWidth);
+			spellToString[s], stat.animationTimer, stat.start_frame_x, stat.start_frame_y, stat.frames_x, stat.frames_y, stat.width, stat.height, false, { 6, 50 }, stat.tileWidth);
 	}
-		
+
 	this->animation =
 		new AnimationComponent(this->sprite, *graphics.battleUnitsSheets[this->type]);
 	struct MonsterAnimationParametrs stat =
-		animationParametrs[{type, "IDLE"}];
+		animationParametrs[{ type, "IDLE" }];
 	this->animation->addAnimotion("IDLE",
-		stat.animationTimer, stat.start_frame_x, stat.start_frame_y,
-		stat.frames_x, stat.frames_y, stat.width, stat.height, false, stat.orgin, stat.tileWidth);
+		stat.animationTimer,
+		stat.start_frame_x,
+		stat.start_frame_y,
+		stat.frames_x,
+		stat.frames_y,
+		stat.width,
+		stat.height,
+		false,
+		stat.orgin,
+		stat.tileWidth);
 	this->sprite.setOrigin(stat.orgin);
-	stat = animationParametrs[{type, "START_MOVE"}];
+	stat = animationParametrs[{ type, "START_MOVE" }];
 	this->animation->addAnimotion("START_MOVE",
-		stat.animationTimer, stat.start_frame_x, stat.start_frame_y,
-		stat.frames_x, stat.frames_y, stat.width, stat.height, true, stat.orgin, stat.tileWidth);
-	stat = animationParametrs[{type, "MOVE1"}];
+		stat.animationTimer,
+		stat.start_frame_x,
+		stat.start_frame_y,
+		stat.frames_x,
+		stat.frames_y,
+		stat.width,
+		stat.height,
+		true,
+		stat.orgin,
+		stat.tileWidth);
+	stat = animationParametrs[{ type, "MOVE1" }];
 	this->animation->addAnimotion("MOVE1",
-		stat.animationTimer, stat.start_frame_x, stat.start_frame_y,
-		stat.frames_x, stat.frames_y, stat.width, stat.height, false, stat.orgin, stat.tileWidth);
-	stat = animationParametrs[{type, "MOVE2"}];
+		stat.animationTimer,
+		stat.start_frame_x,
+		stat.start_frame_y,
+		stat.frames_x,
+		stat.frames_y,
+		stat.width,
+		stat.height,
+		false,
+		stat.orgin,
+		stat.tileWidth);
+	stat = animationParametrs[{ type, "MOVE2" }];
 	this->animation->addAnimotion("MOVE2",
-		stat.animationTimer, stat.start_frame_x, stat.start_frame_y,
-		stat.frames_x, stat.frames_y, stat.width, stat.height, false, stat.orgin, stat.tileWidth);
-	stat = animationParametrs[{type, "ATTACK_UP"}];
+		stat.animationTimer,
+		stat.start_frame_x,
+		stat.start_frame_y,
+		stat.frames_x,
+		stat.frames_y,
+		stat.width,
+		stat.height,
+		false,
+		stat.orgin,
+		stat.tileWidth);
+	stat = animationParametrs[{ type, "ATTACK_UP" }];
 	this->animation->addAnimotion("ATTACK_UP",
-		stat.animationTimer, stat.start_frame_x, stat.start_frame_y,
-		stat.frames_x, stat.frames_y, stat.width, stat.height, false, stat.orgin, stat.tileWidth);
-	stat = animationParametrs[{type, "ATTACK"}];
+		stat.animationTimer,
+		stat.start_frame_x,
+		stat.start_frame_y,
+		stat.frames_x,
+		stat.frames_y,
+		stat.width,
+		stat.height,
+		false,
+		stat.orgin,
+		stat.tileWidth);
+	stat = animationParametrs[{ type, "ATTACK" }];
 	this->animation->addAnimotion("ATTACK",
-		stat.animationTimer, stat.start_frame_x, stat.start_frame_y,
-		stat.frames_x, stat.frames_y, stat.width, stat.height, false, stat.orgin, stat.tileWidth);
-	stat = animationParametrs[{type, "ATTACK_DOWN"}];
+		stat.animationTimer,
+		stat.start_frame_x,
+		stat.start_frame_y,
+		stat.frames_x,
+		stat.frames_y,
+		stat.width,
+		stat.height,
+		false,
+		stat.orgin,
+		stat.tileWidth);
+	stat = animationParametrs[{ type, "ATTACK_DOWN" }];
 	this->animation->addAnimotion("ATTACK_DOWN",
-		stat.animationTimer, stat.start_frame_x, stat.start_frame_y,
-		stat.frames_x, stat.frames_y, stat.width, stat.height, false, stat.orgin, stat.tileWidth);
-	stat = animationParametrs[{type, "DAMAGED"}];
+		stat.animationTimer,
+		stat.start_frame_x,
+		stat.start_frame_y,
+		stat.frames_x,
+		stat.frames_y,
+		stat.width,
+		stat.height,
+		false,
+		stat.orgin,
+		stat.tileWidth);
+	stat = animationParametrs[{ type, "DAMAGED" }];
 	this->animation->addAnimotion("DAMAGED",
-		stat.animationTimer, stat.start_frame_x, stat.start_frame_y,
-		stat.frames_x, stat.frames_y, stat.width, stat.height, false, stat.orgin, stat.tileWidth);
-	stat = animationParametrs[{type, "BLOCK"}];
+		stat.animationTimer,
+		stat.start_frame_x,
+		stat.start_frame_y,
+		stat.frames_x,
+		stat.frames_y,
+		stat.width,
+		stat.height,
+		false,
+		stat.orgin,
+		stat.tileWidth);
+	stat = animationParametrs[{ type, "BLOCK" }];
 	this->animation->addAnimotion("BLOCK",
-		stat.animationTimer, stat.start_frame_x, stat.start_frame_y,
-		stat.frames_x, stat.frames_y, stat.width, stat.height, false, stat.orgin, stat.tileWidth);
-	stat = animationParametrs[{type, "DIE"}];
+		stat.animationTimer,
+		stat.start_frame_x,
+		stat.start_frame_y,
+		stat.frames_x,
+		stat.frames_y,
+		stat.width,
+		stat.height,
+		false,
+		stat.orgin,
+		stat.tileWidth);
+	stat = animationParametrs[{ type, "DIE" }];
 	this->animation->addAnimotion("DIE",
-		stat.animationTimer, stat.start_frame_x, stat.start_frame_y,
-		stat.frames_x, stat.frames_y, stat.width, stat.height, true, stat.orgin, stat.tileWidth);
-	stat = animationParametrs[{type, "SHOT_UP"}];
+		stat.animationTimer,
+		stat.start_frame_x,
+		stat.start_frame_y,
+		stat.frames_x,
+		stat.frames_y,
+		stat.width,
+		stat.height,
+		true,
+		stat.orgin,
+		stat.tileWidth);
+	stat = animationParametrs[{ type, "SHOT_UP" }];
 	this->animation->addAnimotion("SHOT_UP",
-		stat.animationTimer, stat.start_frame_x, stat.start_frame_y,
-		stat.frames_x, stat.frames_y, stat.width, stat.height, false, stat.orgin, stat.tileWidth);
-	stat = animationParametrs[{type, "SHOT"}];
+		stat.animationTimer,
+		stat.start_frame_x,
+		stat.start_frame_y,
+		stat.frames_x,
+		stat.frames_y,
+		stat.width,
+		stat.height,
+		false,
+		stat.orgin,
+		stat.tileWidth);
+	stat = animationParametrs[{ type, "SHOT" }];
 	this->animation->addAnimotion("SHOT",
-		stat.animationTimer, stat.start_frame_x, stat.start_frame_y,
-		stat.frames_x, stat.frames_y, stat.width, stat.height, false, stat.orgin, stat.tileWidth);
-	stat = animationParametrs[{type, "SHOT_DOWN"}];
+		stat.animationTimer,
+		stat.start_frame_x,
+		stat.start_frame_y,
+		stat.frames_x,
+		stat.frames_y,
+		stat.width,
+		stat.height,
+		false,
+		stat.orgin,
+		stat.tileWidth);
+	stat = animationParametrs[{ type, "SHOT_DOWN" }];
 	this->animation->addAnimotion("SHOT_DOWN",
-		stat.animationTimer, stat.start_frame_x, stat.start_frame_y,
-		stat.frames_x, stat.frames_y, stat.width, stat.height, false, stat.orgin, stat.tileWidth);
-
+		stat.animationTimer,
+		stat.start_frame_x,
+		stat.start_frame_y,
+		stat.frames_x,
+		stat.frames_y,
+		stat.width,
+		stat.height,
+		false,
+		stat.orgin,
+		stat.tileWidth);
 }
 
 void BattleUnit::initStatistic()
@@ -93,6 +198,23 @@ void BattleUnit::initTextDmg(const int dmg)
 	text.number = sf::Text(std::to_string(dmg), GH.globalFont, 20);
 	text.number.setPosition(this->sprite.getPosition() + sf::Vector2f(20, -20));
 	this->damageTexts.push_back(text);
+}
+// TODO Make tests for it
+bool BattleUnit::moveMakeColision(const sf::Vector2i& moveDirection, const std::shared_ptr<Battlefield> battlefield) const
+{
+	if (moveDirection == sf::Vector2i { 0, 0 })
+		return false;
+	bool result = battlefield->isTileBlocked(this->getPos() + moveDirection);
+	if (bigCreature)
+	{
+		if (result && this->getPos() + moveDirection == this->getPos2())
+		{
+			return battlefield->isTileBlocked(this->getPos2() + moveDirection);
+		}
+		if (this->getPos2() + moveDirection == this->getPos())
+			return result;
+	}
+	return result || battlefield->isTileBlocked(this->getPos2() + moveDirection);
 }
 
 bool BattleUnit::isShouter() const
@@ -168,8 +290,7 @@ bool BattleUnit::isEnemy() const
 
 bool BattleUnit::haveDefensePosition() const
 {
-	if (this->animationState == AnimationState::IDLE ||
-		this->animationState == AnimationState::BLOCKING)
+	if (this->animationState == AnimationState::IDLE || this->animationState == AnimationState::BLOCKING)
 		return true;
 	else
 		return false;
@@ -182,9 +303,9 @@ void BattleUnit::idle()
 	this->velocity = sf::Vector2f(0, 0);
 }
 
-void BattleUnit::doMove(sf::Vector2f diraction)
+void BattleUnit::doMove(sf::Vector2f direction)
 {
-	if (diraction != sf::Vector2f(0, 0))
+	if (direction != sf::Vector2f(0, 0))
 	{
 		this->moving = true;
 		if (this->animationState != AnimationState::MOVING)
@@ -194,13 +315,15 @@ void BattleUnit::doMove(sf::Vector2f diraction)
 		}
 		else
 			this->animationState = AnimationState::MOVING;
-		if (diraction.x > 0) this->lastDirection = false;
-		if (diraction.x < 0) this->lastDirection = true;
+		if (direction.x > 0)
+			this->lastDirection = false;
+		if (direction.x < 0)
+			this->lastDirection = true;
 	}
-		
-	if (abs(diraction.x) == 1 && abs(diraction.y) == 1)
-		diraction /= 1.41f;
-	this->setVelocity(diraction);
+
+	if (abs(direction.x) == 1 && abs(direction.y) == 1)
+		direction /= 1.41f;
+	this->setVelocity(direction);
 }
 
 bool BattleUnit::makeAttack(const sf::Vector2i target)
@@ -209,8 +332,10 @@ bool BattleUnit::makeAttack(const sf::Vector2i target)
 		return false;
 	if (this->actualAttackCoulddown > 0)
 		return false;
-	if (pos.x < target.x) this->lastDirection = false;
-	if (pos.x > target.x) this->lastDirection = true;
+	if (pos.x < target.x)
+		this->lastDirection = false;
+	if (pos.x > target.x)
+		this->lastDirection = true;
 	this->animationState = AnimationState::ATTACKING;
 	this->attacked = false;
 	return true;
@@ -218,11 +343,16 @@ bool BattleUnit::makeAttack(const sf::Vector2i target)
 
 bool BattleUnit::makeShot(const sf::Vector2i target)
 {
-	if (!this->shooter) return false;
-	if (this->animationState == AnimationState::SHOOTHING) return false;
-	if (this->actualAttackCoulddown > 0) return false;
-	if (pos.x < target.x) this->lastDirection = false;
-	if (pos.x > target.x) this->lastDirection = true;
+	if (!this->shooter)
+		return false;
+	if (this->animationState == AnimationState::SHOOTHING)
+		return false;
+	if (this->actualAttackCoulddown > 0)
+		return false;
+	if (pos.x < target.x)
+		this->lastDirection = false;
+	if (pos.x > target.x)
+		this->lastDirection = true;
 	this->animationState = AnimationState::SHOOTHING;
 	this->shooted = false;
 	return true;
@@ -232,11 +362,12 @@ void BattleUnit::reciveDamage(const sf::Vector2i from, const int dmg)
 {
 	this->initTextDmg(dmg);
 
-	if (this->animationState == AnimationState::RECIVING_DMG ||
-		(dmg * 100) / this->maxHp < 20)
+	if (this->animationState == AnimationState::RECIVING_DMG || (dmg * 100) / this->maxHp < 20)
 		return;
-	if (pos.x < from.x) this->lastDirection = false;
-	if (pos.x > from.x) this->lastDirection = true;
+	if (pos.x < from.x)
+		this->lastDirection = false;
+	if (pos.x > from.x)
+		this->lastDirection = true;
 	this->animationState = AnimationState::RECIVING_DMG;
 }
 
@@ -244,11 +375,12 @@ void BattleUnit::makeBlock(const sf::Vector2i from, const int dmg)
 {
 	this->initTextDmg(dmg);
 
-	if (this->animationState == AnimationState::BLOCKING ||
-		(dmg * 100) / this->maxHp < 10)
+	if (this->animationState == AnimationState::BLOCKING || (dmg * 100) / this->maxHp < 10)
 		return;
-	if (pos.x < from.x) this->lastDirection = false;
-	if (pos.x > from.x) this->lastDirection = true;
+	if (pos.x < from.x)
+		this->lastDirection = false;
+	if (pos.x > from.x)
+		this->lastDirection = true;
 	this->animationState = AnimationState::BLOCKING;
 }
 
@@ -268,7 +400,7 @@ void BattleUnit::fixSpritePos()
 	fixedPos *= B_TILE_WIDTH;
 	this->sprite.setPosition(fixedPos);
 	this->spellEffect.setPosition(fixedPos);
-	this->lineHP.setPosition(fixedPos - sf::Vector2f{ 0, 50 });
+	this->lineHP.setPosition(fixedPos - sf::Vector2f { 0, 50 });
 	this->text.setPosition(fixedPos - sf::Vector2f(0, 60));
 }
 
@@ -306,8 +438,10 @@ void BattleUnit::setPos(sf::Vector2i pos)
 	this->shape.top = pos.y * B_TILE_HEIGHT + 150;
 	this->pos = pos;
 	this->pos2.y = pos.y;
-	if (this->bigCreature) this->pos2.x = pos.x - 1;
-	else this->pos2 = pos;
+	if (this->bigCreature)
+		this->pos2.x = pos.x - 1;
+	else
+		this->pos2 = pos;
 }
 
 void BattleUnit::setVelocity(sf::Vector2f direction)
@@ -325,18 +459,23 @@ void BattleUnit::giveOrder(Order order)
 	this->order = order;
 }
 
-void BattleUnit::clickLeft(bool down, bool previousState)
+void BattleUnit::clickLeft([[maybe_unused]] bool down, [[maybe_unused]] bool previousState)
 {
 }
 
-BattleUnit::BattleUnit(Monster type)
-	:type(type), velocity(sf::Vector2f(0, 0)), alive(true), enemy(false)
+BattleUnit::BattleUnit(Monster type) :
+	InterfaceElem(),
+	type(type),
+	velocity(sf::Vector2f(0, 0)),
+	alive(true),
+	enemy(false)
 {
+	this->initAnimation();
 	this->initStatistic();
 	this->target = nullptr;
 	this->order = Order::AGRESIVE_POSITION;
 	this->spellToAnimate = Spell::SpellType::NONE;
-	this->destenation = { 0,0 };
+	this->destenation = { 0, 0 };
 	this->attacking = false;
 	this->attacked = false;
 	this->reverseAttaking = false;
@@ -344,7 +483,7 @@ BattleUnit::BattleUnit(Monster type)
 	this->recivingDamage = false;
 	this->moving = false;
 	this->moving2 = false;
-	this->offset = { 100,100 };
+	this->offset = { 100, 100 };
 	this->actualAttackCoulddown = (float)(rand() % 73) / 21.f;
 	this->shape.top = sprite.getPosition().y;
 	this->shape.left = sprite.getPosition().x;
@@ -355,7 +494,6 @@ BattleUnit::BattleUnit(Monster type)
 	this->text.setFont(GH.globalFont);
 	this->text.setCharacterSize(12);
 	this->updateNeighbourPos();
-
 }
 
 BattleUnit::~BattleUnit()
@@ -377,9 +515,7 @@ void BattleUnit::updateNeighbourPos()
 {
 	this->neighbourTilePos.clear();
 	static const sf::Vector2i dirs[] = {
-	sf::Vector2i(-1, -1), sf::Vector2i(0, -1), sf::Vector2i(+1, -1),
-	sf::Vector2i(-1, +0),   /* source pos */   sf::Vector2i(+1, +0),
-	sf::Vector2i(-1, +1), sf::Vector2i(0, +1), sf::Vector2i(+1, +1)
+		sf::Vector2i(-1, -1), sf::Vector2i(0, -1), sf::Vector2i(+1, -1), sf::Vector2i(-1, +0), /* source pos */ sf::Vector2i(+1, +0), sf::Vector2i(-1, +1), sf::Vector2i(0, +1), sf::Vector2i(+1, +1)
 	};
 	for (int i = 0; i < 8; i++)
 	{
@@ -397,85 +533,90 @@ void BattleUnit::updateAnimation(const float& dt)
 	bool playReversly = false;
 	switch (this->animationState)
 	{
-	case AnimationState::IDLE:
-		action = "IDLE";
-		break;
-	case AnimationState::START_MOVING:
-		action = "START_MOVE";
-		if (this->animation->playedOnce(action))
-		{
-			this->animationState = AnimationState::MOVING;
-			return;
+		case AnimationState::IDLE:
+			action = "IDLE";
+			break;
+		case AnimationState::START_MOVING:
+			action = "START_MOVE";
+			if (this->animation->playedOnce(action))
+			{
+				this->animationState = AnimationState::MOVING;
+				return;
+			}
+			break;
+		case AnimationState::MOVING: {
+			action = "MOVE";
+			if (this->moving2)
+				action += "2";
+			else
+				action += "1";
+			if (this->animation->playedOnce(action))
+			{
+				this->moving2 = !this->moving2;
+				return;
+			}
+			break;
 		}
-		break;
-	case AnimationState::MOVING:
-	{
-		action = "MOVE";
-		if (this->moving2) action += "2";
-		else action += "1";
-		if (this->animation->playedOnce(action))
-		{
-			this->moving2 = !this->moving2;
-			return;
+		case AnimationState::END_MOVEING:
+			action = "END_MOVE";
+			break;
+		case AnimationState::SHOOTHING: {
+			if (!this->target)
+				break;
+			action = "SHOT";
+			std::string dirShot = "_UP";
+			sf::Vector2i dir = this->target->pos - this->pos;
+			if (dir.x <= -dir.y && dir.x >= dir.y)
+				dirShot = "_UP";
+			else if (dir.x < dir.y && dir.x >= -dir.y)
+				dirShot = "_DOWN";
+			else
+				dirShot = "";
+			action += dirShot;
+			if (this->animation->playedOnce(action)
+				&& this->actualAttackCoulddown <= 0)
+				this->shooted = true;
+			break;
 		}
-		break;
-	}
-	case AnimationState::END_MOVEING:
-		action = "END_MOVE";
-		break;
-	case AnimationState::SHOOTHING:
-	{
-		if (!this->target) break;
-		action = "SHOT";
-		std::string dirShot = "_UP";
-		sf::Vector2i dir = this->target->pos - this->pos;
-		if (dir.x <= -dir.y && dir.x >= dir.y) dirShot = "_UP";
-		else if (dir.x < dir.y && dir.x >= -dir.y) dirShot = "_DOWN";
-		else dirShot = "";
-		action += dirShot;
-		if (this->animation->playedOnce(action)
-			&& this->actualAttackCoulddown <= 0)
-			this->shooted = true;
-		break;
-	}
-	case AnimationState::ATTACKING:
-	{
-		if (!this->target) break;
-		action = "ATTACK";
-		std::string dirAtack = "";
-		sf::Vector2i dir = this->target->pos - this->pos;
-		if (dir.y < 0) dirAtack = "_UP";
-		if (dir.y == 0) dirAtack = "";
-		if (dir.y > 0) dirAtack = "_DOWN";
-		action += dirAtack;
-		if (this->animation->playedHalf(action)
-			&& this->actualAttackCoulddown <= 0)
-			this->attacked = true;
-		break;
-	}
-	case AnimationState::BLOCKING:
-		action = "BLOCK";
-		if (this->animation->playedOnce(action) && !playReversly)
-			playReversly = true;
-		break;
-	case AnimationState::RECIVING_DMG:
-		action = "DAMAGED";
-		if (this->animation->playedOnce(action))
-			this->recivingDamage = false;
-		break;
-	case AnimationState::DIEING:
-		action = "DIE";
-		if (this->animation->playedOnce(action))
-			this->alive = false;
-		break;
-	default:
-		break;
+		case AnimationState::ATTACKING: {
+			if (!this->target)
+				break;
+			action = "ATTACK";
+			std::string dirAtack = "";
+			sf::Vector2i dir = this->target->pos - this->pos;
+			if (dir.y < 0)
+				dirAtack = "_UP";
+			if (dir.y == 0)
+				dirAtack = "";
+			if (dir.y > 0)
+				dirAtack = "_DOWN";
+			action += dirAtack;
+			if (this->animation->playedHalf(action)
+				&& this->actualAttackCoulddown <= 0)
+				this->attacked = true;
+			break;
+		}
+		case AnimationState::BLOCKING:
+			action = "BLOCK";
+			if (this->animation->playedOnce(action) && !playReversly)
+				playReversly = true;
+			break;
+		case AnimationState::RECIVING_DMG:
+			action = "DAMAGED";
+			if (this->animation->playedOnce(action))
+				this->recivingDamage = false;
+			break;
+		case AnimationState::DIEING:
+			action = "DIE";
+			if (this->animation->playedOnce(action))
+				this->alive = false;
+			break;
+		default:
+			break;
 	}
 	this->text.setString(action);
 	if (
-		this->animationState == AnimationState::MOVING ||
-		this->animationState == AnimationState::IDLE ||
-		(this->animationState == AnimationState::BLOCKING && !playReversly))
+		this->animationState == AnimationState::MOVING || this->animationState == AnimationState::IDLE || (this->animationState == AnimationState::BLOCKING && !playReversly))
 		this->animation->play(action, dt, this->lastDirection);
 	else if (!this->animation->playedOnce(action))
 		this->animation->play(action, dt, this->lastDirection, playReversly);
@@ -507,7 +648,8 @@ void BattleUnit::update(const float& dt)
 	}
 	if (shooter && missle)
 		this->missle->update(dt);
-	if (actualAttackCoulddown > 0) actualAttackCoulddown -= dt;
+	if (actualAttackCoulddown > 0)
+		actualAttackCoulddown -= dt;
 	if (Order::ATTACK == this->order && !target->getAlive())
 		this->giveOrder(Order::AGRESIVE_POSITION);
 	sf::Vector2f toMove = this->velocity * dt * this->speed;
@@ -522,7 +664,7 @@ void BattleUnit::update(const float& dt)
 		//this->moving2 = false;
 		if (this->order == Order::DEFENSIVE_POS)
 			this->idle();
-		this->offset = { 0,0 };
+		this->offset = { 0, 0 };
 		setVelocity(sf::Vector2f(0, 0));
 		this->fixSpritePos();
 	}
@@ -530,7 +672,7 @@ void BattleUnit::update(const float& dt)
 	{
 		auto it = this->damageTexts.begin();
 
-		for (int i = 0; i < this->damageTexts.size(); i++)
+		for (size_t i = 0; i < this->damageTexts.size(); i++)
 		{
 			it->displayTimeRemain -= dt;
 			it->number.move(0, -1 * dt * 50);
@@ -542,13 +684,12 @@ void BattleUnit::update(const float& dt)
 			it++;
 		}
 	}
-	
+
 	if (hp < 1)
 	{
 		hp = 0;
 	}
 	this->lineHP.setSize(sf::Vector2f(50 * ((float)hp / (float)maxHp), 3));
-
 }
 
 void BattleUnit::render(sf::RenderTarget* target)
@@ -562,11 +703,11 @@ void BattleUnit::render(sf::RenderTarget* target)
 	target->draw(text);
 	for (auto text : this->damageTexts)
 		target->draw(text.number);
-
 }
 
-Missle::Missle(BattleUnit* unit)
-	: startingPos(unit->getPos()), speed(800.f)
+Missle::Missle(BattleUnit* unit) :
+	speed(800.f),
+	startingPos(unit->getPos())
 {
 	//this->sprite.setTexture(*graphics.battleUnitsSheets[type]);
 	//this->sprite.setTextureRect(sf::IntRect(400, 400, 30, 30));
@@ -574,7 +715,7 @@ Missle::Missle(BattleUnit* unit)
 	this->shape.setFillColor(sf::Color::Yellow);
 	this->shape.setPosition((sf::Vector2f)unit->getPos() * B_TILE_HEIGHT);
 	this->shape.move(70, 170);
-	this->velocity = { 0,0 };
+	this->velocity = { 0, 0 };
 }
 
 Missle::~Missle()

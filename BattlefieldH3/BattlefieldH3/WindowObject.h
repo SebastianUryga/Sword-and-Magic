@@ -3,7 +3,6 @@
 class WindowObject
 {
 public:
-
 	sf::RectangleShape background;
 
 	std::vector<std::shared_ptr<InterfaceElem>> interactiveElem;
@@ -16,11 +15,10 @@ public:
 	WindowObject(float x, float y, float width, float height, sf::Font& font);
 	virtual ~WindowObject();
 
+	bool contains(const sf::Vector2i& mousePos);
 	void addText(std::string text, sf::Vector2f pos);
 	void setPos(float x, float y);
 	void deactivate();
-
-	virtual bool contains(const sf::Vector2i& mousePos);
 	virtual void activate();
 	virtual void close();
 
@@ -31,16 +29,18 @@ public:
 class PopupWindow : public InterfaceElem
 {
 public:
-
 	std::shared_ptr<WindowObject> iner;
 
-	template <typename T, typename ... Args>
-	void setWindow(Args && ... args)
+	template <typename T, typename... Args>
+	void setWindow(Args&&... args)
 	{
-		iner = std::make_shared<T>(args);
+		this->iner = std::make_shared<T>(std::forward<Args>(args)...);
 	}
 
-	bool contains(const sf::Vector2f& mousePos) override { return true; }
+	bool contains([[maybe_unused]] sf::Vector2f mousePos) override
+	{
+		return true;
+	}
 	void clickRight(bool down, bool previousState) override;
 	PopupWindow();
 	virtual ~PopupWindow();

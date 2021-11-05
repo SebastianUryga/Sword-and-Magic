@@ -1,13 +1,13 @@
 #include "GuiHandler.h"
 
-Battle::PathFinder::PathFinder(Battlefield* map, BattleUnit* unit)
-	:battlefield(map), unit(unit)
+Battle::PathFinder::PathFinder(Battlefield* map, BattleUnit* unit) :
+	unit(unit),
+	battlefield(map)
 {
 	auto size = this->battlefield->getSize();
 	this->nodes.resize(size.x);
 	for (auto& node : this->nodes)
 		node.resize(size.y);
-
 }
 
 Battle::PathFinder::~PathFinder()
@@ -27,7 +27,6 @@ void Battle::PathFinder::initializeGraph()
 			this->getNode(pos)->coord = pos;
 			this->getNode(pos)->accessible = this->evaluateAccessibility(tile);
 		}
-
 	}
 }
 
@@ -43,8 +42,8 @@ void Battle::PathFinder::resetGraph()
 bool Battle::PathFinder::getPath(Battle::BPath& out, const sf::Vector2i& dst) const
 {
 	out.nodes.clear();
-	auto curnode = &(this->nodes[dst.x][dst.y]); // nie wiem czemu nie moze byc
-	if (!curnode->theNodeBefore || curnode->accessible == PathNode::Accessibility::BLOCKED)	// this->getNode(dst);
+	auto curnode = &(this->nodes[dst.x][dst.y]);											// nie wiem czemu nie moze byc
+	if (!curnode->theNodeBefore || curnode->accessible == PathNode::Accessibility::BLOCKED) // this->getNode(dst);
 		return false;
 
 	while (curnode)
@@ -67,7 +66,6 @@ void Battle::PathFinder::calculatePaths()
 	{
 		auto source = this->topAndPop();
 		source->locked = true;
-		float cost = source->getCost();
 
 		auto neighbourNodes = calculateNeighbours(source);
 		for (PathNode* neighbour : neighbourNodes)
@@ -87,26 +85,17 @@ void Battle::PathFinder::calculatePaths()
 			float cost = this->getMovementCost(source->coord, destination->coord);
 			float costAtNextTile = source->getCost() + static_cast<float>(cost);
 
-			if (destination->accessible == PathNode::Accessibility::BLOCKVIS ||
-				destination2->accessible == PathNode::Accessibility::BLOCKVIS)
-				if(destination2->coord != source->coord && destination->coord != source2->coord)
-					costAtNextTile += 1000;
-
 			if (destination->getCost() > costAtNextTile)
 			{
 				destination->setCost(costAtNextTile);
 				destination->theNodeBefore = source;
 			}
-			
-			
-			if((destination2->accessible == PathNode::Accessibility::ACCESSIBLE ||
-				destination2->accessible == PathNode::Accessibility::BLOCKVIS ||
+
+			if ((destination2->accessible == PathNode::Accessibility::ACCESSIBLE ||
 				destination2->coord == source->coord) &&
 				(destination->accessible == PathNode::Accessibility::ACCESSIBLE ||
-				destination->accessible == PathNode::Accessibility::BLOCKVIS) ||
-				source2->coord == destination->coord)
+				source2->coord == destination->coord))
 				push(neighbour);
-			
 		}
 	}
 }
@@ -126,9 +115,7 @@ std::vector<Battle::PathNode*> Battle::PathFinder::calculateNeighbours(const Pat
 	neighbours.reserve(16);
 
 	static const sf::Vector2i dirs[] = {
-		sf::Vector2i(-1, +1), sf::Vector2i(0, +1), sf::Vector2i(+1, +1),
-		sf::Vector2i(-1, +0),   /* source pos */   sf::Vector2i(+1, +0),
-		sf::Vector2i(-1, -1), sf::Vector2i(0, -1), sf::Vector2i(+1, -1)
+		sf::Vector2i(-1, +1), sf::Vector2i(0, +1), sf::Vector2i(+1, +1), sf::Vector2i(-1, +0), /* source pos */ sf::Vector2i(+1, +0), sf::Vector2i(-1, -1), sf::Vector2i(0, -1), sf::Vector2i(+1, -1)
 	};
 	for (auto& dir : dirs)
 	{

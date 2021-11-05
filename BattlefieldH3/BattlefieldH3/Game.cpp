@@ -1,4 +1,4 @@
-#include "pch.h"
+
 #include "GuiHandler.h"
 
 //Initializer functions
@@ -6,13 +6,12 @@ void Game::initWindow()
 {
 	this->window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(), "Heroes 3", sf::Style::Default);
 	this->window->setFramerateLimit(120);
-
 }
 
 void Game::initFonts()
 {
 	this->font = new sf::Font();
-	if (!this->font->loadFromFile("Fonts\\bigfonts.ttf"))
+	if (!this->font->loadFromFile("Fonts/bigfonts.ttf"))
 	{
 		throw("ERROR::MAINMENUSTATE:: COULD NOT LOAD FONT");
 	}
@@ -54,7 +53,6 @@ Game::Game()
 	this->initTextures();
 }
 
-
 Game::~Game()
 {
 	delete this->window;
@@ -68,37 +66,30 @@ void Game::mainMenuState()
 		(float)this->window->getPosition().x,
 		(float)this->window->getPosition().y,
 		this->window->getSize().x,
-		this->window->getSize().y, *this->font);
+		this->window->getSize().y,
+		*this->font);
 
 	mainMenu->background.setTexture(graphics.menuBackgroud.get());
 
 	mainMenu->buttons["GAME_STATE_BTN"] = std::make_shared<Button>(
-		300, 280, 250, 50,
-		this->font, "New Game");
+		300, 280, 250, 50, this->font, "New Game");
 	mainMenu->buttons["SETTINGS_STATE_BTN"] = std::make_shared<Button>(
-		300, 380, 250, 50,
-		this->font, "Settings");
+		300, 380, 250, 50, this->font, "Settings");
 	mainMenu->buttons["EDITOR_STATE_BTN"] = std::make_shared<Button>(
-		300, 480, 250, 50,
-		this->font, "EDITOR");
+		300, 480, 250, 50, this->font, "EDITOR");
 	mainMenu->buttons["EXIT_GAME"] = std::make_shared<Button>(
-		300, 680, 250, 50,
-		this->font, "Quit");
+		300, 680, 250, 50, this->font, "Quit");
 
-	mainMenu->buttons["GAME_STATE_BTN"]->addFuctionallity([=]()
-	{
+	mainMenu->buttons["GAME_STATE_BTN"]->addFuctionallity([=]() {
 		this->gameState();
 	});
-	mainMenu->buttons["SETTINGS_STATE_BTN"]->addFuctionallity([=]()
-	{
+	mainMenu->buttons["SETTINGS_STATE_BTN"]->addFuctionallity([=]() {
 		this->settingState();
 	});
-	mainMenu->buttons["EDITOR_STATE_BTN"]->addFuctionallity([=]()
-	{
+	mainMenu->buttons["EDITOR_STATE_BTN"]->addFuctionallity([=]() {
 		this->editorState();
 	});
-	mainMenu->buttons["EXIT_GAME"]->addFuctionallity([=]()
-	{
+	mainMenu->buttons["EXIT_GAME"]->addFuctionallity([=]() {
 		GH.popWindow(mainMenu);
 	});
 	for (auto& btn : mainMenu->buttons)
@@ -113,16 +104,15 @@ void Game::settingState()
 		(float)this->window->getPosition().x,
 		(float)this->window->getPosition().y,
 		this->window->getSize().x,
-		this->window->getSize().y, *this->font);
+		this->window->getSize().y,
+		*this->font);
 
 	settingMenu->background.setTexture(graphics.menuBackgroud.get());
 
 	settingMenu->buttons["EXIT_GAME"] = std::make_shared<Button>(
-		300, 680, 250, 50,
-		this->font, "Quit");
+		300, 680, 250, 50, this->font, "Quit");
 
-	settingMenu->buttons["EXIT_GAME"]->addFuctionallity([=]()
-	{
+	settingMenu->buttons["EXIT_GAME"]->addFuctionallity([=]() {
 		GH.popWindow(settingMenu);
 	});
 	settingMenu->interactiveElem.push_back(settingMenu->buttons["EXIT_GAME"]);
@@ -141,7 +131,6 @@ void Game::editorState()
 	battlefield->load("startMap.txt");
 	battlefield->interactiveElem.push_back(battlefield);
 	GH.pushWindow(battlefield);
-
 }
 
 void Game::endApplication()
@@ -164,7 +153,6 @@ void Game::updateEvents()
 		}
 		if (sfEvent.type == sf::Event::KeyPressed || sfEvent.type == sf::Event::KeyReleased)
 		{
-
 		}
 
 		if (sfEvent.type == sf::Event::MouseMoved)
@@ -182,10 +170,9 @@ void Game::updateEvents()
 				GH.handleMouseButtonClick(sf::Mouse::Right, true);
 			}
 		}
-	
+
 		if (sfEvent.type == sf::Event::MouseButtonReleased)
 		{
-			
 			GH.handleMouseButtonClick(sf::Mouse::Left, false);
 			GH.handleMouseButtonClick(sf::Mouse::Right, false);
 		}

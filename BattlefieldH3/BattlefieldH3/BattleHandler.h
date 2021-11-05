@@ -1,5 +1,5 @@
 #pragma once
-#include "Battlefield.h"
+#include "Battlefiled.h"
 
 class Battlefield;
 class BattleUnit;
@@ -13,7 +13,6 @@ public:
 	std::shared_ptr<Battlefield> battlefield;
 	
 	void startBallte();
-	void setupUnitsAnimations();
 
 	sf::Vector2i choseMoveDirection(BattleUnit* unit) const;
 	bool nextToEachOther(BattleUnit* u1, BattleUnit* u2);

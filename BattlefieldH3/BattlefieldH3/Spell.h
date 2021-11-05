@@ -18,7 +18,6 @@ public:
 	Spell(SpellType type = SpellType::NONE):spell(type) {}
 	Spell(const Spell& other) : spell(other.spell) {}
 	Spell& operator=(const Spell& other) { spell = other.spell;  return *this;}
-	operator Spell() const { return spell; }
 	bool operator== (const Spell & other) { return other.spell == this->spell; }
 	bool operator!= (const Spell & other) { return other.spell != this->spell; }
 	explicit Spell(int type) { spell = static_cast<SpellType>(type); }

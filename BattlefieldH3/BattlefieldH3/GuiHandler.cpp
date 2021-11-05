@@ -1,4 +1,4 @@
-#include "pch.h"
+
 #include "GuiHandler.h"
 
 GuiHandler& GH = GuiHandler::Get();
@@ -63,7 +63,8 @@ void GuiHandler::handleMouseMotion()
 		return;
 
 	auto hlp = this->topWindow()->interactiveElem;
-	if (popupWindow && popupWindow->iner) hlp.push_back(popupWindow);
+	if (popupWindow && popupWindow->iner)
+		hlp.push_back(popupWindow);
 	for (auto& i : hlp)
 	{
 		if (i->contains(mousePosWindow))
@@ -80,7 +81,8 @@ void GuiHandler::handleMouseButtonClick(sf::Mouse::Button btn, bool isPressed)
 	if (!this->topWindow())
 		return;
 	auto hlp = this->topWindow()->interactiveElem;
-	if (popupWindow && popupWindow->iner) hlp.push_back(popupWindow);
+	if (popupWindow && popupWindow->iner)
+		hlp.push_back(popupWindow);
 	for (auto& i : hlp)
 	{
 		auto prev = i->mouseState(btn);
@@ -93,14 +95,14 @@ void GuiHandler::handleMouseButtonClick(sf::Mouse::Button btn, bool isPressed)
 				i->updateMouseState(btn, isPressed);
 			switch (btn)
 			{
-			case sf::Mouse::Left:
-				i->clickLeft(isPressed, prev);
-				break;
-			case sf::Mouse::Right:
-				i->clickRight(isPressed, prev);
-				break;
-			default:
-				break;
+				case sf::Mouse::Left:
+					i->clickLeft(isPressed, prev);
+					break;
+				case sf::Mouse::Right:
+					i->clickRight(isPressed, prev);
+					break;
+				default:
+					break;
 			}
 		}
 	}
@@ -114,7 +116,7 @@ GuiHandler& GuiHandler::Get()
 
 void GuiHandler::update(const float& dt)
 {
-	if(!GH.empty())
+	if (!GH.empty())
 		this->topWindow()->update(dt);
 }
 

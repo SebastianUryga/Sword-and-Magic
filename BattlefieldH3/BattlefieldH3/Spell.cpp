@@ -3,7 +3,7 @@
 void Spell::castSpellOnUnit(BattleUnit& unit, const Spell spell)
 {
 	auto& list = unit.castedSpellList;
-	bool casted = false;
+
 	//check if spell is already casted
 	if (std::find(list.begin(), list.end(), spell) != list.end())
 	{
@@ -11,7 +11,7 @@ void Spell::castSpellOnUnit(BattleUnit& unit, const Spell spell)
 		unit.spellToAnimate = spell;
 		return;
 	}
-	
+
 	switch (spell.spell)
 	{
 	case Spell::SpellType::WEEKNES:
@@ -74,7 +74,7 @@ void Spell::takeOffSpellFromUnit(BattleUnit& unit, const Spell spell)
 
 		list.erase(std::find(list.begin(), list.end(), spell));
 	}
-	
+
 }
 std::map<Spell::SpellType, EffectsAnimationParametrs> batteEffectsAnimationParamets = {
 	{Spell::SpellType::WEEKNES, {0.6f,0,0,20,0,97,114,50}},

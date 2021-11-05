@@ -10,7 +10,7 @@ InterfaceElem::~InterfaceElem()
 {
 }
 
-bool InterfaceElem::contains(const sf::Vector2f & pos)
+bool InterfaceElem::contains(sf::Vector2f pos)
 {
 	return shape.contains(pos);
 }

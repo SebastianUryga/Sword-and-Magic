@@ -22,8 +22,8 @@ void Garrnison::swapStacks(int stack1Id, int stack2Id)
 	std::swap(this->garrnison[stack1Id], this->garrnison[stack2Id]);
 }
 
-Garrnison::Garrnison(std::vector<Troop>& garrnison, sf::Vector2f pos)
-	:garrnison(garrnison)
+Garrnison::Garrnison(std::vector<Troop>& garrnison, sf::Vector2f pos) :
+	garrnison(garrnison)
 {
 	this->selected = nullptr;
 	this->slots.resize(7);
@@ -34,7 +34,6 @@ Garrnison::Garrnison(std::vector<Troop>& garrnison, sf::Vector2f pos)
 
 		this->slots[i]->setTroop(&garrnison[i]);
 	}
-
 }
 
 Garrnison::~Garrnison()
@@ -53,7 +52,6 @@ void Garrnison::render(sf::RenderTarget* target)
 	}
 	if (this->selected)
 		target->draw(this->selected->selectFrame);
-
 }
 
 void Garrnison::updateSlots()
@@ -89,7 +87,7 @@ void GarrnisonSlot::clickLeft(bool down, bool previousState)
 
 			if (this == owner->getSelected())
 			{
-				// open creature window 
+				// open creature window
 				GH.pushWindowT<SelectionWindow>(*owner->selected->stack);
 				owner->updateSlots();
 				owner->selectSlot(nullptr);
@@ -119,13 +117,12 @@ void GarrnisonSlot::clickLeft(bool down, bool previousState)
 		}
 	}
 }
-
-void GarrnisonSlot::clickRight(bool down, bool previousState)
+void GarrnisonSlot::clickRight([[maybe_unused]] bool down, [[maybe_unused]] bool previousState)
 {
 }
-
-GarrnisonSlot::GarrnisonSlot(Garrnison* owner, int id, float x, float y)
-	: owner(owner), id(id)
+GarrnisonSlot::GarrnisonSlot(Garrnison* owner, int id, float x, float y) :
+	id(id),
+	owner(owner)
 {
 	this->selectFrame = sf::RectangleShape(sf::Vector2f(58, 64));
 	this->selectFrame.setOutlineThickness(3);

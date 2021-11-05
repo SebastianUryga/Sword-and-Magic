@@ -1,30 +1,30 @@
 #include "GuiHandler.h"
 
-SelectionWindow::SelectionWindow(Troop& troop)
-	: WindowObject(400,200,600,500,GH.globalFont), troopToEdit(troop)
+SelectionWindow::SelectionWindow(Troop& troop) :
+	WindowObject(400, 200, 600, 500, GH.globalFont),
+	troopToEdit(troop)
 {
 	if (troopToEdit.monster == Monster::NO_CREATURE)
 		this->troopQuantity = 0;
 	else
 		this->troopQuantity = troop.count;
 	this->selectedCreature = troopToEdit.monster;
-	this->addText(std::to_string(this->troopQuantity), { 300,450 });
+	this->addText(std::to_string(this->troopQuantity), { 300, 450 });
 	this->creaturePortraits.resize(allMonseters.size());
 	sf::Vector2f pos;
 	// setting position of creature portrets
-	for (int i = 0 ; i < allMonseters.size() ; i++)
+	for (size_t i = 0; i < allMonseters.size(); i++)
 	{
 		pos = this->background.getPosition() + sf::Vector2f(30, 30);
-		pos += sf::Vector2f((64 * i) % 512, std::floor((64 * i) / 512)*64);
+		pos += sf::Vector2f((64 * i) % 512, std::floor((64 * i) / 512) * 64);
 		this->creaturePortraits[i] = std::make_shared<ClickablePortrait>(allMonseters[i]);
 		this->creaturePortraits[i]->sprite.setPosition(pos);
-		this->creaturePortraits[i]->shape = sf::FloatRect(pos.x,pos.y,50,50);
-		this->creaturePortraits[i]->onClick = [=](){
+		this->creaturePortraits[i]->shape = sf::FloatRect(pos.x, pos.y, 50, 50);
+		this->creaturePortraits[i]->onClick = [=]() {
 			selectedCreature = allMonseters[i];
 		};
 		this->interactiveElem.push_back(this->creaturePortraits[i]);
 	}
-
 
 	this->incrementingBtn = std::make_shared<Button>(
 		100, 450, 100, 30, &this->font, "+");
@@ -32,7 +32,8 @@ SelectionWindow::SelectionWindow(Troop& troop)
 		this->background.getPosition().x,
 		this->background.getPosition().y);
 
-	if (this->troopQuantity > 40) this->incrementingBtn->block(true);
+	if (this->troopQuantity > 40)
+		this->incrementingBtn->block(true);
 
 	this->decrementingBtn = std::make_shared<Button>(
 		350, 450, 100, 30, &this->font, "-");
@@ -40,33 +41,33 @@ SelectionWindow::SelectionWindow(Troop& troop)
 		this->background.getPosition().x,
 		this->background.getPosition().y);
 
-	if (this->troopQuantity < 1) this->decrementingBtn->block(true);
+	if (this->troopQuantity < 1)
+		this->decrementingBtn->block(true);
 
-	this->decrementingBtn->addFuctionallity([=]()
-	{
+	this->decrementingBtn->addFuctionallity([=]() {
 		troopQuantity--;
-		if (troopQuantity < 1) decrementingBtn->block(true);
+		if (troopQuantity < 1)
+			decrementingBtn->block(true);
 		incrementingBtn->block(false);
 		texts.back().setString(std::to_string(troopQuantity));
 	});
 	this->buttons["-"] = this->decrementingBtn;
 
-	this->incrementingBtn->addFuctionallity([=]()
-	{
+	this->incrementingBtn->addFuctionallity([=]() {
 		troopQuantity++;
-		if (troopQuantity > 40) incrementingBtn->block(true);
+		if (troopQuantity > 40)
+			incrementingBtn->block(true);
 		decrementingBtn->block(false);
 		texts.back().setString(std::to_string(troopQuantity));
 	});
 	this->buttons["+"] = this->incrementingBtn;
 
 	this->buttons["OK"] = std::make_shared<Button>(
-		930, 650, 60, 30, &this->font, "OK"
-		);
-	this->buttons["OK"]->addFuctionallity([=]() { 
+		930, 650, 60, 30, &this->font, "OK");
+	this->buttons["OK"]->addFuctionallity([=]() {
 		troopToEdit.monster = selectedCreature;
 		troopToEdit.count = troopQuantity;
-		close(); 
+		close();
 	});
 	this->interactiveElem.push_back(this->buttons["OK"]);
 	this->interactiveElem.push_back(this->buttons["+"]);
@@ -90,8 +91,6 @@ void SelectionWindow::render(sf::RenderTarget* target)
 			target->draw(selectingFrame);
 		}
 	}
-	
-	
 }
 
 void SelectionWindow::ClickablePortrait::clickLeft(bool down, bool priviesState)

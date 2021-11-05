@@ -131,7 +131,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(VCInstallDir)UnitTest\include;$(SolutionDir)Extensions\SFML\include</AdditionalIncludeDirectories>
-      <LanguageStandard>Default</LanguageStandard>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -162,7 +162,7 @@
   <ItemGroup>
     <ClCompile Include="AnimationComponent.cpp" />
     <ClCompile Include="BattlefieldH3.cpp" />
-    <ClCompile Include="Battlefield.cpp" />
+    <ClCompile Include="Battlefiled.cpp" />
     <ClCompile Include="BattleHandler.cpp" />
     <ClCompile Include="BattlePathFinder.cpp" />
     <ClCompile Include="BattleUnit.cpp" />
@@ -182,7 +182,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationComponent.h" />
-    <ClInclude Include="Battlefield.h" />
+    <ClInclude Include="Battlefiled.h" />
     <ClInclude Include="BattleHandler.h" />
     <ClInclude Include="BattlePathFinder.h" />
     <ClInclude Include="BattleUnit.h" />
@@ -195,6 +195,7 @@
     <ClInclude Include="InterfaceElem.h" />
     <ClInclude Include="Monser.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="PCH.hpp" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SelectionWindow.h" />
     <ClInclude Include="Spell.h" />
