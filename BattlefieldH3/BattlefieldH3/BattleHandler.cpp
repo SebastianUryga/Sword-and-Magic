@@ -171,56 +171,20 @@ BattleUnit* BattleHandler::calculateBestTargetFor(BattleUnit* unit)
 void BattleHandler::makeDecision(BattleUnit* unit)
 {
 	//if (!unit->target || !unit->target->alive)
-	bool result = false;
+
 	switch (unit->order)
 	{
 		case Order::DEFENSIVE_POS:
-			unit->idle();
-			[[fallthrough]];
+			this->handleDefenceStance(unit);
+			break;
 		case Order::AGRESIVE_POSITION:
 			this->handleAggressiveStance(unit);
-			// gdy jednostka stoi i czeka to metoda się cały czas wykonuje
-			unit->choseTarget(this->calculateBestTargetFor(unit));
-			if (unit->getTarget() == nullptr)
-				unit->choseTarget(this->findNeerestEnemy(unit));
-			[[fallthrough]];
+			break;
 		case Order::ATTACK:
-			if (this->nextToEachOther(unit, unit->target))
-			{
-				result = unit->makeAttack(unit->target->getPos());
-				if (result == false)
-					unit->idle();
-			}
-			else if (unit->shooter && unit->target && unit->arrows > 0)
-			{
-				result = unit->makeShot(unit->target->pos);
-				if (result == false)
-					unit->idle();
-			}
-			else
-			case Order::MOVE:
-				if (unit->order != Order::DEFENSIVE_POS)
-				{
-					sf::Vector2i oldPos = unit->getPos();
-					auto move = this->choseMoveDirection(unit);
-					unit->doMove(sf::Vector2f(move)); // set unit velocity
-					this->battlefield->changeUnitPos(unit, oldPos, unit->pos + move);
-
-					if(unit->destenation == unit->getPos())
-					{
-						unit->giveOrder(Order::DEFENSIVE_POS);
-					}
-				} else
-				{
-					for(auto tilePos: unit->getNeighbourTilePos())
-						if(battlefield->getTile(tilePos).unit && battlefield->getTile(tilePos).unit->enemy != unit->enemy)
-						{
-							result = unit->makeAttack(tilePos);
-							if (result == false)
-								unit->idle();
-							break;
-						}	
-				}
+			this->handleAttackOrder(unit);
+			break;
+		case Order::MOVE:
+			this->handleMoveOrder(unit);			
 		default:
 			break;
 	}
