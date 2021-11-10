@@ -125,6 +125,7 @@ public:
 	bool getAlive() const;
 	Monster getType() const;
 	bool isEnemy() const;
+	bool isEnemyWith(const BattleUnit* unit) const;
 	bool haveDefensePosition() const;
 
 	void idle();

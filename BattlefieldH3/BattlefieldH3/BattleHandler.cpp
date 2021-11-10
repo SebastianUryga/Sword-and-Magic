@@ -32,7 +32,7 @@ sf::Vector2i BattleHandler::choseMoveDirection(BattleUnit* unit) const
 
 		if ((unit->order == Order::AGRESIVE_POSITION || unit->order == Order::ATTACK) && unit->target)
 		{
-			// finding the neerest tile next ot target
+			// finding the neerest tile next to target
 			unit->destenation = unit->getTarget()->getPos();
 			for (auto item : unit->getTarget()->neighbourTilePos)
 			{
@@ -45,14 +45,21 @@ sf::Vector2i BattleHandler::choseMoveDirection(BattleUnit* unit) const
 		Battle::BPath path;
 		unit->pathfinder->getPath(path, unit->destenation);
 
-		if (path.nextPos() != sf::Vector2i(-1, -1) && (!battlefield->isTileBlocked(path.nextPos()) || battlefield->getTile(path.nextPos()).unit == unit))
+		if (path.nextPos() != sf::Vector2i(-1, -1))
+		{
 			dir = path.nextPos() - unit->getPos();
+			
+		}
 		else
 		{
 
-			unit->giveOrder(Order::DEFENSIVE_POS);
+			unit->giveOrder(Order::AGRESIVE_POSITION);
 		}
-
+		std::cout<< " unit->getPos(): "<<unit->getPos().x<< " "<< unit->getPos().y<<std::endl;
+		std::cout<< " dir: "<<dir.x<< " "<< dir.y<<std::endl;
+		std::cout<< " dest: "<<unit->destenation.x<< " "<< unit->destenation.y<<std::endl;
+		std::cout<< " path.nextPos() "<<path.nextPos().x<< " "<< path.nextPos().y<<std::endl;
+		
 		if (dir.x > 0)
 			velocity.x = 1;
 		if (dir.x < 0)
@@ -129,7 +136,7 @@ BattleUnit* BattleHandler::findNeerestEnemy(BattleUnit* unit)
 	return result;
 }
 
-BattleUnit* BattleHandler::calculateBestTarget(BattleUnit* unit)
+BattleUnit* BattleHandler::calculateBestTargetFor(BattleUnit* unit)
 {
 	BattleUnit* result = nullptr;
 	float max = -10000;
@@ -156,7 +163,8 @@ BattleUnit* BattleHandler::calculateBestTarget(BattleUnit* unit)
 			max = value;
 		}
 	}
-
+	if(!result) 
+		return this->findNeerestEnemy(unit);
 	return result;
 }
 
@@ -170,7 +178,9 @@ void BattleHandler::makeDecision(BattleUnit* unit)
 			unit->idle();
 			[[fallthrough]];
 		case Order::AGRESIVE_POSITION:
-			unit->choseTarget(this->calculateBestTarget(unit)); // gdy jednostka stoi i czeka to metoda się cały czas wykonuje
+			this->handleAggressiveStance(unit);
+			// gdy jednostka stoi i czeka to metoda się cały czas wykonuje
+			unit->choseTarget(this->calculateBestTargetFor(unit));
 			if (unit->getTarget() == nullptr)
 				unit->choseTarget(this->findNeerestEnemy(unit));
 			[[fallthrough]];
@@ -195,6 +205,21 @@ void BattleHandler::makeDecision(BattleUnit* unit)
 					auto move = this->choseMoveDirection(unit);
 					unit->doMove(sf::Vector2f(move)); // set unit velocity
 					this->battlefield->changeUnitPos(unit, oldPos, unit->pos + move);
+
+					if(unit->destenation == unit->getPos())
+					{
+						unit->giveOrder(Order::DEFENSIVE_POS);
+					}
+				} else
+				{
+					for(auto tilePos: unit->getNeighbourTilePos())
+						if(battlefield->getTile(tilePos).unit && battlefield->getTile(tilePos).unit->enemy != unit->enemy)
+						{
+							result = unit->makeAttack(tilePos);
+							if (result == false)
+								unit->idle();
+							break;
+						}	
 				}
 		default:
 			break;
@@ -332,6 +357,100 @@ void BattleHandler::update(const float& dt)
 			GH.Get().pushWindow(win);
 		}
 	}
+}
+
+void BattleHandler::handleAggressiveStance(BattleUnit* unit)
+{
+	bool result;
+	// gdy jednostka stoi i czeka to metoda się cały czas wykonuje
+	auto target = this->calculateBestTargetFor(unit);
+	unit->choseTarget(target);
+			
+	if (this->nextToEachOther(unit, unit->target))
+	{
+		result = unit->makeAttack(unit->target->getPos());
+		if (result == false)
+			unit->idle();
+	}
+	else if (unit->shooter && unit->target && unit->arrows > 0)
+	{
+		result = unit->makeShot(unit->target->pos);
+		if (result == false)
+			unit->idle();
+	}
+	else
+	{
+		sf::Vector2i oldPos = unit->getPos();
+		auto move = this->choseMoveDirection(unit);
+		unit->doMove(sf::Vector2f(move)); // set unit velocity
+		this->battlefield->changeUnitPos(unit, oldPos, unit->pos + move);
+		
+	} 
+}
+
+//It can be more clear
+void BattleHandler::handleDefenceStance(BattleUnit* unit)
+{
+	
+	bool result;
+
+	auto target = this->calculateBestTargetFor(unit);
+	unit->choseTarget(target);
+
+	if (this->nextToEachOther(unit, unit->target))
+	{
+		result = unit->makeAttack(unit->target->getPos());
+		if (result == false)
+			unit->idle();
+	}
+	else
+	{
+		//check if there is enemy next to unit
+		for(auto u : this->battlefield->units)
+		{
+			if(u && u->getAlive() && unit->isEnemyWith(u.get()))
+			if(this->nextToEachOther(unit, u.get()))
+				result = unit->makeAttack(u->getPos());
+				if (result == false)
+					unit->idle();
+		}
+	}
+	
+}
+
+void BattleHandler::handleAttackOrder(BattleUnit* unit)
+{
+	bool result;
+	if(unit->target == nullptr)
+	if (this->nextToEachOther(unit, unit->target))
+	{
+		result = unit->makeAttack(unit->target->getPos());
+		if (result == false)
+			unit->idle();
+	}
+	else
+	{
+		sf::Vector2i oldPos = unit->getPos();
+		auto move = this->choseMoveDirection(unit);
+		unit->doMove(sf::Vector2f(move)); // set unit velocity
+		this->battlefield->changeUnitPos(unit, oldPos, unit->pos + move);
+	}
+	if (!unit->target->getAlive()) 
+		unit->giveOrder(Order::AGRESIVE_POSITION);
+}
+
+
+void BattleHandler::handleMoveOrder(BattleUnit* unit)
+{
+	if(unit->destenation != unit->getPos2() && unit->destenation != unit->getPos())
+	{
+		sf::Vector2i oldPos = unit->getPos();
+		auto move = this->choseMoveDirection(unit);
+		unit->doMove(sf::Vector2f(move)); // set unit velocity
+		this->battlefield->changeUnitPos(unit, oldPos, unit->pos + move);
+	}
+	else
+		unit->giveOrder(Order::DEFENSIVE_POS);
 }
 
 int BattleHandler::calculateDamage(BattleUnit* unit, BattleUnit* target, bool attackBlocked)

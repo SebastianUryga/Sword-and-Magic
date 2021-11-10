@@ -288,6 +288,11 @@ bool BattleUnit::isEnemy() const
 	return this->enemy;
 }
 
+bool BattleUnit::isEnemyWith(const BattleUnit* unit) const
+{
+	return this->enemy != unit->enemy;
+}
+
 bool BattleUnit::haveDefensePosition() const
 {
 	if (this->animationState == AnimationState::IDLE || this->animationState == AnimationState::BLOCKING)

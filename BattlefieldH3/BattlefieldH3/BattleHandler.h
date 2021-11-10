@@ -17,7 +17,7 @@ public:
 	sf::Vector2i choseMoveDirection(BattleUnit* unit) const;
 	bool nextToEachOther(BattleUnit* u1, BattleUnit* u2);
 	BattleUnit* findNeerestEnemy(BattleUnit* unit);
-	BattleUnit* calculateBestTarget(BattleUnit* unit);
+	BattleUnit* calculateBestTargetFor(BattleUnit* unit);
 	void makeDecision(BattleUnit* unit);
 	void unitAttakced(BattleUnit* unit);
 	void unitMadeShot(BattleUnit* unit);
@@ -25,6 +25,11 @@ public:
 	void updateMissle(BattleUnit* unit);
 	void update(const float& dt);
 private:
+	void handleAggressiveStance(BattleUnit* unit);
+	void handleDefenceStance(BattleUnit* unit);
+	void handleAttackOrder(BattleUnit* unit);
+	void handleMoveOrder(BattleUnit* unit);
+
 	int calculateDamage(BattleUnit* unit, BattleUnit* target, bool attackBlocked);
 	std::queue<Monster> armyQueque[2];
 	int nuberUnitsInBattle[2];
