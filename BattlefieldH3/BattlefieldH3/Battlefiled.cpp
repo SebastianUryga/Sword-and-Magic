@@ -25,7 +25,7 @@ void Battlefield::initButtons()
 			for (auto& unit : selectedUnits)
 			{
 				if (unit->getAlive())
-					unit->giveOrder(Order::AGRESIVE_POSITION);
+					unit->giveOrder(Order::AGRESIVE_STANCE);
 			}
 		});
 		this->interactiveElem.push_back(this->buttons["Agresive"]);

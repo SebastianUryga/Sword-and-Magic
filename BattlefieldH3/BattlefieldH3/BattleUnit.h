@@ -35,7 +35,7 @@ enum class AnimationState
 };
 enum class Order
 {
-	AGRESIVE_POSITION,
+	AGRESIVE_STANCE,
 	DEFENSIVE_POS,
 	MOVE,
 	ATTACK

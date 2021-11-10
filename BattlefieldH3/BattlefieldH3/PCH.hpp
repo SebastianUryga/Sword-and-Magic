@@ -63,10 +63,6 @@
 	#include <windows.h>
 #endif // _WIN32
 
-// Utils
-#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
-#include "Utility/FileSystem.hpp"
-#include "Utility/Types.hpp"
 
 // Macros
 #define UNUSED(x) (void)(x)

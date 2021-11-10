@@ -17,7 +17,6 @@ set(SRCS
 	BattlefieldH3/Garrnison.cpp
 	BattlefieldH3/InterfaceElem.cpp
 	BattlefieldH3/Monser.cpp
-	BattlefieldH3/pch.cpp
 	BattlefieldH3/SelectionWindow.cpp
 	BattlefieldH3/Spell.cpp
 	BattlefieldH3/SpellBook.cpp
@@ -37,7 +36,7 @@ set(HEADERS
 	BattlefieldH3/Garrnison.h
 	BattlefieldH3/InterfaceElem.h
 	BattlefieldH3/Monser.h
-	BattlefieldH3/pch.h
+	BattlefieldH3/PCH.hpp
 	BattlefieldH3/SelectionWindow.h
 	BattlefieldH3/Spell.h
 	BattlefieldH3/SpellBook.h
@@ -47,15 +46,18 @@ set(RESOURCES
 	BattlefieldH3/startMap.txt
 	
 	)
+	
+                       
 #target_link_libraries(${PROJECT_NAME} Extension/SFML/lib)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/BattlefieldH3)
 
-set(SFML_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Extensions/SFML/lib/cmake/SFML")
+#set(SFML_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Extensions/SFML/lib/cmake/SFML")
 
-set(SFML_STATIC_LIBRARIES TRUE)
+#set(SFML_STATIC_LIBRARIES TRUE)
 
 find_package(SFML 2.5.1 COMPONENTS graphics audio window system REQUIRED)
+
 
 add_executable(${PROJECT_NAME} ${SRCS} ${HEADERS})
 

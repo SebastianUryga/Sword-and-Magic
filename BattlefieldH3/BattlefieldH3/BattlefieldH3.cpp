@@ -1,6 +1,5 @@
-﻿
-#include "GuiHandler.h"
-#include "Platform/Platform.hpp"
+﻿#include "GuiHandler.h"
+
 int main()
 {
 	Game game;

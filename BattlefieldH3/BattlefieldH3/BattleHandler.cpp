@@ -30,7 +30,7 @@ sf::Vector2i BattleHandler::choseMoveDirection(BattleUnit* unit) const
 		unit->pathfinder->initializeGraph();
 		unit->pathfinder->calculatePaths();
 
-		if ((unit->order == Order::AGRESIVE_POSITION || unit->order == Order::ATTACK) && unit->target)
+		if ((unit->order == Order::AGRESIVE_STANCE || unit->order == Order::ATTACK) && unit->target)
 		{
 			// finding the neerest tile next to target
 			unit->destenation = unit->getTarget()->getPos();
@@ -53,12 +53,12 @@ sf::Vector2i BattleHandler::choseMoveDirection(BattleUnit* unit) const
 		else
 		{
 
-			unit->giveOrder(Order::AGRESIVE_POSITION);
+			unit->giveOrder(Order::AGRESIVE_STANCE);
 		}
-		std::cout<< " unit->getPos(): "<<unit->getPos().x<< " "<< unit->getPos().y<<std::endl;
+		/*std::cout<< " unit->getPos(): "<<unit->getPos().x<< " "<< unit->getPos().y<<std::endl;
 		std::cout<< " dir: "<<dir.x<< " "<< dir.y<<std::endl;
 		std::cout<< " dest: "<<unit->destenation.x<< " "<< unit->destenation.y<<std::endl;
-		std::cout<< " path.nextPos() "<<path.nextPos().x<< " "<< path.nextPos().y<<std::endl;
+		std::cout<< " path.nextPos() "<<path.nextPos().x<< " "<< path.nextPos().y<<std::endl;*/
 		
 		if (dir.x > 0)
 			velocity.x = 1;
@@ -177,7 +177,7 @@ void BattleHandler::makeDecision(BattleUnit* unit)
 		case Order::DEFENSIVE_POS:
 			this->handleDefenceStance(unit);
 			break;
-		case Order::AGRESIVE_POSITION:
+		case Order::AGRESIVE_STANCE:
 			this->handleAggressiveStance(unit);
 			break;
 		case Order::ATTACK:
@@ -385,7 +385,8 @@ void BattleHandler::handleDefenceStance(BattleUnit* unit)
 void BattleHandler::handleAttackOrder(BattleUnit* unit)
 {
 	bool result;
-	if(unit->target == nullptr)
+	if(unit->target == nullptr) 
+		unit->giveOrder(Order::AGRESIVE_STANCE);
 	if (this->nextToEachOther(unit, unit->target))
 	{
 		result = unit->makeAttack(unit->target->getPos());
@@ -400,7 +401,7 @@ void BattleHandler::handleAttackOrder(BattleUnit* unit)
 		this->battlefield->changeUnitPos(unit, oldPos, unit->pos + move);
 	}
 	if (!unit->target->getAlive()) 
-		unit->giveOrder(Order::AGRESIVE_POSITION);
+		unit->giveOrder(Order::AGRESIVE_STANCE);
 }
 
 

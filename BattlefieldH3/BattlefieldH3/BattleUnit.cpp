@@ -478,7 +478,7 @@ BattleUnit::BattleUnit(Monster type) :
 	this->initAnimation();
 	this->initStatistic();
 	this->target = nullptr;
-	this->order = Order::AGRESIVE_POSITION;
+	this->order = Order::AGRESIVE_STANCE;
 	this->spellToAnimate = Spell::SpellType::NONE;
 	this->destenation = { 0, 0 };
 	this->attacking = false;
@@ -656,7 +656,7 @@ void BattleUnit::update(const float& dt)
 	if (actualAttackCoulddown > 0)
 		actualAttackCoulddown -= dt;
 	if (Order::ATTACK == this->order && !target->getAlive())
-		this->giveOrder(Order::AGRESIVE_POSITION);
+		this->giveOrder(Order::AGRESIVE_STANCE);
 	sf::Vector2f toMove = this->velocity * dt * this->speed;
 	this->sprite.move(toMove);
 	this->spellEffect.move(toMove);
