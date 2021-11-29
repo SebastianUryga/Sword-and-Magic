@@ -7,7 +7,7 @@
 Aby uruchomić aplikacjie na lokalnej maszynie należy:
 
 ### Windows
- - [POBIERZ ARCHIWUM ZIP](https://github.com/SebastianUryga/Heroes3-engine/releases/download/v0.0.1/HeroesBattlefield_DownloadToRun.zip) (wraz z zawartością)
+ - [POBIERZ ARCHIWUM ZIP](https://github.com/SebastianUryga/Heroes3-engine/files/7618349/Release.zip) (wraz z zawartością)
  - rozpakuj archiwum
  - uruchom plik BattlefieldH3.exe
  
