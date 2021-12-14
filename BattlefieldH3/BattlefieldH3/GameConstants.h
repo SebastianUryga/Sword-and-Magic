@@ -10,7 +10,7 @@ struct BattleObstacle
 {
     enum class Type : int
     {
-        ROCK1 = 0 , ROCK2 = 1, ROCK3, ROCK4, MUSHROOM, SCIELETON1
+        ROCK1 = 0 , ROCK2 = 1, ROCK3 = 2 , ROCK4 = 3, MUSHROOM, SCIELETON1
     };
     Type type;
     sf::Sprite sprite;

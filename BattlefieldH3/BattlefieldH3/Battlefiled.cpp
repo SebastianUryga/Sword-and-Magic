@@ -127,7 +127,7 @@ std::shared_ptr<BattleUnit> Battlefield::getUnit(sf::Vector2i pos) const
 sf::Vector2i Battlefield::getSize() const
 {
 	if (tiles.size() > 0)
-		return sf::Vector2i(tiles.size(), tiles[0].size());
+		return sf::Vector2i((int)tiles.size(), (int)tiles[0].size());
 	return sf::Vector2i(0, 0);
 }
 
@@ -214,7 +214,7 @@ void Battlefield::addObsticle(BattleObstacle::Type type, sf::Vector2i pos)
 
 	std::shared_ptr<BattleObstacle> obj = std::make_shared<BattleObstacle>();
 	obj->sprite.setTexture(*graphics.battleObsticles[type]);
-
+	obj->type = type;
 	obj->sprite.setPosition(sf::Vector2f(50 + pos.x * B_TILE_WIDTH, 150 + pos.y * B_TILE_HEIGHT));
 	obj->usedTiles = battleObstacleParametrs[type].usedTiles;
 	obj->sprite.setOrigin(B_TILE_WIDTH * sf::Vector2f(obj->usedTiles[0].size() - 1, obj->usedTiles.size() - 1));
@@ -279,7 +279,7 @@ void Battlefield::clickLeft(bool down, bool previousState)
 	{
 		if (this->mode == GameMode::Editor)
 		{
-			auto pos = (sf::Vector2i)sf::Mouse::getPosition() / (int)B_TILE_WIDTH - sf::Vector2i { 1, 3 };
+			auto pos = (sf::Vector2i)GH.mousePosWindow / (int)B_TILE_WIDTH - sf::Vector2i { 1, 3 };
 			if (!this->containsIsBattlefield(pos))
 				return;
 			BattleTile& clickedTile = this->getTile(pos);
@@ -351,7 +351,7 @@ void Battlefield::clickRight(bool down, bool previousState)
 		for (auto u : this->selectedUnits)
 		{
 			int i = 0;
-			int p = std::floor(sqrt(this->selectedUnits.size()));
+			int p = (int)std::floor(sqrt(this->selectedUnits.size()));
 			auto temp = clickedTile.pos + sf::Vector2i { i % p, i / p };
 			if (clickedTile.unit && clickedTile.blocked)
 			{

@@ -44,7 +44,8 @@ set(HEADERS
 )
 set(RESOURCES
 	BattlefieldH3/startMap.txt
-	
+	BattlefieldH3/Textures
+	BattlefieldH3/Fonts
 	)
 	
                        
@@ -52,14 +53,18 @@ set(RESOURCES
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/BattlefieldH3)
 
-#set(SFML_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Extensions/SFML/lib/cmake/SFML")
+set(SFML_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Extensions/SFML/lib/cmake/SFML")
 
 #set(SFML_STATIC_LIBRARIES TRUE)
 
 find_package(SFML 2.5.1 COMPONENTS graphics audio window system REQUIRED)
 
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/${RESOURCES}
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
 
 add_executable(${PROJECT_NAME} ${SRCS} ${HEADERS})
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 
 target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-audio sfml-window sfml-system)
 

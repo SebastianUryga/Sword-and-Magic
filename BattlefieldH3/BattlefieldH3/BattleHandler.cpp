@@ -142,7 +142,7 @@ BattleUnit* BattleHandler::calculateBestTargetFor(BattleUnit* unit)
 	float max = -10000;
 	for (auto u : this->battlefield->units)
 	{
-		if (unit->enemy == u->enemy || !u->getAlive())
+		if (!unit->isEnemyWith(u.get()) || !u->getAlive())
 			continue;
 
 		float cost =
@@ -162,7 +162,14 @@ BattleUnit* BattleHandler::calculateBestTargetFor(BattleUnit* unit)
 			result = u.get();
 			max = value;
 		}
+		if (this->battlefield->selectedUnits.find(unit) != 
+			this->battlefield->selectedUnits.end() && u->type == Monster::ANGEL)
+		{
+			std::cout<<"value "<< value<<std::endl;
+			std::cout << "cost: " << unit->pathfinder->getNode(u->getPos())->getCost()<<std::endl;;
+		}
 	}
+
 	if(!result) 
 		return this->findNeerestEnemy(unit);
 	return result;
@@ -184,9 +191,10 @@ void BattleHandler::makeDecision(BattleUnit* unit)
 			this->handleAttackOrder(unit);
 			break;
 		case Order::MOVE:
-			this->handleMoveOrder(unit);			
-		default:
+			this->handleMoveOrder(unit);	
 			break;
+		default:
+			;
 	}
 	unit->updateNeighbourPos();
 }
@@ -373,10 +381,14 @@ void BattleHandler::handleDefenceStance(BattleUnit* unit)
 		for(auto u : this->battlefield->units)
 		{
 			if(u && u->getAlive() && unit->isEnemyWith(u.get()))
-			if(this->nextToEachOther(unit, u.get()))
-				result = unit->makeAttack(u->getPos());
-				if (result == false)
-					unit->idle();
+				if (this->nextToEachOther(unit, u.get()))
+				{
+					unit->choseTarget(u.get());
+					result = unit->makeAttack(u->getPos());
+					if (result == false)
+						unit->idle();
+					break;
+				}
 		}
 	}
 	

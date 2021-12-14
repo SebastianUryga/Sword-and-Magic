@@ -174,7 +174,6 @@
     <ClCompile Include="GuiHandler.cpp" />
     <ClCompile Include="InterfaceElem.cpp" />
     <ClCompile Include="Monser.cpp" />
-    <ClCompile Include="pch.cpp" />
     <ClCompile Include="SelectionWindow.cpp" />
     <ClCompile Include="Spell.cpp" />
     <ClCompile Include="SpellBook.cpp" />
@@ -194,7 +193,6 @@
     <ClInclude Include="GuiHandler.h" />
     <ClInclude Include="InterfaceElem.h" />
     <ClInclude Include="Monser.h" />
-    <ClInclude Include="pch.h" />
     <ClInclude Include="PCH.hpp" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SelectionWindow.h" />

@@ -10,7 +10,7 @@
     <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefield.cpp">
+    <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefiled.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\BattleHandler.cpp">
@@ -43,9 +43,6 @@
     <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Monser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\pch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\SelectionWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -63,7 +60,7 @@
     <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\AnimationComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefield.h">
+    <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefiled.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\BattleHandler.h">
@@ -99,7 +96,7 @@
     <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Monser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\pch.h">
+    <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\PCH.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\SelectionWindow.h">

@@ -92,17 +92,18 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ExceptionHandling>Sync</ExceptionHandling>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
       <Optimization>Disabled</Optimization>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <UseFullPaths>false</UseFullPaths>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;SFML_STATIC;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;SFML_STATIC;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
@@ -114,7 +115,7 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>..\Extensions\SFML\lib\sfml-graphics-s-d.lib;..\Extensions\SFML\lib\sfml-audio-s-d.lib;..\Extensions\SFML\lib\sfml-window-s-d.lib;..\Extensions\SFML\lib\sfml-system-s-d.lib;gdi32.lib;OpenGL32.lib;..\Extensions\SFML\lib\freetype.lib;winmm.lib;..\Extensions\SFML\lib\openal32.lib;..\Extensions\SFML\lib\vorbisfile.lib;..\Extensions\SFML\lib\vorbisenc.lib;..\Extensions\SFML\lib\vorbis.lib;..\Extensions\SFML\lib\ogg.lib;..\Extensions\SFML\lib\flac.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>..\Extensions\SFML\lib\sfml-graphics-d.lib;..\Extensions\SFML\lib\sfml-audio-d.lib;..\Extensions\SFML\lib\sfml-window-d.lib;..\Extensions\SFML\lib\sfml-system-d.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -133,19 +134,20 @@
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <ExceptionHandling>Sync</ExceptionHandling>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
       <Optimization>MaxSpeed</Optimization>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <UseFullPaths>false</UseFullPaths>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;SFML_STATIC;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <DebugInformationFormat>
       </DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;SFML_STATIC;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
@@ -157,7 +159,7 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>..\Extensions\SFML\lib\sfml-graphics-s.lib;..\Extensions\SFML\lib\sfml-audio-s.lib;..\Extensions\SFML\lib\sfml-window-s.lib;..\Extensions\SFML\lib\sfml-system-s.lib;gdi32.lib;OpenGL32.lib;..\Extensions\SFML\lib\freetype.lib;winmm.lib;..\Extensions\SFML\lib\openal32.lib;..\Extensions\SFML\lib\vorbisfile.lib;..\Extensions\SFML\lib\vorbisenc.lib;..\Extensions\SFML\lib\vorbis.lib;..\Extensions\SFML\lib\ogg.lib;..\Extensions\SFML\lib\flac.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>..\Extensions\SFML\lib\sfml-graphics.lib;..\Extensions\SFML\lib\sfml-audio.lib;..\Extensions\SFML\lib\sfml-window.lib;..\Extensions\SFML\lib\sfml-system.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -176,19 +178,20 @@
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <ExceptionHandling>Sync</ExceptionHandling>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
       <Optimization>MinSpace</Optimization>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <UseFullPaths>false</UseFullPaths>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;SFML_STATIC;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <DebugInformationFormat>
       </DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;SFML_STATIC;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
@@ -200,7 +203,7 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>..\Extensions\SFML\lib\sfml-graphics-s-d.lib;..\Extensions\SFML\lib\sfml-audio-s-d.lib;..\Extensions\SFML\lib\sfml-window-s-d.lib;..\Extensions\SFML\lib\sfml-system-s-d.lib;gdi32.lib;OpenGL32.lib;..\Extensions\SFML\lib\freetype.lib;winmm.lib;..\Extensions\SFML\lib\openal32.lib;..\Extensions\SFML\lib\vorbisfile.lib;..\Extensions\SFML\lib\vorbisenc.lib;..\Extensions\SFML\lib\vorbis.lib;..\Extensions\SFML\lib\ogg.lib;..\Extensions\SFML\lib\flac.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>..\Extensions\SFML\lib\sfml-graphics-d.lib;..\Extensions\SFML\lib\sfml-audio-d.lib;..\Extensions\SFML\lib\sfml-window-d.lib;..\Extensions\SFML\lib\sfml-system-d.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -220,17 +223,18 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ExceptionHandling>Sync</ExceptionHandling>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
       <Optimization>MaxSpeed</Optimization>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <UseFullPaths>false</UseFullPaths>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;SFML_STATIC;CMAKE_INTDIR="RelWithDebInfo";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="RelWithDebInfo";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;SFML_STATIC;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
@@ -242,7 +246,7 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>..\Extensions\SFML\lib\sfml-graphics-s-d.lib;..\Extensions\SFML\lib\sfml-audio-s-d.lib;..\Extensions\SFML\lib\sfml-window-s-d.lib;..\Extensions\SFML\lib\sfml-system-s-d.lib;gdi32.lib;OpenGL32.lib;..\Extensions\SFML\lib\freetype.lib;winmm.lib;..\Extensions\SFML\lib\openal32.lib;..\Extensions\SFML\lib\vorbisfile.lib;..\Extensions\SFML\lib\vorbisenc.lib;..\Extensions\SFML\lib\vorbis.lib;..\Extensions\SFML\lib\ogg.lib;..\Extensions\SFML\lib\flac.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>..\Extensions\SFML\lib\sfml-graphics-d.lib;..\Extensions\SFML\lib\sfml-audio-d.lib;..\Extensions\SFML\lib\sfml-window-d.lib;..\Extensions\SFML\lib\sfml-system-d.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -268,7 +272,7 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\WindowsPaths.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLConfig.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLConfigDependencies.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLConfigVersion.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLStaticTargets-debug.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLStaticTargets-release.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLStaticTargets.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeCCompiler.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeCXXCompiler.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeRCCompiler.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\WindowsPaths.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLConfig.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLConfigDependencies.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLConfigVersion.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLSharedTargets-debug.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLSharedTargets-release.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLSharedTargets.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeCCompiler.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeCXXCompiler.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeRCCompiler.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/Sebix/Desktop/Projekt1/BattlefieldH3/CMakeLists.txt</Message>
@@ -281,7 +285,7 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\WindowsPaths.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLConfig.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLConfigDependencies.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLConfigVersion.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLStaticTargets-debug.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLStaticTargets-release.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLStaticTargets.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeCCompiler.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeCXXCompiler.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeRCCompiler.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\WindowsPaths.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLConfig.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLConfigDependencies.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLConfigVersion.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLSharedTargets-debug.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLSharedTargets-release.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLSharedTargets.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeCCompiler.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeCXXCompiler.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeRCCompiler.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/Sebix/Desktop/Projekt1/BattlefieldH3/CMakeLists.txt</Message>
@@ -294,7 +298,7 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\WindowsPaths.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLConfig.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLConfigDependencies.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLConfigVersion.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLStaticTargets-debug.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLStaticTargets-release.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLStaticTargets.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeCCompiler.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeCXXCompiler.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeRCCompiler.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\WindowsPaths.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLConfig.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLConfigDependencies.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLConfigVersion.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLSharedTargets-debug.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLSharedTargets-release.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLSharedTargets.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeCCompiler.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeCXXCompiler.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeRCCompiler.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/Sebix/Desktop/Projekt1/BattlefieldH3/CMakeLists.txt</Message>
@@ -307,7 +311,7 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\WindowsPaths.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLConfig.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLConfigDependencies.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLConfigVersion.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLStaticTargets-debug.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLStaticTargets-release.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLStaticTargets.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeCCompiler.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeCXXCompiler.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeRCCompiler.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.20\Modules\Platform\WindowsPaths.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLConfig.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLConfigDependencies.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLConfigVersion.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLSharedTargets-debug.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLSharedTargets-release.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\Extensions\SFML\lib\cmake\SFML\SFMLSharedTargets.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeCCompiler.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeCXXCompiler.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeRCCompiler.cmake;C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\3.20.2\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\build\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
     </CustomBuild>
@@ -316,7 +320,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\BattlefieldH3.cpp" />
     <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\AnimationComponent.cpp" />
     <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Game.cpp" />
-    <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefield.cpp" />
+    <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefiled.cpp" />
     <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\BattleHandler.cpp" />
     <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\BattlePathFinder.cpp" />
     <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\BattleUnit.cpp" />
@@ -327,13 +331,12 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Garrnison.cpp" />
     <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\InterfaceElem.cpp" />
     <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Monser.cpp" />
-    <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\pch.cpp" />
     <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\SelectionWindow.cpp" />
     <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Spell.cpp" />
     <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\SpellBook.cpp" />
     <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\WindowObject.cpp" />
     <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\AnimationComponent.h" />
-    <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefield.h" />
+    <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Battlefiled.h" />
     <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\BattleHandler.h" />
     <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\BattlePathFinder.h" />
     <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\BattleUnit.h" />
@@ -345,7 +348,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Garrnison.h" />
     <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\InterfaceElem.h" />
     <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Monser.h" />
-    <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\pch.h" />
+    <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\PCH.hpp" />
     <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\SelectionWindow.h" />
     <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Spell.h" />
     <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\SpellBook.h" />
