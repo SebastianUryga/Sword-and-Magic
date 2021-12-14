@@ -4,7 +4,7 @@
 //Initializer functions
 void Game::initWindow()
 {
-	this->window = new sf::RenderWindow(sf::VideoMode(1500,800),  "Heroes 3",
+	this->window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(),  "Heroes 3",
 		 sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
 	this->window->setVerticalSyncEnabled(true);
 	this->window->setFramerateLimit(120);
@@ -147,7 +147,7 @@ void Game::updateDt()
 
 void Game::updateEvents()
 {
-	if (window->pollEvent(sfEvent))
+	while (window->pollEvent(sfEvent))
 	{
 		if (sfEvent.type == sf::Event::Closed)
 		{
@@ -181,8 +181,8 @@ void Game::updateEvents()
 		
 	}
 	GH.mousePosWindow = (sf::Vector2f)sf::Mouse::getPosition(*window);
-	GH.mousePosWindow.x /= (window->getSize().x / 1500.f);
-	GH.mousePosWindow.y /= (window->getSize().y / 800.f);
+	GH.mousePosWindow.x /= ((float)window->getSize().x / sf::VideoMode::getDesktopMode().width);
+	GH.mousePosWindow.y /= ((float)window->getSize().y / sf::VideoMode::getDesktopMode().height);
 }
 
 void Game::update()
@@ -210,10 +210,16 @@ void Game::render()
 
 void Game::run()
 {
+	sf::Clock measureTime;
 	while (this->window->isOpen())
 	{
+
 		this->updateDt();
 		this->update();
+		//std::cout << "Time Looptick update : " << measureTime.restart().asMilliseconds() << std::endl;
+
 		this->render();
+		//std::cout << "Time Looptick render: " << measureTime.restart().asMilliseconds() <<std::endl;
+
 	}
 }
