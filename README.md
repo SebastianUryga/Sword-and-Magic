@@ -2,12 +2,18 @@
 
 ![Hnet-image (1)](https://user-images.githubusercontent.com/33723260/133456961-1486f473-0002-4b63-89f0-e084efd1cd81.gif)
 ---
+## Filmik przedstawiający działanie aplikacji:
+
+ https://youtu.be/RJXgUcLYeWE
+ 
+---
+
 ## DEMO Aplikacji
 
 Aby uruchomić aplikacjie na lokalnej maszynie należy:
 
 ### Windows
- - [POBIERZ ARCHIWUM ZIP](https://github.com/SebastianUryga/Heroes3-engine/releases/download/v0.0.1/HeroesBattlefield_DownloadToRun.zip) (wraz z zawartością)
+ - [POBIERZ ARCHIWUM ZIP](https://github.com/SebastianUryga/Heroes3-engine/files/7618349/Release.zip) (wraz z zawartością)
  - rozpakuj archiwum
  - uruchom plik BattlefieldH3.exe
  
