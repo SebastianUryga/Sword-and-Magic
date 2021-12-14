@@ -4,7 +4,9 @@
 //Initializer functions
 void Game::initWindow()
 {
-	this->window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(), "Heroes 3", sf::Style::Default);
+	this->window = new sf::RenderWindow(sf::VideoMode(1500,800),  "Heroes 3",
+		 sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
+	this->window->setVerticalSyncEnabled(true);
 	this->window->setFramerateLimit(120);
 }
 
@@ -176,8 +178,11 @@ void Game::updateEvents()
 			GH.handleMouseButtonClick(sf::Mouse::Left, false);
 			GH.handleMouseButtonClick(sf::Mouse::Right, false);
 		}
-		GH.mousePosWindow = (sf::Vector2f)sf::Mouse::getPosition(*window);
+		
 	}
+	GH.mousePosWindow = (sf::Vector2f)sf::Mouse::getPosition(*window);
+	GH.mousePosWindow.x /= (window->getSize().x / 1500.f);
+	GH.mousePosWindow.y /= (window->getSize().y / 800.f);
 }
 
 void Game::update()

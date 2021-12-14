@@ -398,11 +398,10 @@ void BattleUnit::dieing()
 
 void BattleUnit::fixSpritePos()
 {
+
 	sf::Vector2f fixedPos = this->sprite.getPosition();
-	fixedPos /= B_TILE_WIDTH;
-	fixedPos.x = std::round(fixedPos.x);
-	fixedPos.y = std::round(fixedPos.y);
-	fixedPos *= B_TILE_WIDTH;
+	
+	fixedPos = (sf::Vector2f)(this->getPos() + sf::Vector2i{1, 3}) *B_TILE_WIDTH;
 	this->sprite.setPosition(fixedPos);
 	this->spellEffect.setPosition(fixedPos);
 	this->lineHP.setPosition(fixedPos - sf::Vector2f { 0, 50 });
