@@ -13,6 +13,7 @@ set(SRCS
 	BattlefieldH3/Button.cpp
 	BattlefieldH3/GameConstants.cpp
 	BattlefieldH3/Graphics.cpp
+	BattlefieldH3/Graphics2.cpp
 	BattlefieldH3/GuiHandler.cpp
 	BattlefieldH3/Garrnison.cpp
 	BattlefieldH3/InterfaceElem.cpp
@@ -21,6 +22,7 @@ set(SRCS
 	BattlefieldH3/Spell.cpp
 	BattlefieldH3/SpellBook.cpp
 	BattlefieldH3/WindowObject.cpp
+	BattlefieldH3/Configuration.cpp
 )
 set(HEADERS
 	BattlefieldH3/AnimationComponent.h
@@ -31,6 +33,7 @@ set(HEADERS
 	BattlefieldH3/Game.h
 	BattlefieldH3/GameConstants.h
 	BattlefieldH3/Graphics.h
+	BattlefieldH3/Graphics2.h
 	BattlefieldH3/Button.h
 	BattlefieldH3/GuiHandler.h
 	BattlefieldH3/Garrnison.h
@@ -41,21 +44,19 @@ set(HEADERS
 	BattlefieldH3/Spell.h
 	BattlefieldH3/SpellBook.h
 	BattlefieldH3/WindowObject.h
+	BattlefieldH3/Configuration.h
 )
 set(RESOURCES
 	BattlefieldH3/startMap.txt
+	BattlefieldH3/config.txt
 	BattlefieldH3/Textures
 	BattlefieldH3/Fonts
 	)
 	
                        
-#target_link_libraries(${PROJECT_NAME} Extension/SFML/lib)
-
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/BattlefieldH3)
 
 set(SFML_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Extensions/SFML/lib/cmake/SFML")
-
-#set(SFML_STATIC_LIBRARIES TRUE)
 
 find_package(SFML 2.5.1 COMPONENTS graphics audio window system REQUIRED)
 

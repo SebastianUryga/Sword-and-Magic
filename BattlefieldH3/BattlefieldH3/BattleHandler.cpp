@@ -162,12 +162,7 @@ BattleUnit* BattleHandler::calculateBestTargetFor(BattleUnit* unit)
 			result = u.get();
 			max = value;
 		}
-		if (this->battlefield->selectedUnits.find(unit) != 
-			this->battlefield->selectedUnits.end() && u->type == Monster::ANGEL)
-		{
-			std::cout<<"value "<< value<<std::endl;
-			std::cout << "cost: " << unit->pathfinder->getNode(u->getPos())->getCost()<<std::endl;;
-		}
+		
 	}
 
 	if(!result) 
@@ -275,8 +270,10 @@ void BattleHandler::update(const float& dt)
 	{
 		for (auto unit : this->battlefield->units)
 		{
-
-			unit->update(dt);
+			if (this->battlefield->gamePaused)
+				unit->update(0.f);
+			else
+				unit->update(dt);
 			if (unit->getAttacked())
 			{
 				this->unitAttakced(unit.get());
@@ -486,8 +483,8 @@ void BattleHandler::updateQueque()
 			int conut = 0;
 			do
 			{
-				int temp = rand() % BATTLEFIELD_HEIGHT;
-				pos = { i * (BATTLEFIELD_WIDHT - 3) + 1, temp };
+				int temp = rand() % Config.battlefiledTileHegiht;;
+				pos = { i * (Config.battlefiledTileWidth - 3) + 1, temp };
 			} while (this->battlefield->isTileBlocked(pos) && conut++ < 60);
 
 			this->battlefield->addUnit(std::make_shared<BattleUnit>(creature), pos, (bool)i);

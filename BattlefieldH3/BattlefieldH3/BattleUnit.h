@@ -1,8 +1,12 @@
 #pragma once
 #include "AnimationComponent.h"
+#include "Animator.h"
 #include "BattlePathFinder.h"
 #include "GameConstants.h"
 #include "Graphics.h"
+#include "Graphics2.h"
+#include "Configuration.h"
+
 
 class InterfaceElem;
 class Missle;
@@ -106,9 +110,11 @@ private:
 	Spell spellToAnimate;
 	sf::Sprite sprite;
 	sf::Sprite spellEffect;
+	std::shared_ptr<Animator> animator;
 	AnimationComponent* animation;
 	AnimationComponent* spellEffectAnimation;
 	void initAnimation();
+	void initAnimation2();
 	void initStatistic();
 	void initTextDmg(const int dmg);
 
@@ -154,6 +160,7 @@ public:
 	void updatePathfinder(const float& dt);
 	void updateNeighbourPos();
 	void updateAnimation(const float& dt);
+	void updateAnimation2(const float& dt);
 	void update(const float& dt);
 	void render(sf::RenderTarget* target);
 

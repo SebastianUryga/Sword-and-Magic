@@ -161,16 +161,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AnimationComponent.cpp" />
+    <ClCompile Include="Animator.cpp" />
     <ClCompile Include="BattlefieldH3.cpp" />
     <ClCompile Include="Battlefiled.cpp" />
     <ClCompile Include="BattleHandler.cpp" />
     <ClCompile Include="BattlePathFinder.cpp" />
     <ClCompile Include="BattleUnit.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Configuration.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameConstants.cpp" />
     <ClCompile Include="Garrnison.cpp" />
     <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="Graphics2.cpp" />
     <ClCompile Include="GuiHandler.cpp" />
     <ClCompile Include="InterfaceElem.cpp" />
     <ClCompile Include="Monser.cpp" />
@@ -181,15 +184,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationComponent.h" />
+    <ClInclude Include="Animator.h" />
     <ClInclude Include="Battlefiled.h" />
     <ClInclude Include="BattleHandler.h" />
     <ClInclude Include="BattlePathFinder.h" />
     <ClInclude Include="BattleUnit.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="Configuration.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameConstants.h" />
     <ClInclude Include="Garrnison.h" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="Graphics2.h" />
     <ClInclude Include="GuiHandler.h" />
     <ClInclude Include="InterfaceElem.h" />
     <ClInclude Include="Monser.h" />

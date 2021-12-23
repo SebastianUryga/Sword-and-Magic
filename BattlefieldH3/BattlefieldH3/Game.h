@@ -1,7 +1,7 @@
 #pragma once
 #include "WindowObject.h"
 #include "BattleHandler.h"
-
+#include "GuiHandler.h"
 class Game
 {
 private:

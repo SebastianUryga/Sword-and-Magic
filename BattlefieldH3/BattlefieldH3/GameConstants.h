@@ -4,7 +4,10 @@ class GameConstants
 {
 };
 
-
+//enum class Background :int
+//{
+//    BACKGROUND1 = 0, BACKGROUND2 = 1, BACKGROUND3 = 2,
+//};
 
 struct BattleObstacle
 {

@@ -2,8 +2,51 @@
 
 class BattleUnit;
 
+void BattleUnit::initAnimation2()
+{
+	if (graphics2.creaturesTextures.find(this->type) == graphics2.creaturesTextures.end())
+	{
+		this->sprite.setScale(0.5f, 0.5f);
+		this->animator = std::make_shared<Animator>(this->sprite);
+		animator->addAnimotion("IDLE", graphics2.creaturesTextures[Monster::ORK1].idle,
+			1.f, 340, 120, sf::Vector2f(150, 160), 90);
+		animator->addAnimotion("MOVE", graphics2.creaturesTextures[Monster::ORK1].move,
+			1.f, 340, 120, sf::Vector2f(150, 160), 90);
+		animator->addAnimotion("ATTAK", graphics2.creaturesTextures[Monster::ORK1].attak,
+			1.f, 340, 120, sf::Vector2f(150, 160), 90);
+		animator->addAnimotion("DIE", graphics2.creaturesTextures[Monster::ORK1].die,
+			1.f, 340, 120, sf::Vector2f(150, 160), 90);
+		animator->addAnimotion("HURT", graphics2.creaturesTextures[Monster::ORK1].hurt,
+			1.f, 340, 120, sf::Vector2f(150, 160), 90);
+
+	}
+	else
+	{
+		this->sprite.setScale(0.5f, 0.5f);
+		this->animator = std::make_shared<Animator>(this->sprite);
+		animator->addAnimotion("IDLE", graphics2.creaturesTextures[this->type].idle,
+			1.f, 340, 120, sf::Vector2f(150, 160), 90);
+		animator->addAnimotion("MOVE", graphics2.creaturesTextures[this->type].move,
+			1.f, 340, 120, sf::Vector2f(150, 160), 90);
+		animator->addAnimotion("ATTAK", graphics2.creaturesTextures[this->type].attak,
+			1.f, 340, 120, sf::Vector2f(150, 160), 90);
+		animator->addAnimotion("DIE", graphics2.creaturesTextures[this->type].die,
+			1.f, 340, 120, sf::Vector2f(150, 160), 90);
+		animator->addAnimotion("HURT", graphics2.creaturesTextures[this->type].hurt,
+			1.f, 340, 120, sf::Vector2f(150, 160), 90);
+	}
+	this->spellEffectAnimation =
+		new AnimationComponent(this->spellEffect, *graphics.battleEffectsSheet);
+	for (auto s : allSpells)
+	{
+		struct EffectsAnimationParametrs stat = batteEffectsAnimationParamets[s];
+		this->spellEffectAnimation->addAnimotion(
+			spellToString[s], stat.animationTimer, stat.start_frame_x, stat.start_frame_y, stat.frames_x, stat.frames_y, stat.width, stat.height, false, { 6, 50 }, stat.tileWidth);
+	}
+}
 void BattleUnit::initAnimation()
 {
+	
 	this->spellEffectAnimation =
 		new AnimationComponent(this->spellEffect, *graphics.battleEffectsSheet);
 	for (auto s : allSpells)
@@ -400,8 +443,9 @@ void BattleUnit::fixSpritePos()
 {
 
 	sf::Vector2f fixedPos = this->sprite.getPosition();
-	
-	fixedPos = (sf::Vector2f)(this->getPos() + sf::Vector2i{1, 3}) *B_TILE_WIDTH;
+
+
+	fixedPos = ((sf::Vector2f)(this->getPos() + Config.battleTileOffset) * Config.tileWidth);
 	this->sprite.setPosition(fixedPos);
 	this->spellEffect.setPosition(fixedPos);
 	this->lineHP.setPosition(fixedPos - sf::Vector2f { 0, 50 });
@@ -429,23 +473,26 @@ void BattleUnit::setPathfinder(Battlefield* field)
 	this->timeToUpdatePathfinder = 100;
 }
 
-void BattleUnit::setPos(sf::Vector2i pos)
+void BattleUnit::setPos(sf::Vector2i tilePos)
 {
+	auto pixelPos = sf::Vector2f(
+		(tilePos.x + Config.battlefiledTileWidth) * Config.tileWidth,
+		(tilePos.y + Config.battlefiledTileHegiht) * Config.tileHeight);
 	if (!this->moving)
 	{
-		this->sprite.setPosition(pos.x * B_TILE_WIDTH + 50, pos.y * B_TILE_HEIGHT + 150);
-		this->spellEffect.setPosition(pos.x * B_TILE_WIDTH + 50, pos.y * B_TILE_HEIGHT + 150);
-		this->lineHP.setPosition(pos.x * B_TILE_WIDTH + 50, pos.y * B_TILE_HEIGHT + 100);
-		this->text.setPosition(sprite.getPosition() - sf::Vector2f(0, 60));
+		this->sprite.setPosition(pixelPos);
+		this->spellEffect.setPosition(pixelPos);
+		this->lineHP.setPosition(pixelPos - sf::Vector2f(0,Config.tileWidth));
+		this->text.setPosition(pixelPos - sf::Vector2f(0, 60));
 	}
-	this->shape.left = pos.x * B_TILE_WIDTH + 50;
-	this->shape.top = pos.y * B_TILE_HEIGHT + 150;
-	this->pos = pos;
-	this->pos2.y = pos.y;
+	this->shape.left = pixelPos.x;
+	this->shape.top = pixelPos.y;
+	this->pos = tilePos;
+	this->pos2.y = tilePos.y;
 	if (this->bigCreature)
-		this->pos2.x = pos.x - 1;
+		this->pos2.x = tilePos.x - 1;
 	else
-		this->pos2 = pos;
+		this->pos2 = tilePos;
 }
 
 void BattleUnit::setVelocity(sf::Vector2f direction)
@@ -474,7 +521,7 @@ BattleUnit::BattleUnit(Monster type) :
 	alive(true),
 	enemy(false)
 {
-	this->initAnimation();
+	this->initAnimation2();
 	this->initStatistic();
 	this->target = nullptr;
 	this->order = Order::AGRESIVE_STANCE;
@@ -628,10 +675,63 @@ void BattleUnit::updateAnimation(const float& dt)
 		this->animationState = AnimationState::IDLE;
 }
 
+void BattleUnit::updateAnimation2(const float& dt)
+{
+	std::string action = "IDLE";
+	bool playReversly = false;
+	switch (this->animationState)
+	{
+	case AnimationState::IDLE:
+		action = "IDLE";
+		break;
+	case AnimationState::START_MOVING:
+		action = "MOVE";
+		break;
+	case AnimationState::MOVING: {
+		action = "MOVE";
+		break;
+	}
+	case AnimationState::SHOOTHING: {
+		
+		break;
+	}
+	case AnimationState::ATTACKING: {
+		if (!this->target)
+			break;
+		action = "ATTAK";
+		if (this->animator->playedHalf(action)
+			&& this->actualAttackCoulddown <= 0)
+			this->attacked = true;
+		break;
+	}
+	case AnimationState::BLOCKING:
+		break;
+	case AnimationState::RECIVING_DMG:
+		action = "HURT";
+		if (this->animator->playedOnce(action))
+			this->recivingDamage = false;
+		break;
+	case AnimationState::DIEING:
+		action = "DIE";
+		if (this->animator->playedOnce(action))
+			this->alive = false;
+		break;
+	default:
+		break;
+	}
+	this->text.setString(action);
+	
+	if (!this->animator->playedOnce(action))
+		this->animator->play(action, dt, this->lastDirection, playReversly);
+	else
+		this->animationState = AnimationState::IDLE;
+	
+}
+
 void BattleUnit::update(const float& dt)
 {
 	if (this->alive)
-		this->updateAnimation(dt);
+		this->updateAnimation2(dt);
 	this->updatePathfinder(dt);
 	if (this->spellToAnimate.spell != Spell::SpellType::NONE)
 	{
@@ -652,6 +752,7 @@ void BattleUnit::update(const float& dt)
 	}
 	if (shooter && missle)
 		this->missle->update(dt);
+	
 	if (actualAttackCoulddown > 0)
 		actualAttackCoulddown -= dt;
 	if (Order::ATTACK == this->order && !target->getAlive())
@@ -662,7 +763,7 @@ void BattleUnit::update(const float& dt)
 	this->lineHP.move(toMove);
 	this->text.move(toMove);
 	this->offset += (toMove);
-	if (B_TILE_WIDTH < abs(this->offset.x) || B_TILE_HEIGHT < abs(this->offset.y))
+	if (Config.tileWidth < abs(this->offset.x) || Config.tileHeight < abs(this->offset.y))
 	{
 		this->moving = false;
 		//this->moving2 = false;
@@ -717,7 +818,7 @@ Missle::Missle(BattleUnit* unit) :
 	//this->sprite.setTextureRect(sf::IntRect(400, 400, 30, 30));
 	this->shape = sf::RectangleShape(sf::Vector2f(10, 10));
 	this->shape.setFillColor(sf::Color::Yellow);
-	this->shape.setPosition((sf::Vector2f)unit->getPos() * B_TILE_HEIGHT);
+	this->shape.setPosition((sf::Vector2f)unit->getPos() * Config.tileWidth);
 	this->shape.move(70, 170);
 	this->velocity = { 0, 0 };
 }
@@ -740,7 +841,7 @@ void Missle::setTarget(sf::Vector2i targetPos)
 
 sf::Vector2i Missle::getTilePos() const
 {
-	return (sf::Vector2i)((this->shape.getPosition() - sf::Vector2f(50, 150)) / B_TILE_WIDTH);
+	return (sf::Vector2i)(this->shape.getPosition()  / Config.tileWidth) - Config.battleTileOffset;
 }
 
 void Missle::update(const float& dt)

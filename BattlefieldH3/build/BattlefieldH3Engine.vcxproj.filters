@@ -31,6 +31,9 @@
     <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Graphics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Graphics2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\GuiHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -53,6 +56,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\WindowObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Configuration.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -79,6 +85,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Graphics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Graphics2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Button.h">
@@ -109,6 +118,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\WindowObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Sebix\Desktop\Projekt1\BattlefieldH3\BattlefieldH3\Configuration.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

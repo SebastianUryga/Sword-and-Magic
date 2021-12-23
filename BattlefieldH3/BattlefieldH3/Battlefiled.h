@@ -7,9 +7,12 @@
 
 class BattleUnit;
 
-#define B_TILE_WIDTH 50.f
-#define B_TILE_HEIGHT 50.f
-#define BATTLEFIELD_WIDHT 26
+#define BATTLE_OFFSET_X 2
+#define BATTLE_OFFSET_Y 3
+
+#define B_TILE_WIDTH 60.f
+#define B_TILE_HEIGHT 60.f
+#define BATTLEFIELD_WIDHT 24
 #define BATTLEFIELD_HEIGHT 12
 
 struct BattleTile
@@ -49,11 +52,17 @@ private:
 	void initArmy();
 	void initButtons();
 	void initStartUnits();
+	void initMovmentMarker();
 	void sortUnits();
 
+	bool gamePaused = false;
 	Monster selectedUnitType;
 	Spell spellToCast;
 	sf::RectangleShape selectingArea;
+
+	float markerVisableTimeLeft = 0.f;
+	sf::CircleShape movmentMarker;
+	void putMovmentMarker(const sf::Vector2i& pos, bool attck);
 
 public:
 	bool containsIsBattlefield(sf::Vector2i pos) const;
@@ -82,6 +91,7 @@ public:
 	Battlefield(GameMode mode);
 	virtual ~Battlefield();
 
+	void updateMovmentMarker(const float dt);
 	void update(const float dt) override;
 	void render(sf::RenderTarget* target) override;
 

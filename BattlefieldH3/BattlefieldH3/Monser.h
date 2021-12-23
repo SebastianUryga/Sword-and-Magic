@@ -1,4 +1,5 @@
 #pragma once
+#include "PCH.hpp"
 struct MonsterStats
 {
 	uint8_t damage;
@@ -47,6 +48,13 @@ public:
 		ANGEL = 13,
 		MINOTAUR = 14,
 		BLACK_DRAGON = 15,
+
+		ORK1 = 30,
+		ORK2 = 31,
+		ORK3 = 32,
+		TROLL1 = 33,
+		TROLL2 = 34,
+		TROLL3 = 35,
 	};
 
 	Monster(MonsterType type = NO_CREATURE) :

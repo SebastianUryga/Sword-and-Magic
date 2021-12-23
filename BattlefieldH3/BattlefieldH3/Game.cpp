@@ -1,5 +1,4 @@
-
-#include "GuiHandler.h"
+#include "Game.h"
 
 //Initializer functions
 void Game::initWindow()
@@ -8,6 +7,8 @@ void Game::initWindow()
 		 sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
 	this->window->setVerticalSyncEnabled(true);
 	this->window->setFramerateLimit(120);
+	Config.windowSize = this->window->getSize();
+
 }
 
 void Game::initFonts()
@@ -45,6 +46,7 @@ void Game::initKeys()
 void Game::initTextures()
 {
 	graphics.Init();
+	graphics2.init();
 }
 
 Game::Game()
@@ -109,7 +111,18 @@ void Game::settingState()
 		this->window->getSize().y,
 		*this->font);
 
+	auto marker = std::make_shared<sf::Text>(">",GH.globalFont,30);
+	settingMenu->texts.push_back(*marker);
+	
 	settingMenu->background.setTexture(graphics.menuBackgroud.get());
+	settingMenu->addText("Select battle size in tiles", sf::Vector2f(200, 240));
+	settingMenu->buttons["SizeOption1"] = std::make_shared<Button>(
+		200, 280, 250, 50, this->font, "14 x 7");
+	settingMenu->buttons["SizeOption2"] = std::make_shared<Button>(
+		200, 350, 250, 50, this->font, "20 x 9");
+	settingMenu->buttons["SizeOption3"] = std::make_shared<Button>(
+		200, 420, 250, 50, this->font, "30 x 12");
+
 
 	settingMenu->buttons["EXIT_GAME"] = std::make_shared<Button>(
 		300, 680, 250, 50, this->font, "Quit");
@@ -117,8 +130,26 @@ void Game::settingState()
 	settingMenu->buttons["EXIT_GAME"]->addFuctionallity([=]() {
 		GH.popWindow(settingMenu);
 	});
-	settingMenu->interactiveElem.push_back(settingMenu->buttons["EXIT_GAME"]);
-
+	settingMenu->buttons["SizeOption1"]->addFuctionallity([=]() {
+		Config.battlefiledTileWidth = 14;
+		Config.battlefiledTileHegiht = 7;
+		marker->setPosition(180, 280);
+		Config.save();
+	});
+	settingMenu->buttons["SizeOption2"]->addFuctionallity([=]() {
+		Config.battlefiledTileWidth = 20;
+		Config.battlefiledTileHegiht = 9;
+		marker->setPosition(180, 350);
+		Config.save();
+	});
+	settingMenu->buttons["SizeOption3"]->addFuctionallity([=]() {
+		Config.battlefiledTileWidth = 30;
+		Config.battlefiledTileHegiht = 12;
+		marker->setPosition(180, 420);
+		Config.save();
+	});
+	for(auto button : settingMenu->buttons)
+		settingMenu->interactiveElem.push_back(button.second);
 	GH.pushWindow(settingMenu);
 }
 

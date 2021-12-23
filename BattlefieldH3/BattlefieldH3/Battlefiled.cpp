@@ -36,6 +36,22 @@ void Battlefield::initButtons()
 			GH.pushWindowT<SpellBook>(this->spellToCast);
 		});
 		this->interactiveElem.push_back(this->buttons["SpellBook"]);
+
+		this->buttons["PauseStartGame"] = std::make_shared<Button>(
+			700, 770, 170, 30, &this->font, "Pause Game");
+		this->buttons["PauseStartGame"]->addFuctionallity([=]() {
+			if (gamePaused)
+			{
+				buttons["PauseStartGame"]->setText("Pause Game");
+				gamePaused = false;
+			}
+			else
+			{
+				buttons["PauseStartGame"]->setText("Start Game");
+				gamePaused = true;
+			}
+		});
+		this->interactiveElem.push_back(this->buttons["PauseStartGame"]);
 	}
 	if (this->mode == GameMode::Editor)
 	{
@@ -95,6 +111,16 @@ void Battlefield::initStartUnits()
 	this->addUnit(std::make_shared<BattleUnit>(Monster::ARCHER), sf::Vector2i(20, 1), true);
 }
 
+void Battlefield::initMovmentMarker()
+{
+	this->movmentMarker.setOutlineColor(sf::Color::Green);
+	this->movmentMarker.setOutlineThickness(1);
+	this->movmentMarker.setFillColor(sf::Color::Transparent);
+	this->movmentMarker.setOrigin(sf::Vector2f(-Config.tileWidth/2,-Config.tileHeight / 2));
+	this->movmentMarker.setRadius(0);
+	
+}
+
 void Battlefield::sortUnits()
 {
 	std::sort(units.begin(), units.end(), [](const std::shared_ptr<BattleUnit>& a, const std::shared_ptr<BattleUnit>& b) {
@@ -108,10 +134,24 @@ void Battlefield::initArmy()
 	this->army[1] = { { Monster::PIKEMAN, 15 }, { Monster::GRIFFIN, 5 }, { Monster::ARCHER, 5 }, { Monster::MARKSMEN, 7 }, { Monster::ROYAL_GRIFFIN, 3 }, { Monster::NO_CREATURE, 0 }, { Monster::NO_CREATURE, 0 } };
 }
 
+void Battlefield::putMovmentMarker(const sf::Vector2i& tilePos, bool attck)
+{
+	if (attck)
+		this->movmentMarker.setOutlineColor(sf::Color::Red);
+	else
+		this->movmentMarker.setOutlineColor(sf::Color::Green);
+	auto pixelPos = sf::Vector2f(
+		(tilePos.x + Config.battleTileOffset.x) * Config.tileWidth,
+		(tilePos.y + Config.battleTileOffset.y) * Config.tileHeight);
+	this->movmentMarker.setPosition(pixelPos);
+	this->movmentMarker.setRadius(0);
+	this->markerVisableTimeLeft = 0.5f;
+}
+
 bool Battlefield::containsIsBattlefield(sf::Vector2i pos) const
 {
 	if (pos.x < 0 || pos.y < 0
-		|| pos.x >= BATTLEFIELD_WIDHT || pos.y >= BATTLEFIELD_HEIGHT)
+		|| pos.x >= Config.battlefiledTileWidth || pos.y >= Config.battlefiledTileHegiht)
 		return false;
 	return true;
 }
@@ -207,18 +247,20 @@ void Battlefield::addUnit(std::shared_ptr<BattleUnit> unit, sf::Vector2i pos, bo
 	this->tiles[unit->getPos2().x][unit->getPos2().y].blocked = true;
 }
 
-void Battlefield::addObsticle(BattleObstacle::Type type, sf::Vector2i pos)
+void Battlefield::addObsticle(BattleObstacle::Type type, sf::Vector2i tilePos)
 {
-	if (!this->containsIsBattlefield(pos))
+	if (!this->containsIsBattlefield(tilePos))
 		return;
-
+	auto pixelPos = sf::Vector2f(
+		(tilePos.x + Config.battleTileOffset.x) * Config.tileWidth,
+		(tilePos.y + Config.battleTileOffset.y) * Config.tileHeight);
 	std::shared_ptr<BattleObstacle> obj = std::make_shared<BattleObstacle>();
 	obj->sprite.setTexture(*graphics.battleObsticles[type]);
 	obj->type = type;
-	obj->sprite.setPosition(sf::Vector2f(50 + pos.x * B_TILE_WIDTH, 150 + pos.y * B_TILE_HEIGHT));
+	obj->sprite.setPosition(pixelPos);
 	obj->usedTiles = battleObstacleParametrs[type].usedTiles;
-	obj->sprite.setOrigin(B_TILE_WIDTH * sf::Vector2f(obj->usedTiles[0].size() - 1, obj->usedTiles.size() - 1));
-	obj->pos = pos;
+	obj->sprite.setOrigin(Config.tileWidth * sf::Vector2f(obj->usedTiles[0].size() - 1, obj->usedTiles.size() - 1));
+	obj->pos = tilePos;
 	for (int y = 0; y < (int)obj->usedTiles.size(); y++)
 		for (int x = 0; x < (int)obj->usedTiles[y].size(); x++)
 		{
@@ -279,10 +321,11 @@ void Battlefield::clickLeft(bool down, bool previousState)
 	{
 		if (this->mode == GameMode::Editor)
 		{
-			auto pos = (sf::Vector2i)GH.mousePosWindow / (int)B_TILE_WIDTH - sf::Vector2i { 1, 3 };
-			if (!this->containsIsBattlefield(pos))
+			auto tilePos = (sf::Vector2i)(GH.mousePosWindow /
+				Config.tileWidth) - Config.battleTileOffset;
+			if (!this->containsIsBattlefield(tilePos))
 				return;
-			BattleTile& clickedTile = this->getTile(pos);
+			BattleTile& clickedTile = this->getTile(tilePos);
 			if (!clickedTile.blocked && !clickedTile.unit)
 				this->addObsticle(BattleObstacle::Type::SCIELETON1, clickedTile.pos);
 		}
@@ -299,10 +342,11 @@ void Battlefield::clickLeft(bool down, bool previousState)
 		{
 			if (this->spellToCast != Spell::SpellType::NONE)
 			{
-				auto pos = (sf::Vector2i)GH.mousePosWindow / (int)B_TILE_WIDTH - sf::Vector2i { 1, 3 };
-				if (!this->containsIsBattlefield(pos))
+				auto tilePos = (sf::Vector2i)(GH.mousePosWindow /
+					Config.tileWidth) - Config.battleTileOffset;
+				if (!this->containsIsBattlefield(tilePos))
 					return;
-				BattleTile& clickedTile = this->getTile(pos);
+				BattleTile& clickedTile = this->getTile(tilePos);
 				if (clickedTile.unit && clickedTile.unit->getAlive())
 				{
 					Spell::castSpellOnUnit(*clickedTile.unit, this->spellToCast);
@@ -312,8 +356,12 @@ void Battlefield::clickLeft(bool down, bool previousState)
 			this->selectingArea.setFillColor(sf::Color(120, 120, 120, 0));
 			this->selectedUnits.clear();
 			sf::FloatRect bounds = this->selectingArea.getGlobalBounds();
-			for (int x = (bounds.left - 50) / B_TILE_WIDTH; x < (bounds.left + bounds.width - 50) / B_TILE_WIDTH; x++)
-				for (int y = (bounds.top - 150) / B_TILE_WIDTH; y < (bounds.top + bounds.height - 150) / B_TILE_HEIGHT; y++)
+			for (int x = bounds.left / Config.tileWidth - Config.battleTileOffset.x;
+			x < (bounds.left + bounds.width) / Config.tileWidth - Config.battleTileOffset.x;
+			x++)
+				for (int y = bounds.top / Config.tileHeight - Config.battleTileOffset.y;
+				y < (bounds.top + bounds.height) / Config.tileHeight - Config.battleTileOffset.y;
+				y++)
 				{
 					if (!this->containsIsBattlefield(sf::Vector2i(x, y)))
 						continue;
@@ -334,10 +382,11 @@ void Battlefield::clickRight(bool down, bool previousState)
 	{
 		this->spellToCast = Spell::SpellType::NONE;
 
-		auto pos = ((sf::Vector2i)GH.mousePosWindow / (int)B_TILE_WIDTH) - sf::Vector2i { 1, 3 };
-		if (!this->containsIsBattlefield(pos))
+		auto tilePos = (sf::Vector2i)(GH.mousePosWindow /
+			Config.tileWidth) - Config.battleTileOffset;
+		if (!this->containsIsBattlefield(tilePos))
 			return;
-		BattleTile& clickedTile = this->getTile(pos);
+		BattleTile& clickedTile = this->getTile(tilePos);
 
 		if (this->mode == GameMode::Editor)
 		{
@@ -356,14 +405,17 @@ void Battlefield::clickRight(bool down, bool previousState)
 			if (clickedTile.unit && clickedTile.blocked)
 			{
 				if (u->choseTarget(clickedTile.unit))
+				{
 					u->giveOrder(Order::ATTACK);
+					this->putMovmentMarker(temp, true);
+				}
 			}
 			else
 			{
 				if (u->giveDestenation(temp))
 				{
 					u->giveOrder(Order::MOVE);
-					clickedTile.shape.setFillColor(sf::Color::Green);
+					this->putMovmentMarker(temp, false);
 				}
 			}
 			i++;
@@ -393,24 +445,30 @@ Battlefield::Battlefield(GameMode mode) :
 
 	this->initArmy();
 	this->initButtons();
+	this->initMovmentMarker();
 
-	this->tiles.resize(BATTLEFIELD_WIDHT);
+	this->tiles.resize(Config.battlefiledTileWidth);
 	for (auto& tile : this->tiles)
-		tile.resize(BATTLEFIELD_HEIGHT);
+		tile.resize(Config.battlefiledTileHegiht);
 
 	for (int x = 0; x < (int)tiles.size(); x++)
 		for (int y = 0; y < (int)tiles[x].size(); y++)
 		{
 			tiles[x][y].pos = sf::Vector2i(x, y);
-			tiles[x][y].shape = sf::RectangleShape(sf::Vector2f(B_TILE_WIDTH, B_TILE_HEIGHT));
-			tiles[x][y].shape.setPosition(50 + (x * B_TILE_WIDTH), 150 + (y * B_TILE_HEIGHT));
+			tiles[x][y].shape = sf::RectangleShape(sf::Vector2f(Config.tileWidth, Config.tileHeight));
+			tiles[x][y].shape.setPosition(
+				(Config.battleTileOffset.x + x) * Config.tileWidth,
+				(Config.battleTileOffset.y + y) * Config.tileHeight);
 			tiles[x][y].shape.setFillColor(sf::Color(20, 20, 20, 90));
 			tiles[x][y].shape.setOutlineColor(sf::Color::Yellow);
+			tiles[x][y].shape.setOutlineThickness(0.5f);
 			tiles[x][y].blocked = false;
 			tiles[x][y].unit = nullptr;
 		}
 	this->backgroud.setTexture(*graphics.battleBackgrouds);
-	this->backgroud.setPosition(30, 30);
+	this->backgroud.setPosition(
+		Config.battleTileOffset.x * Config.tileWidth -20,
+		Config.battleTileOffset.y * Config.tileHeight - 130);
 	this->backgroud.setScale(1.5, 1.5);
 	this->backgroud.setTextureRect(sf::IntRect(0, 0, 900, 500));
 
@@ -421,9 +479,22 @@ Battlefield::~Battlefield()
 {
 }
 
+void Battlefield::updateMovmentMarker(const float dt)
+{
+	if (this->markerVisableTimeLeft > 0.f)
+	{
+		this->markerVisableTimeLeft -= dt;
+		this->movmentMarker.setRadius(this->movmentMarker.getRadius() + (40 * dt));
+		this->movmentMarker.move(sf::Vector2f(-dt * 40, -dt * 40));
+	}
+	else
+		this->movmentMarker.setRadius(0);
+}
+
 void Battlefield::update(const float dt)
 {
 	WindowObject::update(dt);
+	this->updateMovmentMarker(dt);
 	if (this->mode == GameMode::Game)
 		BH.update(dt);
 	if (this->mode == GameMode::Editor)
@@ -463,6 +534,8 @@ void Battlefield::render(sf::RenderTarget* target)
 		target->draw(obj->sprite);
 	for (auto& unit : this->units)
 		unit->render(target);
+	if (this->markerVisableTimeLeft > 0.f) 
+		target->draw(this->movmentMarker);
 	for (auto& btn : this->buttons)
 		btn.second->render(target);
 	target->draw(selectingArea);

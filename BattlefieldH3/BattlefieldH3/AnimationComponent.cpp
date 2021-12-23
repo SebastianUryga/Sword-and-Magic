@@ -54,7 +54,6 @@ void AnimationComponent::play(const std::string key, const float& dt, bool flipH
 			this->lastAnimation = this->animations[key];
 		}
 	}
-
 	this->animations[key]->play(dt, inversely);
 }
 
