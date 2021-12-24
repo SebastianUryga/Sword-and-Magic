@@ -35,6 +35,7 @@ public:
 	//update
 	void updateDt();
 	void updateEvents();
+	void updateMousePos();
 	void update();
 
 	void run();

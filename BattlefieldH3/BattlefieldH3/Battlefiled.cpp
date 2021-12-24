@@ -141,8 +141,8 @@ void Battlefield::putMovmentMarker(const sf::Vector2i& tilePos, bool attck)
 	else
 		this->movmentMarker.setOutlineColor(sf::Color::Green);
 	auto pixelPos = sf::Vector2f(
-		(tilePos.x + Config.battleTileOffset.x) * Config.tileWidth,
-		(tilePos.y + Config.battleTileOffset.y) * Config.tileHeight);
+		tilePos.x * Config.tileWidth,
+		tilePos.y * Config.tileHeight) + Config.battlefieldOffset;
 	this->movmentMarker.setPosition(pixelPos);
 	this->movmentMarker.setRadius(0);
 	this->markerVisableTimeLeft = 0.5f;
@@ -252,14 +252,16 @@ void Battlefield::addObsticle(BattleObstacle::Type type, sf::Vector2i tilePos)
 	if (!this->containsIsBattlefield(tilePos))
 		return;
 	auto pixelPos = sf::Vector2f(
-		(tilePos.x + Config.battleTileOffset.x) * Config.tileWidth,
-		(tilePos.y + Config.battleTileOffset.y) * Config.tileHeight);
+		tilePos.x * Config.tileWidth,
+		tilePos.y * Config.tileHeight) + Config.battlefieldOffset;
 	std::shared_ptr<BattleObstacle> obj = std::make_shared<BattleObstacle>();
 	obj->sprite.setTexture(*graphics.battleObsticles[type]);
 	obj->type = type;
 	obj->sprite.setPosition(pixelPos);
 	obj->usedTiles = battleObstacleParametrs[type].usedTiles;
-	obj->sprite.setOrigin(Config.tileWidth * sf::Vector2f(obj->usedTiles[0].size() - 1, obj->usedTiles.size() - 1));
+	obj->sprite.setOrigin(sf::Vector2f(
+		Config.tileWidth * obj->usedTiles[0].size() - 1,
+		Config.tileHeight * obj->usedTiles.size() - 1));
 	obj->pos = tilePos;
 	for (int y = 0; y < (int)obj->usedTiles.size(); y++)
 		for (int x = 0; x < (int)obj->usedTiles[y].size(); x++)
@@ -321,8 +323,7 @@ void Battlefield::clickLeft(bool down, bool previousState)
 	{
 		if (this->mode == GameMode::Editor)
 		{
-			auto tilePos = (sf::Vector2i)(GH.mousePosWindow /
-				Config.tileWidth) - Config.battleTileOffset;
+			auto tilePos = GH.mouseTilePos;
 			if (!this->containsIsBattlefield(tilePos))
 				return;
 			BattleTile& clickedTile = this->getTile(tilePos);
@@ -342,8 +343,7 @@ void Battlefield::clickLeft(bool down, bool previousState)
 		{
 			if (this->spellToCast != Spell::SpellType::NONE)
 			{
-				auto tilePos = (sf::Vector2i)(GH.mousePosWindow /
-					Config.tileWidth) - Config.battleTileOffset;
+				auto tilePos = GH.mouseTilePos;
 				if (!this->containsIsBattlefield(tilePos))
 					return;
 				BattleTile& clickedTile = this->getTile(tilePos);
@@ -356,11 +356,11 @@ void Battlefield::clickLeft(bool down, bool previousState)
 			this->selectingArea.setFillColor(sf::Color(120, 120, 120, 0));
 			this->selectedUnits.clear();
 			sf::FloatRect bounds = this->selectingArea.getGlobalBounds();
-			for (int x = bounds.left / Config.tileWidth - Config.battleTileOffset.x;
-			x < (bounds.left + bounds.width) / Config.tileWidth - Config.battleTileOffset.x;
+			for (int x = (bounds.left - Config.battlefieldOffset.x) / Config.tileWidth;
+			x < (bounds.left + bounds.left - Config.battlefieldOffset.x) / Config.tileWidth;
 			x++)
-				for (int y = bounds.top / Config.tileHeight - Config.battleTileOffset.y;
-				y < (bounds.top + bounds.height) / Config.tileHeight - Config.battleTileOffset.y;
+				for (int y = (bounds.top - Config.battlefieldOffset.y) / Config.tileHeight;
+				y < (bounds.top + (bounds.height - Config.battlefieldOffset.y)) / Config.tileHeight;
 				y++)
 				{
 					if (!this->containsIsBattlefield(sf::Vector2i(x, y)))
@@ -382,8 +382,7 @@ void Battlefield::clickRight(bool down, bool previousState)
 	{
 		this->spellToCast = Spell::SpellType::NONE;
 
-		auto tilePos = (sf::Vector2i)(GH.mousePosWindow /
-			Config.tileWidth) - Config.battleTileOffset;
+		auto tilePos = GH.mouseTilePos;
 		if (!this->containsIsBattlefield(tilePos))
 			return;
 		BattleTile& clickedTile = this->getTile(tilePos);
@@ -439,7 +438,7 @@ Battlefield::Battlefield(GameMode mode) :
 	WindowObject(20, 20, Config.windowSize.x -20, Config.windowSize.y -20, GH.globalFont),
 	InterfaceElem()
 {
-	this->shape = sf::FloatRect(20, 20, 1400, 750);
+	this->shape = sf::FloatRect(20, 20, Config.windowSize.x - 20, Config.windowSize.y - 20);
 
 	this->mode = mode;
 	this->selectingArea.setFillColor(sf::Color(120, 120, 120, 0));
@@ -457,9 +456,9 @@ Battlefield::Battlefield(GameMode mode) :
 		{
 			tiles[x][y].pos = sf::Vector2i(x, y);
 			tiles[x][y].shape = sf::RectangleShape(sf::Vector2f(Config.tileWidth, Config.tileHeight));
-			tiles[x][y].shape.setPosition(
-				(Config.battleTileOffset.x + x) * Config.tileWidth,
-				(Config.battleTileOffset.y + y) * Config.tileHeight);
+			tiles[x][y].shape.setPosition(sf::Vector2f(
+				x * Config.tileWidth,
+				y * Config.tileHeight) + Config.battlefieldOffset);
 			tiles[x][y].shape.setFillColor(sf::Color(20, 20, 20, 90));
 			tiles[x][y].shape.setOutlineColor(sf::Color::Yellow);
 			tiles[x][y].shape.setOutlineThickness(0.5f);
@@ -469,8 +468,7 @@ Battlefield::Battlefield(GameMode mode) :
 	//this->backgroud.setTexture(*graphics.battleBackgrouds);
 	this->backgroud.setTexture(*graphics2.backgroundsTextures[Background::BACKGROUND1]);
 	this->backgroud.setPosition(
-		Config.battleTileOffset.x * Config.tileWidth -20,
-		Config.battleTileOffset.y * Config.tileHeight - 130);
+		Config.battlefieldOffset - sf::Vector2f(10, 320));
 	auto size = graphics2.backgroundsTextures[Background::BACKGROUND1]->getSize();
 	auto toScaleX = (float)Config.windowSize.x / size.x;
 	auto toScaleY = (float)Config.windowSize.y / size.y;

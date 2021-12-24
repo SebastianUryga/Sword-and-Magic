@@ -135,7 +135,7 @@ public:
 	bool haveDefensePosition() const;
 
 	void idle();
-	void doMove(sf::Vector2f diraction);
+	void doMove(sf::Vector2i diraction);
 	bool makeAttack(const sf::Vector2i target);
 	bool makeShot(const sf::Vector2i target);
 	void reciveDamage(const sf::Vector2i from, const int dmg);
@@ -148,7 +148,7 @@ public:
 	bool choseTarget(BattleUnit* t);
 	void setPathfinder(Battlefield* field);
 	void setPos(sf::Vector2i pos);
-	void setVelocity(sf::Vector2f direction);
+	void setVelocity(const sf::Vector2i direction);
 	void setEnemy(bool enemy);
 	void giveOrder(Order order);
 

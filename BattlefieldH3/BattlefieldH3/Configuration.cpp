@@ -34,6 +34,10 @@ bool Configuration::load()
 	if (battleTileOffset.y > 10) battleTileOffset.y = 10;
 	if (battleTileOffset.y < 0) battleTileOffset.y = 0;
 	file.close();
+	
+	Config.tileWidth = ((float)Config.windowSize.x - (Config.battlefieldOffset.x + 70)) / (float)Config.battlefiledTileWidth;
+	Config.tileHeight = ((float)Config.windowSize.y - (Config.battlefieldOffset.y + 170)) / (float)Config.battlefiledTileHegiht;
+	return true;
 }
 
 bool Configuration::save()
@@ -49,4 +53,7 @@ bool Configuration::save()
 	file << battleTileOffset.x << " " << battleTileOffset.y << std::endl;
 	file.close();
 
+	Config.tileWidth = ((float)Config.windowSize.x - (Config.battlefieldOffset.x+70)) / (float)Config.battlefiledTileWidth;
+	Config.tileHeight = ((float)Config.windowSize.y - (Config.battlefieldOffset.y+170)) / (float)Config.battlefiledTileHegiht;
+	return true;
 }

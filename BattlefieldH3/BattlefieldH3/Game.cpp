@@ -45,7 +45,7 @@ void Game::initKeys()
 
 void Game::initTextures()
 {
-	graphics.Init();
+	//graphics.Init();
 	graphics2.init();
 }
 
@@ -168,7 +168,7 @@ void Game::editorState()
 
 void Game::endApplication()
 {
-	std::cout << "Ending Application!" << std::endl;
+	//std::cout << "Ending Application!" << std::endl;
 }
 
 void Game::updateDt()
@@ -211,9 +211,17 @@ void Game::updateEvents()
 		}
 		
 	}
+}
+
+void Game::updateMousePos()
+{
 	GH.mousePosWindow = (sf::Vector2f)sf::Mouse::getPosition(*window);
 	GH.mousePosWindow.x /= ((float)window->getSize().x / sf::VideoMode::getDesktopMode().width);
 	GH.mousePosWindow.y /= ((float)window->getSize().y / sf::VideoMode::getDesktopMode().height);
+
+	GH.mouseTilePos = (sf::Vector2i)(sf::Vector2f(
+		(GH.mousePosWindow.x - Config.battlefieldOffset.x) / Config.tileWidth,
+		(GH.mousePosWindow.y - Config.battlefieldOffset.x) / Config.tileHeight));
 }
 
 void Game::update()
@@ -221,6 +229,7 @@ void Game::update()
 	if (!GH.empty())
 	{
 		this->updateEvents();
+		this->updateMousePos();
 		GH.update(dt);
 	}
 	// Applicatin end

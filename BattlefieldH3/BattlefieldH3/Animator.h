@@ -55,7 +55,7 @@ public:
 				{
 					if (--currentFrame <= 0)
 					{
-						currentFrame = textures.size()-1;
+						currentFrame = (int)textures.size()-1;
 						this->playedOnce = true;
 					}
 				}
@@ -69,7 +69,7 @@ public:
 			if (!inversely)
 				currentFrame = 0;
 			else
-				currentFrame = textures.size()-1;
+				currentFrame = (int)textures.size()-1;
 			this->playedOnce = false;
 			this->timer = 0;
 		}

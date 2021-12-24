@@ -23,6 +23,7 @@ public:
 
 	sf::Font globalFont;
 	sf::Vector2f mousePosWindow;
+	sf::Vector2i mouseTilePos;
 
 	GuiHandler() {}
 	virtual ~GuiHandler();

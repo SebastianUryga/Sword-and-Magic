@@ -87,6 +87,8 @@ public:
 };
 extern std::map<Monster, std::string> creatureToString;
 extern std::map<Monster, MonsterStats> creaturesStats;
+extern std::map<Monster, sf::Vector2f> creatureTexturesOffest;
+
 extern std::map<std::pair<Monster, std::string>, MonsterAnimationParametrs> animationParametrs;
 static std::vector<Monster> allMonseters = {
 	Monster::NO_CREATURE, Monster::PIKEMAN, Monster::HALBERDIER, Monster::SWORDSMAN, Monster::CRUSADER, Monster::ARCHER, Monster::MARKSMEN, Monster::GRIFFIN, Monster::ROYAL_GRIFFIN, Monster::MONK, Monster::ZEALOT, Monster::CAVALIER, Monster::ANGEL, Monster::MINOTAUR, Monster::BLACK_DRAGON

@@ -51,6 +51,17 @@ std::map<Monster, MonsterStats> creaturesStats = {
 	{Monster::KNIGHT2,{5,4,5,3,0,40,70.f,0.6f,false,false,false }},
 	{Monster::KNIGHT3,{4,4,8,3,0,25,60.f,0.55f,false,false,false }}
 };
+std::map < Monster, sf::Vector2f > creatureTexturesOffest = {
+	{Monster::ORK3, sf::Vector2f(150, 160)},
+	{Monster::ORK2, sf::Vector2f(150, 160)},
+	{Monster::ORK1, sf::Vector2f(150, 160)},
+	{Monster::TROLL1, sf::Vector2f(150, 280)},
+	{Monster::TROLL2, sf::Vector2f(150, 280)},
+	{Monster::TROLL3, sf::Vector2f(150, 280)},
+	{Monster::KNIGHT1, sf::Vector2f(150, 160)},
+	{Monster::KNIGHT2, sf::Vector2f(150, 160)},
+	{Monster::KNIGHT3, sf::Vector2f(150, 160)}
+};
 float attackTime = 0.8f;
 float moveTime = 0.8f;
 float moveTimeAngel = 0.9f;

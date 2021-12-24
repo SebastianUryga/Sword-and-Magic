@@ -351,7 +351,7 @@ void BattleHandler::handleAggressiveStance(BattleUnit* unit)
 	{
 		sf::Vector2i oldPos = unit->getPos();
 		auto move = this->choseMoveDirection(unit);
-		unit->doMove(sf::Vector2f(move)); // set unit velocity
+		unit->doMove(move); // set unit velocity
 		this->battlefield->changeUnitPos(unit, oldPos, unit->pos + move);
 		
 	} 
@@ -406,7 +406,7 @@ void BattleHandler::handleAttackOrder(BattleUnit* unit)
 	{
 		sf::Vector2i oldPos = unit->getPos();
 		auto move = this->choseMoveDirection(unit);
-		unit->doMove(sf::Vector2f(move)); // set unit velocity
+		unit->doMove(move); // set unit velocity
 		this->battlefield->changeUnitPos(unit, oldPos, unit->pos + move);
 	}
 	if (!unit->target->getAlive()) 
@@ -420,7 +420,7 @@ void BattleHandler::handleMoveOrder(BattleUnit* unit)
 	{
 		sf::Vector2i oldPos = unit->getPos();
 		auto move = this->choseMoveDirection(unit);
-		unit->doMove(sf::Vector2f(move)); // set unit velocity
+		unit->doMove(move); // set unit velocity
 		this->battlefield->changeUnitPos(unit, oldPos, unit->pos + move);
 	}
 	else
