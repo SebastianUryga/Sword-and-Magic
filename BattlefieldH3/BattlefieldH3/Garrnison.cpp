@@ -73,7 +73,8 @@ void GarrnisonSlot::setPos(sf::Vector2f pos)
 void GarrnisonSlot::setTroop(Troop* troop)
 {
 	this->stack = troop;
-	this->sprite.setTextureRect(Graphics::selectPortrait(troop->monster));
+	this->sprite.setTexture(*graphics2.creaturesTextures[troop->monster].portrait);
+	//this->sprite.setTextureRect(Graphics::selectPortrait(troop->monster));
 	std::string count = std::to_string(troop->count);
 	this->number.setString(count);
 }

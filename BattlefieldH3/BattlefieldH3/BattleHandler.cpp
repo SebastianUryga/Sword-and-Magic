@@ -297,7 +297,7 @@ void BattleHandler::update(const float& dt)
 			win = std::make_shared<WindowObject>(500, 300, 400, 400, GH.globalFont);
 			win->addText("Battle Result", { 150, 10 });
 			float i = 0, j = 0;
-			for (auto type : allMonseters)
+			for (auto type : allMonseters2)
 			{
 				int number[2] = { 0, 0 };
 				for (auto creature : this->battlefield->units)

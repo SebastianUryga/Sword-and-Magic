@@ -55,6 +55,9 @@ public:
 		TROLL1 = 33,
 		TROLL2 = 34,
 		TROLL3 = 35,
+		KNIGHT1 = 36,
+		KNIGHT2 = 37,
+		KNIGHT3 = 38,
 	};
 
 	Monster(MonsterType type = NO_CREATURE) :
@@ -87,4 +90,8 @@ extern std::map<Monster, MonsterStats> creaturesStats;
 extern std::map<std::pair<Monster, std::string>, MonsterAnimationParametrs> animationParametrs;
 static std::vector<Monster> allMonseters = {
 	Monster::NO_CREATURE, Monster::PIKEMAN, Monster::HALBERDIER, Monster::SWORDSMAN, Monster::CRUSADER, Monster::ARCHER, Monster::MARKSMEN, Monster::GRIFFIN, Monster::ROYAL_GRIFFIN, Monster::MONK, Monster::ZEALOT, Monster::CAVALIER, Monster::ANGEL, Monster::MINOTAUR, Monster::BLACK_DRAGON
+};
+static std::vector<Monster> allMonseters2 = {
+	Monster::NO_CREATURE, Monster::ORK1, Monster::ORK2, Monster::ORK3, Monster::TROLL1, Monster::TROLL2, Monster::TROLL3,
+	Monster::KNIGHT1, Monster::KNIGHT2, Monster::KNIGHT3
 };

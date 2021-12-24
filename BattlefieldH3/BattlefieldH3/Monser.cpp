@@ -18,6 +18,12 @@ std::map<Monster, std::string> creatureToString = {
 	{Monster::ORK2,"ORK2"},
 	{Monster::ORK1,"ORK1"},
 	{Monster::ORK3,"ORK3"},
+	{Monster::TROLL1,"TROLL1"},
+	{Monster::TROLL2,"TROLL2"},
+	{Monster::TROLL3,"TROLL3"},
+	{Monster::KNIGHT1,"KNIGHT1"},
+	{Monster::KNIGHT2,"KNIGHT2"},
+	{Monster::KNIGHT3,"KNIGHT3"},
 };
 std::map<Monster, MonsterStats> creaturesStats = {
 	{Monster::NO_CREATURE,{0,0,0,0,0,0,0.f,0.f,false,false,false}},
@@ -37,7 +43,13 @@ std::map<Monster, MonsterStats> creaturesStats = {
 	{Monster::BLACK_DRAGON,{12,17,12,7,0,180,170.f,0.9f,true,false,true }},
 	{Monster::ORK3,{5,7,8,3,0,34,50.f,0.5f,false,false,false }},
 	{Monster::ORK2,{5,4,5,3,0,40,70.f,0.6f,false,false,false }},
-	{Monster::ORK1,{4,4,8,3,0,25,60.f,0.55f,false,false,false }}
+	{Monster::ORK1,{4,4,8,3,0,25,60.f,0.55f,false,false,false }},
+	{Monster::TROLL1,{5,7,8,3,0,34,50.f,0.5f,false,false,false }},
+	{Monster::TROLL2,{5,4,5,3,0,40,70.f,0.6f,false,false,false }},
+	{Monster::TROLL3,{4,4,8,3,0,25,60.f,0.55f,false,false,false }},
+	{Monster::KNIGHT1,{5,7,8,3,0,34,50.f,0.5f,false,false,false }},
+	{Monster::KNIGHT2,{5,4,5,3,0,40,70.f,0.6f,false,false,false }},
+	{Monster::KNIGHT3,{4,4,8,3,0,25,60.f,0.55f,false,false,false }}
 };
 float attackTime = 0.8f;
 float moveTime = 0.8f;

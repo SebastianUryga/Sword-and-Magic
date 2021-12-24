@@ -434,14 +434,15 @@ void Battlefield::hover(bool on)
 		}
 	}
 }
+
 Battlefield::Battlefield(GameMode mode) :
-	WindowObject(20, 20, 1500, 800, GH.globalFont),
+	WindowObject(20, 20, Config.windowSize.x -20, Config.windowSize.y -20, GH.globalFont),
 	InterfaceElem()
 {
 	this->shape = sf::FloatRect(20, 20, 1400, 750);
 
 	this->mode = mode;
-	this->selectingArea.setFillColor(sf::Color(120, 120, 120, 120));
+	this->selectingArea.setFillColor(sf::Color(120, 120, 120, 0));
 
 	this->initArmy();
 	this->initButtons();
@@ -465,12 +466,16 @@ Battlefield::Battlefield(GameMode mode) :
 			tiles[x][y].blocked = false;
 			tiles[x][y].unit = nullptr;
 		}
-	this->backgroud.setTexture(*graphics.battleBackgrouds);
+	//this->backgroud.setTexture(*graphics.battleBackgrouds);
+	this->backgroud.setTexture(*graphics2.backgroundsTextures[Background::BACKGROUND1]);
 	this->backgroud.setPosition(
 		Config.battleTileOffset.x * Config.tileWidth -20,
 		Config.battleTileOffset.y * Config.tileHeight - 130);
-	this->backgroud.setScale(1.5, 1.5);
-	this->backgroud.setTextureRect(sf::IntRect(0, 0, 900, 500));
+	auto size = graphics2.backgroundsTextures[Background::BACKGROUND1]->getSize();
+	auto toScaleX = (float)Config.windowSize.x / size.x;
+	auto toScaleY = (float)Config.windowSize.y / size.y;
+	this->backgroud.setScale(toScaleX, toScaleY);
+	//this->backgroud.setTextureRect(sf::IntRect(0, 0, 900, 500));
 
 	this->spellToCast = Spell::SpellType::NONE;
 }

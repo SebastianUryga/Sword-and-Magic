@@ -2,6 +2,12 @@
 #include "Monser.h"
 #include "PCH.hpp"
 
+
+enum class Background : int
+{
+	BACKGROUND1 = 0, BACKGROUND2 = 1, BACKGROUND3 = 2,
+};
+
 class Graphics2
 {
 public:
@@ -13,17 +19,21 @@ public:
 	class CreatureTexture
 	{
 	public:
+		std::shared_ptr<sf::Texture> portrait;
 		std::vector<std::shared_ptr<sf::Texture>> idle;
 		std::vector<std::shared_ptr<sf::Texture>> move;
+		std::vector<std::shared_ptr<sf::Texture>> run;
 		std::vector<std::shared_ptr<sf::Texture>> attak;
 		std::vector<std::shared_ptr<sf::Texture>> die;
 		std::vector<std::shared_ptr<sf::Texture>> hurt;
 
 		void Load(std::string creatureName)
-		{
+		{	
 			int i = 0;
 			auto temp = std::make_shared<sf::Texture>();
+			this->portrait = std::make_shared<sf::Texture>();
 			std::string s = "Textures/" +creatureName + "/" + creatureName;
+			this->portrait->loadFromFile(s + "_head" + ".png");
 			while(temp->loadFromFile(s + "_IDLE_00" + std::to_string(i) + ".png"))
 			{
 				idle.push_back(temp);
@@ -31,7 +41,7 @@ public:
 				if (++i > 9) break;
 			}
 			i = 0;
-			while (temp->loadFromFile(s + "_ATTAK_00" + std::to_string(i) + ".png"))
+			while (temp->loadFromFile(s + "_ATTACK_00" + std::to_string(i) + ".png"))
 			{
 				attak.push_back(temp);
 				temp = std::make_shared<sf::Texture>();
@@ -62,7 +72,7 @@ public:
 			
 		}
 	};
-	//std::map <Background, std::shared_ptr<sf::Texture>> bacgroundsTextures;
+	std::map <Background, std::shared_ptr<sf::Texture>> backgroundsTextures;
 	std::map <Monster, CreatureTexture> creaturesTextures;
 	void init();
 
