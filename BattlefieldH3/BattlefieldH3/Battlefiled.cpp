@@ -357,7 +357,7 @@ void Battlefield::clickLeft(bool down, bool previousState)
 			this->selectedUnits.clear();
 			sf::FloatRect bounds = this->selectingArea.getGlobalBounds();
 			for (int x = (bounds.left - Config.battlefieldOffset.x) / Config.tileWidth;
-			x < (bounds.left + bounds.left - Config.battlefieldOffset.x) / Config.tileWidth;
+			x < (bounds.left + bounds.width - Config.battlefieldOffset.x) / Config.tileWidth;
 			x++)
 				for (int y = (bounds.top - Config.battlefieldOffset.y) / Config.tileHeight;
 				y < (bounds.top + (bounds.height - Config.battlefieldOffset.y)) / Config.tileHeight;

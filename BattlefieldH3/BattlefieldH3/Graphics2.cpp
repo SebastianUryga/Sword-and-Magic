@@ -35,14 +35,21 @@ void Graphics2::init()
 	creaturesTextures[Monster::MonsterType::KNIGHT2].Load("Knight_02");
 	creaturesTextures[Monster::MonsterType::KNIGHT3] = *std::make_shared<CreatureTexture>();
 	creaturesTextures[Monster::MonsterType::KNIGHT3].Load("Knight_03");
+	
+	creaturesTextures[Monster::MonsterType::ELF1] = *std::make_shared<CreatureTexture>();
+	creaturesTextures[Monster::MonsterType::ELF1].Load("Elf_01_");
+	creaturesTextures[Monster::MonsterType::ELF2] = *std::make_shared<CreatureTexture>();
+	creaturesTextures[Monster::MonsterType::ELF2].Load("Elf_02_");
+	creaturesTextures[Monster::MonsterType::ELF3] = *std::make_shared<CreatureTexture>();
+	creaturesTextures[Monster::MonsterType::ELF3].Load("Elf_03_");
 
 	backgroundsTextures[Background::BACKGROUND1] = std::make_shared<sf::Texture>();
 	backgroundsTextures[Background::BACKGROUND1]->loadFromFile("Textures/game_background_1/game_background_1.png");
-	backgroundsTextures[Background::BACKGROUND2] = std::make_shared<sf::Texture>();
+	/*backgroundsTextures[Background::BACKGROUND2] = std::make_shared<sf::Texture>();
 	backgroundsTextures[Background::BACKGROUND2]->loadFromFile("Textures/game_background_2/game_background_2.png");
 	backgroundsTextures[Background::BACKGROUND3] = std::make_shared<sf::Texture>();
 	backgroundsTextures[Background::BACKGROUND3]->loadFromFile("Textures/game_background_3/game_background_3.png");
-
+	*/
 	
 }
 

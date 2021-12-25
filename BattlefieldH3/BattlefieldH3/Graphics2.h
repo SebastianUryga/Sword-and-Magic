@@ -15,7 +15,8 @@ public:
 	virtual ~Graphics2();
 
 	sf::Image image;
-
+	sf::Texture arrow;
+	sf::Texture magicBulet;
 	class CreatureTexture
 	{
 	public:

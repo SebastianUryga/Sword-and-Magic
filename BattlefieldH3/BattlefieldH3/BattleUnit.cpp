@@ -720,10 +720,12 @@ void BattleUnit::updateAnimation2(const float& dt)
 	}
 	this->text.setString(action);
 	
-	if (this->animationState == AnimationState::MOVING || this->animationState == AnimationState::IDLE || (this->animationState == AnimationState::BLOCKING && !playReversly))
+	if (this->animationState == AnimationState::MOVING || this->animationState == AnimationState::IDLE )
 		this->animator->play(action, dt, this->lastDirection);
 	else if (!this->animator->playedOnce(action))
 		this->animator->play(action, dt, this->lastDirection, playReversly);
+	else if(this->moving)
+		this->animationState = AnimationState::MOVING;
 	else
 		this->animationState = AnimationState::IDLE;
 	

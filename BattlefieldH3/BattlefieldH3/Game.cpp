@@ -221,7 +221,7 @@ void Game::updateMousePos()
 
 	GH.mouseTilePos = (sf::Vector2i)(sf::Vector2f(
 		(GH.mousePosWindow.x - Config.battlefieldOffset.x) / Config.tileWidth,
-		(GH.mousePosWindow.y - Config.battlefieldOffset.x) / Config.tileHeight));
+		(GH.mousePosWindow.y - Config.battlefieldOffset.y) / Config.tileHeight));
 }
 
 void Game::update()

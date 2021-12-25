@@ -58,6 +58,9 @@ public:
 		KNIGHT1 = 36,
 		KNIGHT2 = 37,
 		KNIGHT3 = 38,
+		ELF1 = 39,
+		ELF2 = 40,
+		ELF3 = 41,
 	};
 
 	Monster(MonsterType type = NO_CREATURE) :
@@ -95,5 +98,5 @@ static std::vector<Monster> allMonseters = {
 };
 static std::vector<Monster> allMonseters2 = {
 	Monster::NO_CREATURE, Monster::ORK1, Monster::ORK2, Monster::ORK3, Monster::TROLL1, Monster::TROLL2, Monster::TROLL3,
-	Monster::KNIGHT1, Monster::KNIGHT2, Monster::KNIGHT3
+	Monster::KNIGHT1, Monster::KNIGHT2, Monster::KNIGHT3, Monster::ELF1,Monster::ELF2,Monster::ELF3
 };
