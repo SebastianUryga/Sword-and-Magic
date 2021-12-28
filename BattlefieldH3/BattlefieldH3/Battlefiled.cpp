@@ -3,7 +3,7 @@
 void Battlefield::initButtons()
 {
 	this->buttons["Quit"] = std::make_shared<Button>(
-		1400, 730, 60, 30, &this->font, "Quit");
+		1400, 740, 60, 30, &this->font, "Quit");
 	this->buttons["Quit"]->addFuctionallity([=]() { close(); });
 	this->interactiveElem.push_back(this->buttons["Quit"]);
 	if (this->mode == GameMode::Game)
@@ -56,12 +56,12 @@ void Battlefield::initButtons()
 	if (this->mode == GameMode::Editor)
 	{
 		this->buttons["Save"] = std::make_shared<Button>(
-			1400, 300, 60, 30, &this->font, "Save");
+			750, 770, 60, 30, &this->font, "Save");
 		this->buttons["Save"]->addFuctionallity([=]() { save("startMap.txt"); });
 		this->interactiveElem.push_back(this->buttons["Save"]);
 
 		this->buttons["Load"] = std::make_shared<Button>(
-			1400, 360, 60, 30, &this->font, "Load");
+			650, 770, 60, 30, &this->font, "Load");
 		this->buttons["Load"]->addFuctionallity([=]() { load("startMap.txt"); });
 		this->interactiveElem.push_back(this->buttons["Load"]);
 
@@ -124,7 +124,9 @@ void Battlefield::initMovmentMarker()
 void Battlefield::sortUnits()
 {
 	std::sort(units.begin(), units.end(), [](const std::shared_ptr<BattleUnit>& a, const std::shared_ptr<BattleUnit>& b) {
-		return a->getPos().y < b->getPos().y || (a->getPos().y == b->getPos().y && a->getPos().x < b->getPos().x);
+		return a->getPos().y < b->getPos().y || 
+			(a->getPos().y == b->getPos().y && !a->getAlive() && b->getAlive()) ||
+			(a->getPos().y == b->getPos().y && !a->getAlive() && a->getPos().x > b->getPos().x);
 	});
 }
 
@@ -132,6 +134,12 @@ void Battlefield::initArmy()
 {
 	this->army[0] = { { Monster::PIKEMAN, 5 }, { Monster::SWORDSMAN, 4 }, { Monster::ARCHER, 2 }, { Monster::ARCHER, 4 }, { Monster::PIKEMAN, 2 }, { Monster::ZEALOT, 3 }, { Monster::NO_CREATURE, 0 } };
 	this->army[1] = { { Monster::PIKEMAN, 15 }, { Monster::GRIFFIN, 5 }, { Monster::ARCHER, 5 }, { Monster::MARKSMEN, 7 }, { Monster::ROYAL_GRIFFIN, 3 }, { Monster::NO_CREATURE, 0 }, { Monster::NO_CREATURE, 0 } };
+}
+
+void Battlefield::initArmy2()
+{
+	this->army[0] = { { Monster::ELF1, 1 }, { Monster::NO_CREATURE, 1 }, { Monster::NO_CREATURE, 1 }, { Monster::NO_CREATURE, 1 }, { Monster::NO_CREATURE, 2 }, { Monster::NO_CREATURE, 3 }, { Monster::NO_CREATURE, 0 } };
+	this->army[1] = { { Monster::KNIGHT2, 1 }, { Monster::NO_CREATURE, 1 }, { Monster::NO_CREATURE, 1 }, { Monster::NO_CREATURE, 1 }, { Monster::NO_CREATURE, 3 }, { Monster::NO_CREATURE, 0 }, { Monster::NO_CREATURE, 0 } };
 }
 
 void Battlefield::putMovmentMarker(const sf::Vector2i& tilePos, bool attck)
@@ -432,6 +440,10 @@ void Battlefield::hover(bool on)
 				-1.f * (selectingArea.getPosition() - GH.mousePosWindow));
 		}
 	}
+	else
+	{
+		this->selectingArea.setFillColor(sf::Color(120, 120, 120, 0));
+	}
 }
 
 Battlefield::Battlefield(GameMode mode) :
@@ -443,7 +455,8 @@ Battlefield::Battlefield(GameMode mode) :
 	this->mode = mode;
 	this->selectingArea.setFillColor(sf::Color(120, 120, 120, 0));
 
-	this->initArmy();
+	//this->initArmy();
+	this->initArmy2();
 	this->initButtons();
 	this->initMovmentMarker();
 

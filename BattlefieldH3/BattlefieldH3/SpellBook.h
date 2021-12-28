@@ -16,7 +16,7 @@ public:
 		type(type)
 	{
 		this->shape = sf::FloatRect(pos, { 83, 65 });
-		this->sprite.setTexture(*graphics.allSpellIcons);
+		this->sprite.setTexture(*graphics2.allSpellIcons);
 		this->sprite.setTextureRect(Graphics::selectSpellIcon(type));
 		this->sprite.setPosition(pos);
 	}

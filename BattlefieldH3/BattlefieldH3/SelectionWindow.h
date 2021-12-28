@@ -1,4 +1,6 @@
 #pragma once
+#include "CreatureInfo.h"
+class CreatureInfo;
 class GarrnisonSlot;
 class WindowObject;
 struct Troop;
@@ -15,6 +17,7 @@ private:
         std::function<void()> onClick;
         Monster id;
         void clickLeft(bool down, bool priviesState) ;
+        void clickRight(bool down, bool priviesState) ;
         ClickablePortrait(Monster id) : id(id)
         {
             this->sprite.setTexture(*graphics2.creaturesTextures[id].portrait);

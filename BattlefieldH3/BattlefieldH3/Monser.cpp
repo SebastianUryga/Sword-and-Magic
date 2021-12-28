@@ -45,31 +45,31 @@ std::map<Monster, MonsterStats> creaturesStats = {
 	{Monster::MINOTAUR,{13,10,8,5,0,50,70.f,0.3f,false,false,false }},
 	{Monster::BLACK_DRAGON,{12,17,12,7,0,180,170.f,0.9f,true,false,true }},
 	{Monster::ORK3,{5,7,8,3,0,24,50.f,0.7f,false,false,false }},
-	{Monster::ORK2,{5,4,5,3,0,20,70.f,0.6f,false,false,false }},
+	{Monster::ORK2,{6,4,5,3,0,20,70.f,0.6f,false,false,false }},
 	{Monster::ORK1,{6,4,8,3,0,25,60.f,0.55f,false,false,false }},
-	{Monster::TROLL1,{8,7,8,3,0,65,40.f,0.2f,false,false,false }},
-	{Monster::TROLL2,{7,4,5,3,0,60,50.f,0.3f,false,false,false }},
-	{Monster::TROLL3,{8,6,10,3,0,40,30.f,0.25f,false,false,false }},
-	{Monster::KNIGHT1,{3,7,9,3,0,31,60.f,0.6f,false,false,false }},
-	{Monster::KNIGHT2,{5,4,5,3,0,30,40.f,0.3f,false,false,false }},
-	{Monster::KNIGHT3,{6,4,8,3,0,25,90.f,0.55f,false,false,false }},
-	{Monster::ELF1,{5,7,8,3,8,34,60.f,0.2f,false,false,false }},
-	{Monster::ELF2,{5,3,5,3,0,30,90.f,0.6f,false,false,false }},
-	{Monster::ELF3,{4,4,8,3,6,25,70.f,0.24f,false,false,false }}
+	{Monster::TROLL1,{12,12,6,3,0,65,40.f,0.2f,false,false,false }},
+	{Monster::TROLL2,{8,12,5,3,0,60,50.f,0.3f,false,false,false }},
+	{Monster::TROLL3,{9,12,8,3,0,40,30.f,0.25f,false,false,false }},
+	{Monster::KNIGHT1,{3,7,10,3,0,31,60.f,0.7f,false,false,false }},
+	{Monster::KNIGHT2,{6,4,11,3,0,25,40.f,0.4f,false,false,false }},
+	{Monster::KNIGHT3,{5,4,9,3,0,25,90.f,0.55f,false,false,false }},
+	{Monster::ELF1,{4,7,5,3,9,10,60.f,0.2f,false,true,false }},
+	{Monster::ELF2,{5,3,5,3,0,25,90.f,0.6f,false,false,false }},
+	{Monster::ELF3,{7,4,3,3,6,20,70.f,0.24f,false,true,false }}
 };
 std::map < Monster, sf::Vector2f > creatureTexturesOffest = {
 	{Monster::ORK3, sf::Vector2f(150, 160)},
 	{Monster::ORK2, sf::Vector2f(150, 160)},
 	{Monster::ORK1, sf::Vector2f(150, 160)},
-	{Monster::TROLL1, sf::Vector2f(150, 280)},
-	{Monster::TROLL2, sf::Vector2f(150, 280)},
-	{Monster::TROLL3, sf::Vector2f(150, 280)},
+	{Monster::TROLL1, sf::Vector2f(150, 290)},
+	{Monster::TROLL2, sf::Vector2f(150, 290)},
+	{Monster::TROLL3, sf::Vector2f(150, 290)},
 	{Monster::KNIGHT1, sf::Vector2f(150, 170)},
 	{Monster::KNIGHT2, sf::Vector2f(150, 170)},
 	{Monster::KNIGHT3, sf::Vector2f(150, 160)},
-	{Monster::ELF1, sf::Vector2f(150, 170)},
-	{Monster::ELF2, sf::Vector2f(150, 170)},
-	{Monster::ELF3, sf::Vector2f(150, 170)}
+	{Monster::ELF1, sf::Vector2f(110, 170)},
+	{Monster::ELF2, sf::Vector2f(100, 210)},
+	{Monster::ELF3, sf::Vector2f(190, 190)}
 };
 float attackTime = 0.8f;
 float moveTime = 0.8f;

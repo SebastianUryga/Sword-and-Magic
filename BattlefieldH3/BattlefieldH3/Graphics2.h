@@ -17,6 +17,7 @@ public:
 	sf::Image image;
 	sf::Texture arrow;
 	sf::Texture magicBulet;
+	
 	class CreatureTexture
 	{
 	public:
@@ -70,11 +71,23 @@ public:
 				if (++i > 9) break;
 			}
 			i = 0;
+			while (temp->loadFromFile(s + "_RUN_00" + std::to_string(i) + ".png"))
+			{
+				run.push_back(temp);
+				temp = std::make_shared<sf::Texture>();
+				if (++i > 9) break;
+			}
+			i = 0;
 			
 		}
 	};
+	std::shared_ptr<sf::Texture> allSpellIcons;
+	std::map<Spell::SpellType, sf::IntRect> spellIcons;
+	std::shared_ptr<sf::Texture> battleEffectsSheet;
 	std::map <Background, std::shared_ptr<sf::Texture>> backgroundsTextures;
 	std::map <Monster, CreatureTexture> creaturesTextures;
+	static sf::IntRect selectSpellIcon(Spell type);
+
 	void init();
 
 	static Graphics2& Get();

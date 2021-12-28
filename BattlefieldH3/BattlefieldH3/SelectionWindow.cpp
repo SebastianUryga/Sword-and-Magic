@@ -30,10 +30,10 @@ SelectionWindow::SelectionWindow(Troop& troop) :
 	for (size_t i = 0; i < allMonseters2.size(); i++)
 	{
 		pos = this->background.getPosition() + sf::Vector2f(30, 30);
-		pos += sf::Vector2f((64 * i) % 512, std::floor((64 * i) / 512) * 64);
+		pos += sf::Vector2f((75 * i) % 512, std::floor((75 * i) / 512) * 70);
 		this->creaturePortraits[i] = std::make_shared<ClickablePortrait>(allMonseters2[i]);
 		this->creaturePortraits[i]->sprite.setPosition(pos);
-		this->creaturePortraits[i]->shape = sf::FloatRect(pos.x, pos.y, 50, 50);
+		this->creaturePortraits[i]->shape = sf::FloatRect(pos.x, pos.y, 70, 64);
 		this->creaturePortraits[i]->onClick = [=]() {
 			selectedCreature = allMonseters2[i];
 		};
@@ -91,7 +91,7 @@ void SelectionWindow::render(sf::RenderTarget* target)
 {
 	WindowObject::render(target);
 
-	static sf::RectangleShape selectingFrame(sf::Vector2f(58, 64));
+	static sf::RectangleShape selectingFrame(sf::Vector2f(70, 64));
 	selectingFrame.setOutlineThickness(1);
 	selectingFrame.setOutlineColor(sf::Color::Yellow);
 	selectingFrame.setFillColor(sf::Color::Transparent);
@@ -115,5 +115,16 @@ void SelectionWindow::ClickablePortrait::clickLeft(bool down, bool priviesState)
 	else if (priviesState && (down == false))
 	{
 		this->onClick();
+	}
+}
+
+void SelectionWindow::ClickablePortrait::clickRight(bool down, bool priviesState)
+{
+	if (down)
+	{
+		if (id == Monster::NO_CREATURE) return;
+		auto creatureInfo = std::make_shared<CreatureInfo>(
+			this->shape.left, this->shape.top, id);
+		GH.makePopup(creatureInfo);
 	}
 }

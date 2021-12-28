@@ -1,4 +1,4 @@
-#include "Graphics2.h"
+#include"GuiHandler.h"
 
 Graphics2& graphics2 = Graphics2::Get();
 
@@ -50,7 +50,29 @@ void Graphics2::init()
 	backgroundsTextures[Background::BACKGROUND3] = std::make_shared<sf::Texture>();
 	backgroundsTextures[Background::BACKGROUND3]->loadFromFile("Textures/game_background_3/game_background_3.png");
 	*/
-	
+	this->arrow.loadFromFile("Textures/arrow.png");
+	this->magicBulet.loadFromFile("Textures/magicBulet.png");
+
+	this->spellIcons[Spell::SpellType::WEEKNES] = sf::IntRect(83 * 1, 65 * 4, 83, 65);
+	this->spellIcons[Spell::SpellType::SHIELD] = sf::IntRect(83 * 5, 65 * 2, 83, 65);
+	this->spellIcons[Spell::SpellType::HASTE] = sf::IntRect(83 * 9, 65 * 4, 83, 65);
+	this->spellIcons[Spell::SpellType::SLOW] = sf::IntRect(83 * 10, 65 * 4, 83, 65);
+
+	this->battleEffectsSheet = std::make_shared<sf::Texture>();
+	this->allSpellIcons = std::make_shared<sf::Texture>();
+	this->image.loadFromFile("Textures/SpellIcons.png");
+	this->image.createMaskFromColor(this->image.getPixel(1, 1));
+	this->allSpellIcons->loadFromImage(this->image);
+
+	this->image.loadFromFile("Textures/BattleEffects.png");
+	this->image.createMaskFromColor(this->image.getPixel(1, 1));
+	this->battleEffectsSheet->loadFromImage(this->image);
+
+}
+
+sf::IntRect Graphics2::selectSpellIcon(Spell type)
+{
+	return Graphics2::Get().spellIcons[type.spell];
 }
 
 Graphics2& Graphics2::Get()

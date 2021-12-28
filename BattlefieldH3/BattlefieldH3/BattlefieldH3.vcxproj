@@ -169,6 +169,7 @@
     <ClCompile Include="BattleUnit.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Configuration.cpp" />
+    <ClCompile Include="CreatureInfo.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameConstants.cpp" />
     <ClCompile Include="Garrnison.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="BattleUnit.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Configuration.h" />
+    <ClInclude Include="CreatureInfo.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameConstants.h" />
     <ClInclude Include="Garrnison.h" />

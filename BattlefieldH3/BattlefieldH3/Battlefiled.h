@@ -50,6 +50,7 @@ private:
 	std::shared_ptr<Garrnison> gar2;
 
 	void initArmy();
+	void initArmy2();
 	void initButtons();
 	void initStartUnits();
 	void initMovmentMarker();

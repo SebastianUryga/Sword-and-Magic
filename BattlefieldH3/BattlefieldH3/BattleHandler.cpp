@@ -394,11 +394,20 @@ void BattleHandler::handleDefenceStance(BattleUnit* unit)
 void BattleHandler::handleAttackOrder(BattleUnit* unit)
 {
 	bool result;
-	if(unit->target == nullptr) 
+	if (unit->target == nullptr)
+	{
 		unit->giveOrder(Order::AGRESIVE_STANCE);
+		return;
+	}
 	if (this->nextToEachOther(unit, unit->target))
 	{
 		result = unit->makeAttack(unit->target->getPos());
+		if (result == false)
+			unit->idle();
+	}
+	else if (unit->shooter && unit->arrows > 0)
+	{
+		result = unit->makeShot(unit->target->pos);
 		if (result == false)
 			unit->idle();
 	}

@@ -35,6 +35,7 @@ enum class AnimationState
 	START_MOVING,
 	END_MOVEING,
 	DIEING,
+	RUNNING,
 	IDLE
 };
 enum class Order

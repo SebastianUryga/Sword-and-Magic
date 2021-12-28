@@ -25,12 +25,16 @@ void Garrnison::swapStacks(int stack1Id, int stack2Id)
 Garrnison::Garrnison(std::vector<Troop>& garrnison, sf::Vector2f pos) :
 	garrnison(garrnison)
 {
+	this->background.setSize(sf::Vector2f(74*7,80));
+	this->background.setPosition(pos);
+	this->background.move(-10, -10);
+	this->background.setFillColor(sf::Color(120, 110, 120, 255));
 	this->selected = nullptr;
 	this->slots.resize(7);
 	for (int i = 0; i < 7; ++i)
 	{
 		this->slots[i] = std::make_shared<GarrnisonSlot>(
-			this, i, (i * 62) + pos.x, pos.y);
+			this, i, (i * 74) + pos.x, pos.y);
 
 		this->slots[i]->setTroop(&garrnison[i]);
 	}
@@ -42,9 +46,9 @@ Garrnison::~Garrnison()
 
 void Garrnison::render(sf::RenderTarget* target)
 {
+	target->draw(this->background);
 	for (auto& slot : this->slots)
 	{
-
 		target->draw(slot->sprite);
 		if (slot->stack->monster == Monster::NO_CREATURE)
 			continue;
@@ -64,7 +68,7 @@ void Garrnison::updateSlots()
 
 void GarrnisonSlot::setPos(sf::Vector2f pos)
 {
-	this->shape = sf::FloatRect(pos.x, pos.y, 58, 64);
+	this->shape = sf::FloatRect(pos.x, pos.y, 70, 67);
 	this->sprite.setPosition(pos);
 	this->number.setPosition(pos + sf::Vector2f(2, 48));
 	this->selectFrame.setPosition(pos);
@@ -125,11 +129,11 @@ GarrnisonSlot::GarrnisonSlot(Garrnison* owner, int id, float x, float y) :
 	id(id),
 	owner(owner)
 {
-	this->selectFrame = sf::RectangleShape(sf::Vector2f(58, 64));
+	this->selectFrame = sf::RectangleShape(sf::Vector2f(70, 67));
 	this->selectFrame.setOutlineThickness(3);
 	this->selectFrame.setOutlineColor(sf::Color::Yellow);
 	this->selectFrame.setFillColor(sf::Color::Transparent);
-	this->sprite.setTexture(*graphics.allCreaturePortraits);
+	//this->sprite.setTexture(*graphics.allCreaturePortraits);
 	this->number.setFont(GH.globalFont);
 	this->number.setCharacterSize(15);
 	this->setPos(sf::Vector2f(x, y));

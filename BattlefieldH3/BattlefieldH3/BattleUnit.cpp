@@ -16,6 +16,8 @@ void BattleUnit::initAnimation2()
 			1.f, 340, 120, sf::Vector2f(150, 160), Config.tileWidth + 20);
 		animator->addAnimotion("DIE", graphics2.creaturesTextures[Monster::ORK1].die,
 			1.f, 340, 120, sf::Vector2f(150, 160), Config.tileWidth + 20);
+		animator->addAnimotion("RUN", graphics2.creaturesTextures[Monster::ORK1].run,
+			1.f, 340, 120, sf::Vector2f(150, 160), Config.tileWidth + 20);
 		animator->addAnimotion("HURT", graphics2.creaturesTextures[Monster::ORK1].hurt,
 			1.f, 340, 120, sf::Vector2f(150, 160), Config.tileWidth + 20);
 
@@ -32,18 +34,21 @@ void BattleUnit::initAnimation2()
 			0.8f, 340, 120, creatureTexturesOffest[this->type], Config.tileWidth + 20);
 		animator->addAnimotion("DIE", graphics2.creaturesTextures[this->type].die,
 			0.8f, 340, 120, creatureTexturesOffest[this->type], Config.tileWidth + 20);
+		animator->addAnimotion("RUN", graphics2.creaturesTextures[this->type].run,
+			0.8f, 340, 120, creatureTexturesOffest[this->type], Config.tileWidth + 20);
 		animator->addAnimotion("HURT", graphics2.creaturesTextures[this->type].hurt,
 			0.8f, 340, 120, creatureTexturesOffest[this->type], Config.tileWidth + 20);
 	}
 	this->spellEffectAnimation =
-		new AnimationComponent(this->spellEffect, *graphics.battleEffectsSheet);
+		new AnimationComponent(this->spellEffect, *graphics2.battleEffectsSheet);
 	for (auto s : allSpells)
 	{
 		struct EffectsAnimationParametrs stat = batteEffectsAnimationParamets[s];
 		this->spellEffectAnimation->addAnimotion(
-			spellToString[s], stat.animationTimer, stat.start_frame_x, stat.start_frame_y, stat.frames_x, stat.frames_y, stat.width, stat.height, false, { 6, 50 }, stat.tileWidth);
+			spellToString[s], stat.animationTimer, stat.start_frame_x, stat.start_frame_y, stat.frames_x, stat.frames_y, stat.width, stat.height, false, { 6, 50 }, Config.tileWidth);
 	}
 }
+
 void BattleUnit::initAnimation()
 {
 	
@@ -686,12 +691,20 @@ void BattleUnit::updateAnimation2(const float& dt)
 	case AnimationState::START_MOVING:
 		action = "MOVE";
 		break;
+	case AnimationState::RUNNING:
+		action = "RUN";
+		break;
 	case AnimationState::MOVING: {
 		action = "MOVE";
 		break;
 	}
 	case AnimationState::SHOOTHING: {
-		
+		if (!this->target)
+			break;
+		action = "ATTAK";
+		if (this->animator->playedHalf(action)
+			&& this->actualAttackCoulddown <= 0)
+			this->shooted = true;
 		break;
 	}
 	case AnimationState::ATTACKING: {
@@ -720,12 +733,10 @@ void BattleUnit::updateAnimation2(const float& dt)
 	}
 	this->text.setString(action);
 	
-	if (this->animationState == AnimationState::MOVING || this->animationState == AnimationState::IDLE )
+	if (this->moving || this->animationState == AnimationState::IDLE)
 		this->animator->play(action, dt, this->lastDirection);
 	else if (!this->animator->playedOnce(action))
 		this->animator->play(action, dt, this->lastDirection, playReversly);
-	else if(this->moving)
-		this->animationState = AnimationState::MOVING;
 	else
 		this->animationState = AnimationState::IDLE;
 	
@@ -814,17 +825,33 @@ void BattleUnit::render(sf::RenderTarget* target)
 }
 
 Missle::Missle(BattleUnit* unit) :
-	speed(800.f),
+	speed(600.f),
 	startingPos(unit->getPos())
 {
-	//this->sprite.setTexture(*graphics.battleUnitsSheets[type]);
-	//this->sprite.setTextureRect(sf::IntRect(400, 400, 30, 30));
+	this->shape.setFillColor(sf::Color::Transparent);
+	if (unit->getType() == Monster::ELF1)
+	{
+		this->sprite.setTexture(graphics2.arrow);
+		this->sprite.setOrigin((sf::Vector2f)graphics2.arrow.getSize() / 2.f);
+
+	}
+	else if (unit->getType() == Monster::ELF3)
+	{
+		this->sprite.setTexture(graphics2.magicBulet);
+		this->sprite.setOrigin((sf::Vector2f)graphics2.magicBulet.getSize() / 2.f);
+	}
+	else
+	{
+		this->shape.setFillColor(sf::Color::Yellow);
+	}
+	this->sprite.setScale(0.5, 0.5);
 	this->shape = sf::RectangleShape(sf::Vector2f(10, 10));
-	this->shape.setFillColor(sf::Color::Yellow);
+	this->sprite.setPosition(sf::Vector2f(
+		unit->getPos().x * Config.tileWidth,
+		unit->getPos().y * Config.tileHeight + 15) + Config.battlefieldOffset);
 	this->shape.setPosition(sf::Vector2f(
 		unit->getPos().x * Config.tileWidth,
-		unit->getPos().y * Config.tileHeight));
-	this->shape.move(70, 170);
+		unit->getPos().y * Config.tileHeight + 15) + Config.battlefieldOffset);
 	this->velocity = { 0, 0 };
 }
 
@@ -835,30 +862,35 @@ Missle::~Missle()
 void Missle::setTarget(sf::Vector2i targetPos)
 {
 	sf::Vector2i dir = targetPos - this->startingPos;
+	auto tempp = sf::Vector2f(Config.tileWidth * dir.x, Config.tileHeight * dir.y);
+	if(dir.x < 0) this->sprite.setRotation(180);
 	float temp;
-	if (abs(dir.x) > abs(dir.y))
-		temp = 1.f / dir.x;
+	if (abs(tempp.x) > abs(tempp.y))
+		temp = 1.f / tempp.x;
 	else
-		temp = 1.f / dir.y;
-	this->velocity.x = dir.x * abs(temp);
-	this->velocity.y = dir.y * abs(temp);
+		temp = 1.f / tempp.y;
+	this->velocity.x = tempp.x * abs(temp);
+	this->velocity.y = tempp.y * abs(temp);
+
+	
 }
 
 sf::Vector2i Missle::getTilePos() const
 {
 
 	return sf::Vector2i(
-		this->shape.getPosition().x - Config.battlefieldOffset.x / Config.tileWidth,
-		this->shape.getPosition().y - Config.battlefieldOffset.y / Config.tileHeight);
+		(this->shape.getPosition().x - Config.battlefieldOffset.x) / Config.tileWidth,
+		(this->shape.getPosition().y - Config.battlefieldOffset.y) / Config.tileHeight);
 }
 
 void Missle::update(const float& dt)
 {
-
+	this->sprite.move(this->velocity * speed * dt);
 	this->shape.move(this->velocity * speed * dt);
 }
 
 void Missle::render(sf::RenderTarget* target)
 {
-	target->draw(this->shape);
+	//target->draw(this->shape);
+	target->draw(this->sprite);
 }

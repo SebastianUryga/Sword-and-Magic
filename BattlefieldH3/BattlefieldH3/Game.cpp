@@ -52,9 +52,10 @@ void Game::initTextures()
 Game::Game()
 {
 	this->initWindow();
+	Config.load();
 	this->initFonts();
-	this->mainMenuState();
 	this->initTextures();
+	this->mainMenuState();
 }
 
 Game::~Game()
@@ -168,7 +169,7 @@ void Game::editorState()
 
 void Game::endApplication()
 {
-	//std::cout << "Ending Application!" << std::endl;
+	std::cout << "Ending Application!" << std::endl;
 }
 
 void Game::updateDt()

@@ -55,10 +55,12 @@ void Button::clickLeft(bool pressed, bool previousState)
 		return;
 	if (pressed)
 	{
+		this->buttonState = Button_states::BTN_PRESSED;
 		// play sound
 	}
 	else if (previousState && (pressed == false))
 	{
+		this->buttonState = Button_states::BTN_IDLE;
 		this->onButtonClicked();
 	}
 }

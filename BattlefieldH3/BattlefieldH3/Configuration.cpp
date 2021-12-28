@@ -19,11 +19,7 @@ bool Configuration::load()
 	file.open(path);
 	if(file.fail() || file.bad())
 		return false;
-	file >> tileWidth >> tileHeight >> battlefiledTileWidth >> battlefiledTileHegiht;
-	if (tileWidth < 30.f) tileWidth = 30.f;
-	if (tileWidth > 100.f) tileWidth = 100.f;
-	if (tileHeight < 30.f) tileHeight = 30.f;
-	if (tileHeight > 100.f) tileHeight = 100.f;
+	file >> battlefiledTileWidth >> battlefiledTileHegiht;
 	if (battlefiledTileHegiht < 5) battlefiledTileHegiht = 5;
 	if (battlefiledTileHegiht > 20) battlefiledTileHegiht = 20;
 	if (battlefiledTileWidth < 8) battlefiledTileWidth = 8;
@@ -33,10 +29,11 @@ bool Configuration::load()
 	if (battleTileOffset.x > 10) battleTileOffset.x = 10;
 	if (battleTileOffset.y > 10) battleTileOffset.y = 10;
 	if (battleTileOffset.y < 0) battleTileOffset.y = 0;
+	file >> battlefieldOffset.x >> battlefieldOffset.y;
 	file.close();
 	
-	Config.tileWidth = ((float)Config.windowSize.x - (Config.battlefieldOffset.x + 70)) / (float)Config.battlefiledTileWidth;
-	Config.tileHeight = ((float)Config.windowSize.y - (Config.battlefieldOffset.y + 170)) / (float)Config.battlefiledTileHegiht;
+	tileWidth = ((float)windowSize.x - (battlefieldOffset.x + 20)) / (float)battlefiledTileWidth;
+	tileHeight = ((float)windowSize.y - (battlefieldOffset.y + 170)) / (float)battlefiledTileHegiht;
 	return true;
 }
 
@@ -48,12 +45,13 @@ bool Configuration::save()
 	if (file.fail() || file.bad())
 		return false;
 	file.clear();
-	file << tileWidth << " " << tileHeight << std::endl;
 	file << battlefiledTileWidth << " " << battlefiledTileHegiht << std::endl;
 	file << battleTileOffset.x << " " << battleTileOffset.y << std::endl;
+	file << battlefieldOffset.x << " " << battlefieldOffset.y << std::endl;
 	file.close();
 
-	Config.tileWidth = ((float)Config.windowSize.x - (Config.battlefieldOffset.x+70)) / (float)Config.battlefiledTileWidth;
-	Config.tileHeight = ((float)Config.windowSize.y - (Config.battlefieldOffset.y+170)) / (float)Config.battlefiledTileHegiht;
+	tileWidth = ((float)windowSize.x - (battlefieldOffset.x+20)) / (float)battlefiledTileWidth;
+	tileHeight = ((float)windowSize.y - (battlefieldOffset.y+170)) / (float)battlefiledTileHegiht;
+
 	return true;
 }

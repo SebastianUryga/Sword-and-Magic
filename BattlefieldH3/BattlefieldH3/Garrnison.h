@@ -10,6 +10,7 @@ struct Troop
 class Garrnison
 {
 public:
+	sf::RectangleShape background;
 	GarrnisonSlot* selected;
 	GarrnisonSlot* getSelected();
 	void selectSlot(GarrnisonSlot* slot);
