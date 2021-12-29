@@ -14,6 +14,8 @@ public:
 	
 	void startBallte();
 
+	void spellCasted(Spell spell, Player* player);
+
 	sf::Vector2i choseMoveDirection(BattleUnit* unit) const;
 	bool nextToEachOther(BattleUnit* u1, BattleUnit* u2);
 	BattleUnit* findNeerestEnemy(BattleUnit* unit);

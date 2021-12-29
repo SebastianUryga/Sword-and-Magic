@@ -4,6 +4,7 @@
 #include "SelectionWindow.h"
 #include "SpellBook.h"
 #include "WindowObject.h"
+#include "Player.h"
 
 class BattleUnit;
 
@@ -44,12 +45,14 @@ private:
 	std::set<BattleUnit*> selectedUnits;
 
 	std::vector<Troop> army[2];
+	std::vector<std::shared_ptr<Player>> players;
 
 	// interface using only in Editing mode
 	std::shared_ptr<Garrnison> gar1;
 	std::shared_ptr<Garrnison> gar2;
 
 	void initArmy();
+	void initPlayers();
 	void initArmy2();
 	void initButtons();
 	void initStartUnits();
@@ -60,6 +63,7 @@ private:
 	Monster selectedUnitType;
 	Spell spellToCast;
 	sf::RectangleShape selectingArea;
+	std::shared_ptr<sf::Text> cooldownNumber;
 
 	float markerVisableTimeLeft = 0.f;
 	sf::CircleShape movmentMarker;

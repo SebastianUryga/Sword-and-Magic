@@ -412,7 +412,7 @@ bool BattleUnit::makeShot(const sf::Vector2i target)
 void BattleUnit::reciveDamage(const sf::Vector2i from, const int dmg)
 {
 	this->initTextDmg(dmg);
-
+	if (isBlid) Spell::takeOffSpellFromUnit(*this, Spell::SpellType::TURN_TO_STONE);
 	if (this->animationState == AnimationState::RECIVING_DMG || (dmg * 100) / this->maxHp < 20)
 		return;
 	if (pos.x < from.x)
@@ -744,8 +744,11 @@ void BattleUnit::updateAnimation2(const float& dt)
 
 void BattleUnit::update(const float& dt)
 {
-	if (this->alive)
+	if (this->alive && !this->isBlid)
 		this->updateAnimation2(dt);
+	if (this->isBlid)
+		this->updateAnimation2(0);
+
 	this->updatePathfinder(dt);
 	if (this->spellToAnimate.spell != Spell::SpellType::NONE)
 	{
@@ -772,6 +775,7 @@ void BattleUnit::update(const float& dt)
 	if (Order::ATTACK == this->order && !target->getAlive())
 		this->giveOrder(Order::AGRESIVE_STANCE);
 	sf::Vector2f toMove = this->velocity * dt * this->speed;
+	if (this->isBlid) toMove = { 0,0 };
 	this->sprite.move(toMove);
 	this->spellEffect.move(toMove);
 	this->lineHP.move(toMove);

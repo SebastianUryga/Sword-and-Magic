@@ -21,9 +21,10 @@ bool WindowObject::contains(const sf::Vector2i& mousePos)
 void WindowObject::addText(std::string text, sf::Vector2f pos)
 {
 	pos += background.getPosition();
-	texts.push_back(sf::Text(text, this->font, 20));
-	texts.back().setPosition(pos);
-	texts.back().setStyle(sf::Text::Italic);
+	auto sfText = std::make_shared<sf::Text>(text, this->font, 30);
+	texts.push_back(sfText);
+	texts.back()->setPosition(pos);
+	texts.back()->setStyle(sf::Text::Italic);
 }
 
 void WindowObject::setPos(float x, float y)
@@ -36,7 +37,7 @@ void WindowObject::setPos(float x, float y)
 	for (auto& btn : this->buttons)
 		btn.second->move(difX, difY);
 	for (auto& text : this->texts)
-		text.move(difX, difY);
+		text->move(difX, difY);
 }
 
 void WindowObject::deactivate()
@@ -67,7 +68,7 @@ void WindowObject::render(sf::RenderTarget* target)
 {
 	target->draw(background);
 	for (auto& text : this->texts)
-		target->draw(text);
+		target->draw(*text);
 	for (auto& btn : this->buttons)
 		btn.second->render(target);
 }

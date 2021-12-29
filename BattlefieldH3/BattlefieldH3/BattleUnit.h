@@ -112,6 +112,7 @@ private:
 	sf::Sprite sprite;
 	sf::Sprite spellEffect;
 	std::shared_ptr<Animator> animator;
+	bool isBlid = false;
 	AnimationComponent* animation;
 	AnimationComponent* spellEffectAnimation;
 	void initAnimation();

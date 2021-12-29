@@ -13,6 +13,7 @@ public:
 		COUNTER_STRIKE,
 		BERSERK,
 		FORGETFULNESS,
+		TURN_TO_STONE,
 	};
 	SpellType spell;
 	Spell(SpellType type = SpellType::NONE):spell(type) {}
@@ -40,10 +41,11 @@ struct EffectsAnimationParametrs
 };
 
 extern std::map<Spell::SpellType, std::string> spellToString;
+extern std::map<Spell::SpellType, int> spellCost;
 
 extern std::map<Spell::SpellType, EffectsAnimationParametrs> batteEffectsAnimationParamets;
 static std::vector<Spell::SpellType> allSpells = {
 	Spell::SpellType::WEEKNES,Spell::SpellType::SHIELD,Spell::SpellType::CURSE,
 	Spell::SpellType::HASTE,Spell::SpellType::COUNTER_STRIKE,Spell::SpellType::BERSERK,
-	Spell::SpellType::SLOW,Spell::SpellType::FORGETFULNESS
+	Spell::SpellType::SLOW,Spell::SpellType::TURN_TO_STONE
 };

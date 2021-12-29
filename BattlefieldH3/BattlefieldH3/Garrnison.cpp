@@ -52,7 +52,7 @@ void Garrnison::render(sf::RenderTarget* target)
 		target->draw(slot->sprite);
 		if (slot->stack->monster == Monster::NO_CREATURE)
 			continue;
-		target->draw(slot->number);
+		target->draw(*slot->number);
 	}
 	if (this->selected)
 		target->draw(this->selected->selectFrame);
@@ -70,7 +70,7 @@ void GarrnisonSlot::setPos(sf::Vector2f pos)
 {
 	this->shape = sf::FloatRect(pos.x, pos.y, 70, 67);
 	this->sprite.setPosition(pos);
-	this->number.setPosition(pos + sf::Vector2f(2, 48));
+	this->number->setPosition(pos + sf::Vector2f(2, 48));
 	this->selectFrame.setPosition(pos);
 }
 
@@ -80,7 +80,7 @@ void GarrnisonSlot::setTroop(Troop* troop)
 	this->sprite.setTexture(*graphics2.creaturesTextures[troop->monster].portrait);
 	//this->sprite.setTextureRect(Graphics::selectPortrait(troop->monster));
 	std::string count = std::to_string(troop->count);
-	this->number.setString(count);
+	this->number->setString(count);
 }
 
 void GarrnisonSlot::clickLeft(bool down, bool previousState)
@@ -134,7 +134,8 @@ GarrnisonSlot::GarrnisonSlot(Garrnison* owner, int id, float x, float y) :
 	this->selectFrame.setOutlineColor(sf::Color::Yellow);
 	this->selectFrame.setFillColor(sf::Color::Transparent);
 	//this->sprite.setTexture(*graphics.allCreaturePortraits);
-	this->number.setFont(GH.globalFont);
-	this->number.setCharacterSize(15);
+	this->number = std::make_shared < sf::Text>();
+	this->number->setFont(GH.globalFont);
+	this->number->setCharacterSize(15);
 	this->setPos(sf::Vector2f(x, y));
 }

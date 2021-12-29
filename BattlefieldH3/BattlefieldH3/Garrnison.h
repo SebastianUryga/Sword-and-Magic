@@ -33,7 +33,7 @@ class GarrnisonSlot : public InterfaceElem
 public:
 	Troop* stack;
 	sf::Sprite sprite;
-	sf::Text number;
+	std::shared_ptr<sf::Text> number;
 	sf::RectangleShape selectFrame;
 	void setPos(sf::Vector2f pos);
 	void setTroop(Troop* troop);

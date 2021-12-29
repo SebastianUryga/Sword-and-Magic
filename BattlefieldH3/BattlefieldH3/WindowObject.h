@@ -7,7 +7,7 @@ public:
 
 	std::vector<std::shared_ptr<InterfaceElem>> interactiveElem;
 	std::map<std::string, std::shared_ptr<Button>> buttons;
-	std::vector<sf::Text> texts;
+	std::vector< std::shared_ptr<sf::Text>> texts;
 
 	bool active;
 	sf::Font font;

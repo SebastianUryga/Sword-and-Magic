@@ -18,6 +18,13 @@ void BattleHandler::startBallte()
 	GH.pushWindow(this->battlefield);
 }
 
+void BattleHandler::spellCasted(Spell spell, Player* player)
+{
+	player->refreshColldown();
+	if (player->substrackMana(spellCost[spell.spell]))
+		std::cout << "mana cannot be lower then 0!" << std::endl;
+}
+
 sf::Vector2i BattleHandler::choseMoveDirection(BattleUnit* unit) const
 {
 
@@ -470,10 +477,10 @@ void BattleHandler::initArmyQueque()
 			setAllArmy = true;
 			for (int i = 0; i < 7; i++)
 			{
-				if (this->battlefield->army[j][i].monster == Monster::NO_CREATURE || this->battlefield->army[j][i].count < 1)
+				if (this->battlefield->players[j]->army[i].monster == Monster::NO_CREATURE || this->battlefield->players[j]->army[i].count < 1)
 					continue;
-				this->armyQueque[j].push(this->battlefield->army[j][i].monster);
-				this->battlefield->army[j][i].count--;
+				this->armyQueque[j].push(this->battlefield->players[j]->army[i].monster);
+				this->battlefield->players[j]->army[i].count--;
 				setAllArmy = false;
 			}
 		}

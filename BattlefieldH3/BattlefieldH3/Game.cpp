@@ -14,7 +14,7 @@ void Game::initWindow()
 void Game::initFonts()
 {
 	this->font = new sf::Font();
-	if (!this->font->loadFromFile("Fonts/bigfonts.ttf"))
+	if (!this->font->loadFromFile("Fonts/Alice_in_Wonderland_3.ttf"))
 	{
 		throw("ERROR::MAINMENUSTATE:: COULD NOT LOAD FONT");
 	}
@@ -81,7 +81,7 @@ void Game::mainMenuState()
 	mainMenu->buttons["SETTINGS_STATE_BTN"] = std::make_shared<Button>(
 		300, 380, 250, 50, this->font, "Settings");
 	mainMenu->buttons["EDITOR_STATE_BTN"] = std::make_shared<Button>(
-		300, 480, 250, 50, this->font, "EDITOR");
+		300, 480, 250, 50, this->font, "Editor");
 	mainMenu->buttons["EXIT_GAME"] = std::make_shared<Button>(
 		300, 680, 250, 50, this->font, "Quit");
 
@@ -112,8 +112,16 @@ void Game::settingState()
 		this->window->getSize().y,
 		*this->font);
 
-	auto marker = std::make_shared<sf::Text>(">",GH.globalFont,30);
-	settingMenu->texts.push_back(*marker);
+	auto marker = std::make_shared<sf::Text>("->",GH.globalFont,30);
+	if (Config.battlefiledTileHegiht == 7 && Config.battlefiledTileWidth == 14)
+		marker->setPosition(160, 280);
+	else if (Config.battlefiledTileHegiht == 9 && Config.battlefiledTileWidth == 20)
+		marker->setPosition(160, 350);
+	else if (Config.battlefiledTileHegiht == 12 && Config.battlefiledTileWidth == 30)
+		marker->setPosition(160, 420);
+	else
+		marker->setPosition(-1000, -1000);
+	settingMenu->texts.push_back(marker);
 	
 	settingMenu->background.setTexture(graphics.menuBackgroud.get());
 	settingMenu->addText("Select battle size in tiles", sf::Vector2f(200, 240));
@@ -134,19 +142,19 @@ void Game::settingState()
 	settingMenu->buttons["SizeOption1"]->addFuctionallity([=]() {
 		Config.battlefiledTileWidth = 14;
 		Config.battlefiledTileHegiht = 7;
-		marker->setPosition(180, 280);
+		marker->setPosition(160, 280);
 		Config.save();
 	});
 	settingMenu->buttons["SizeOption2"]->addFuctionallity([=]() {
 		Config.battlefiledTileWidth = 20;
 		Config.battlefiledTileHegiht = 9;
-		marker->setPosition(180, 350);
+		marker->setPosition(160, 350);
 		Config.save();
 	});
 	settingMenu->buttons["SizeOption3"]->addFuctionallity([=]() {
 		Config.battlefiledTileWidth = 30;
 		Config.battlefiledTileHegiht = 12;
-		marker->setPosition(180, 420);
+		marker->setPosition(160, 420);
 		Config.save();
 	});
 	for(auto button : settingMenu->buttons)

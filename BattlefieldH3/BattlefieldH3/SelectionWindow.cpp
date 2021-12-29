@@ -62,7 +62,7 @@ SelectionWindow::SelectionWindow(Troop& troop) :
 		if (troopQuantity <= 1)
 			decrementingBtn->block(true);
 		incrementingBtn->block(false);
-		texts.back().setString(std::to_string(troopQuantity));
+		texts.back()->setString(std::to_string(troopQuantity));
 	});
 	this->buttons["-"] = this->decrementingBtn;
 
@@ -71,7 +71,7 @@ SelectionWindow::SelectionWindow(Troop& troop) :
 		if (troopQuantity > 10)
 			incrementingBtn->block(true);
 		decrementingBtn->block(false);
-		texts.back().setString(std::to_string(troopQuantity));
+		texts.back()->setString(std::to_string(troopQuantity));
 	});
 	this->buttons["+"] = this->incrementingBtn;
 

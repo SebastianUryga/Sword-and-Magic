@@ -18,6 +18,8 @@ set(SRCS
 	BattlefieldH3/Garrnison.cpp
 	BattlefieldH3/InterfaceElem.cpp
 	BattlefieldH3/Monser.cpp
+	BattlefieldH3/CreatureInfo.cpp
+	BattlefieldH3/Player.cpp
 	BattlefieldH3/SelectionWindow.cpp
 	BattlefieldH3/Spell.cpp
 	BattlefieldH3/SpellBook.cpp
@@ -39,6 +41,8 @@ set(HEADERS
 	BattlefieldH3/Garrnison.h
 	BattlefieldH3/InterfaceElem.h
 	BattlefieldH3/Monser.h
+	BattlefieldH3/CreatureInfo.h
+	BattlefieldH3/Player.h
 	BattlefieldH3/PCH.hpp
 	BattlefieldH3/SelectionWindow.h
 	BattlefieldH3/Spell.h

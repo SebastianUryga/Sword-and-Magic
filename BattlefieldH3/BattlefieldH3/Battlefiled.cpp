@@ -37,8 +37,14 @@ void Battlefield::initButtons()
 		});
 		this->interactiveElem.push_back(this->buttons["SpellBook"]);
 
+		this->cooldownNumber = std::make_shared<sf::Text>(
+			std::to_string(std::ceil(players[0]->getSpellCooldown())),
+			GH.globalFont, 30);
+		this->cooldownNumber->setPosition(680, 770);
+		this->texts.push_back(cooldownNumber);
+
 		this->buttons["PauseStartGame"] = std::make_shared<Button>(
-			700, 770, 170, 30, &this->font, "Pause Game");
+			730, 770, 170, 30, &this->font, "Pause Game");
 		this->buttons["PauseStartGame"]->addFuctionallity([=]() {
 			if (gamePaused)
 			{
@@ -134,6 +140,13 @@ void Battlefield::initArmy()
 {
 	this->army[0] = { { Monster::PIKEMAN, 5 }, { Monster::SWORDSMAN, 4 }, { Monster::ARCHER, 2 }, { Monster::ARCHER, 4 }, { Monster::PIKEMAN, 2 }, { Monster::ZEALOT, 3 }, { Monster::NO_CREATURE, 0 } };
 	this->army[1] = { { Monster::PIKEMAN, 15 }, { Monster::GRIFFIN, 5 }, { Monster::ARCHER, 5 }, { Monster::MARKSMEN, 7 }, { Monster::ROYAL_GRIFFIN, 3 }, { Monster::NO_CREATURE, 0 }, { Monster::NO_CREATURE, 0 } };
+}
+
+void Battlefield::initPlayers()
+{
+	this->players.resize(2);
+	this->players[0] = std::make_shared<Player>(true, 20);
+	this->players[1] = std::make_shared<Player>(false, 10);
 }
 
 void Battlefield::initArmy2()
@@ -358,6 +371,7 @@ void Battlefield::clickLeft(bool down, bool previousState)
 				if (clickedTile.unit && clickedTile.unit->getAlive())
 				{
 					Spell::castSpellOnUnit(*clickedTile.unit, this->spellToCast);
+					BH.spellCasted(this->spellToCast,this->players[0].get());
 					this->spellToCast = Spell::SpellType::NONE;
 				}
 			}
@@ -456,7 +470,7 @@ Battlefield::Battlefield(GameMode mode) :
 	this->selectingArea.setFillColor(sf::Color(120, 120, 120, 0));
 
 	//this->initArmy();
-	this->initArmy2();
+	this->initPlayers();
 	this->initButtons();
 	this->initMovmentMarker();
 
@@ -510,9 +524,17 @@ void Battlefield::updateMovmentMarker(const float dt)
 void Battlefield::update(const float dt)
 {
 	WindowObject::update(dt);
-	this->updateMovmentMarker(dt);
+	
 	if (this->mode == GameMode::Game)
+	{
+		for (auto& player : this->players)
+			player->update(dt);
+		bool cooldownPassed = this->players[0]->getSpellCooldown() <= 0;
+		this->buttons["SpellBook"]->block(!cooldownPassed);
+		this->cooldownNumber->setString(std::to_string(std::ceil(players[0]->getSpellCooldown())));
+		this->updateMovmentMarker(dt);
 		BH.update(dt);
+	}
 	if (this->mode == GameMode::Editor)
 	{
 		for (auto& unit : this->units)
@@ -582,7 +604,7 @@ void Battlefield::save(const std::string& path)
 		file << u->getAlive() << " " << u->isEnemy() << std::endl;
 	}
 	for (int i = 0; i < 2; i++)
-		for (auto troop : this->army[i])
+		for (auto troop : this->players[i]->army)
 		{
 			file << " " << troop.monster.monster << " " << troop.count << " ";
 		}
@@ -594,7 +616,7 @@ bool Battlefield::load(const std::string& path)
 	file.open(path);
 	int temp, type;
 	sf::Vector2i pos1, pos2;
-	// loading Obstacles
+	// loading ObstaclesBigFon
 	file >> temp;
 	if (temp < 0)
 		return false;
@@ -619,7 +641,7 @@ bool Battlefield::load(const std::string& path)
 	}
 	// loading Armys
 	for (int i = 0; i < 2; i++)
-		for (auto& troop : this->army[i])
+		for (auto& troop : this->players[i]->army)
 		{
 			int type;
 			file >> type >> troop.count;

@@ -46,7 +46,11 @@ void SpellIcon::clickRight(bool down, bool previousState)
 	{
 		auto pop = std::make_shared<WindowObject>(
 			GH.mousePosWindow.x, GH.mousePosWindow.y,150,100,GH.globalFont);
-		pop->addText(spellToString[this->type.spell], sf::Vector2f(20, 20));
+		pop->background.setFillColor(sf::Color(120, 120, 100, 255));
+		auto t = sf::Text(spellToString[this->type.spell], GH.globalFont, 20);
+		auto size = sf::Vector2f(t.getGlobalBounds().width, t.getGlobalBounds().height);
+
+		pop->addText(spellToString[this->type.spell], sf::Vector2f((150 - size.x)/2, 20));
 		GH.makePopup(pop);
 	}
 }

@@ -178,6 +178,7 @@
     <ClCompile Include="GuiHandler.cpp" />
     <ClCompile Include="InterfaceElem.cpp" />
     <ClCompile Include="Monser.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="SelectionWindow.cpp" />
     <ClCompile Include="Spell.cpp" />
     <ClCompile Include="SpellBook.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="InterfaceElem.h" />
     <ClInclude Include="Monser.h" />
     <ClInclude Include="PCH.hpp" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SelectionWindow.h" />
     <ClInclude Include="Spell.h" />

@@ -39,6 +39,7 @@ Graphics::Graphics()
 	this->spellIcons[Spell::SpellType::COUNTER_STRIKE] = sf::IntRect(83 * 3, 65 * 5, 83, 65);
 	this->spellIcons[Spell::SpellType::BERSERK] = sf::IntRect(83 * 4, 65 * 5, 83, 65);
 	this->spellIcons[Spell::SpellType::FORGETFULNESS] = sf::IntRect(83 * 6, 65 * 5, 83, 65);
+	this->spellIcons[Spell::SpellType::TURN_TO_STONE] = sf::IntRect(83 * 6, 65 * 5, 83, 65);
 
 }
 

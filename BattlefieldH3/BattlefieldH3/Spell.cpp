@@ -26,6 +26,10 @@ void Spell::castSpellOnUnit(BattleUnit& unit, const Spell spell)
 		Spell::takeOffSpellFromUnit(unit, Spell(Spell::SpellType::SLOW));
 		unit.speed += 30.f;
 		break;
+	case Spell::SpellType::TURN_TO_STONE:
+		unit.isBlid = true;
+
+		break;
 	case Spell::SpellType::SLOW:
 		Spell::takeOffSpellFromUnit(unit, Spell(Spell::SpellType::HASTE));
 		unit.speed *= 0.7f;
@@ -62,6 +66,9 @@ void Spell::takeOffSpellFromUnit(BattleUnit& unit, const Spell spell)
 		case Spell::SpellType::SLOW:
 			unit.speed /= 0.7f;
 			break;
+		case Spell::SpellType::TURN_TO_STONE:
+			unit.isBlid = false;
+			break;
 		case Spell::SpellType::COUNTER_STRIKE:
 			unit.attackCoulddown /= 0.8;
 			break;
@@ -84,7 +91,8 @@ std::map<Spell::SpellType, EffectsAnimationParametrs> batteEffectsAnimationParam
 	{Spell::SpellType::SLOW, {0.6f,0,6,15,0,74,114,50}},
 	{Spell::SpellType::COUNTER_STRIKE, {0.5f,0,4,16,0,84,114,50}},
 	{Spell::SpellType::BERSERK, {0.5f,0,5,16,0,61,114,50}},
-	{Spell::SpellType::FORGETFULNESS, {0.5f,0,7,15,0,119,114,50}}
+	{Spell::SpellType::TURN_TO_STONE, {0.5f,0,7,15,0,119,114,50}}
+//	{Spell::SpellType::FORGETFULNESS, {0.5f,0,7,15,0,119,114,50}}
 };
 std::map<Spell::SpellType, std::string> spellToString = {
 	{Spell::SpellType::NONE, "None"},
@@ -95,10 +103,23 @@ std::map<Spell::SpellType, std::string> spellToString = {
 	{Spell::SpellType::SLOW, "Slow"},
 	{Spell::SpellType::COUNTER_STRIKE, "Counter Strike"},
 	{Spell::SpellType::BERSERK, "Berserk"},
-	{Spell::SpellType::FORGETFULNESS, "Forgetfulness"}
+	{Spell::SpellType::FORGETFULNESS, "Forgetfulness"},
+	{Spell::SpellType::TURN_TO_STONE, "Turn to stone"}
 };
 
-
+std::map<Spell::SpellType, int> spellCost =
+{
+	{Spell::SpellType::NONE, 0},
+	{Spell::SpellType::WEEKNES, 5},
+	{Spell::SpellType::SHIELD, 5},
+	{Spell::SpellType::HASTE, 5},
+	{Spell::SpellType::CURSE, 6},
+	{Spell::SpellType::SLOW, 5},
+	{Spell::SpellType::COUNTER_STRIKE, 8},
+	{Spell::SpellType::BERSERK, 12},
+	{Spell::SpellType::FORGETFULNESS, 9},
+	{Spell::SpellType::TURN_TO_STONE, 10}
+};
 
 
 
