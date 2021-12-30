@@ -1,3 +1,0 @@
-C:/Users/Sebix/Desktop/Projekt1/BattlefieldH3/build/CMakeFiles/BattlefieldH3Engine.dir
-C:/Users/Sebix/Desktop/Projekt1/BattlefieldH3/build/CMakeFiles/ALL_BUILD.dir
-C:/Users/Sebix/Desktop/Projekt1/BattlefieldH3/build/CMakeFiles/ZERO_CHECK.dir
