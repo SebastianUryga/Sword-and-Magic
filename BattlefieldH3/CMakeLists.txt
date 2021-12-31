@@ -53,16 +53,16 @@ set(HEADERS
 	src/Configuration.h
 )
 set(RESOURCES
-	res/startMap.txt
-	res/config.txt
-	res/Textures
-	res/Fonts
+	res
 	)
 	
                        
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-set(SFML_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Extensions/SFML/lib/cmake/SFML")
+set(SFML_DIR "${CMAKE_CURRENT_SOURCE_DIR}/SFML-2.5.1/build")
+
+#if working on Windows
+#set(SFML_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Extensions/SFML/lib/cmake/SFML")
 
 find_package(SFML 2.5.1 COMPONENTS graphics audio window system REQUIRED)
 

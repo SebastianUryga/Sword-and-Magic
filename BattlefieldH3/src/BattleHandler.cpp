@@ -12,7 +12,7 @@ void BattleHandler::startBallte()
 {
 	if (!this->battlefield)
 		battlefield = std::make_shared<Battlefield>(GameMode::Game);
-	battlefield->load("startMap.txt");
+	battlefield->load("res/startMap.txt");
 	this->initArmyQueque();
 	this->battlefield->interactiveElem.push_back(this->battlefield);
 	GH.pushWindow(this->battlefield);

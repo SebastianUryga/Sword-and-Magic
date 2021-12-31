@@ -63,12 +63,12 @@ void Battlefield::initButtons()
 	{
 		this->buttons["Save"] = std::make_shared<Button>(
 			750, 770, 60, 30, &this->font, "Save");
-		this->buttons["Save"]->addFuctionallity([=]() { save("startMap.txt"); });
+		this->buttons["Save"]->addFuctionallity([=]() { save("res/startMap.txt"); });
 		this->interactiveElem.push_back(this->buttons["Save"]);
 
 		this->buttons["Load"] = std::make_shared<Button>(
 			650, 770, 60, 30, &this->font, "Load");
-		this->buttons["Load"]->addFuctionallity([=]() { load("startMap.txt"); });
+		this->buttons["Load"]->addFuctionallity([=]() { load("res/startMap.txt"); });
 		this->interactiveElem.push_back(this->buttons["Load"]);
 
 		this->gar1 = std::make_shared<Garrnison>(

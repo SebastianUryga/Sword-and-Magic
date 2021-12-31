@@ -14,7 +14,7 @@ Configuration& Configuration::Get()
 
 bool Configuration::load()
 {
-	std::string path = "config.txt";
+	std::string path = "res/config.txt";
 	std::fstream file;
 	file.open(path);
 	if(file.fail() || file.bad())
@@ -39,7 +39,7 @@ bool Configuration::load()
 
 bool Configuration::save()
 {
-	std::string path = "config.txt";
+	std::string path = "res/config.txt";
 	std::fstream file;
 	file.open(path);
 	if (file.fail() || file.bad())
