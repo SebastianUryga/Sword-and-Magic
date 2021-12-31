@@ -3,6 +3,11 @@
 *.lo
 *.o
 *.obj
+*.sln
+*.dll
+*.rc
+*.vcxproj*
+*.aps
 
 # Precompiled Headers
 *.gch
