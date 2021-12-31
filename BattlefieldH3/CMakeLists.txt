@@ -5,6 +5,7 @@ project(BattlefieldH3Engine)
 set(SRCS 
 	src/BattlefieldH3.cpp
 	src/AnimationComponent.cpp
+	src/Animator.cpp
 	src/Game.cpp
 	src/Battlefiled.cpp
 	src/BattleHandler.cpp
@@ -28,6 +29,7 @@ set(SRCS
 )
 set(HEADERS
 	src/AnimationComponent.h
+	src/Animator.h
 	src/Battlefiled.h
 	src/BattleHandler.h
 	src/BattlePathFinder.h
@@ -60,7 +62,7 @@ set(RESOURCES
                        
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-set(SFML_DIR ${CMAKE_CURRENT_SOURCE_DIR}/SFML-2.5.1 EXCLUDE_FROM_ALL)
+set(SFML_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Extensions/SFML/lib/cmake/SFML")
 
 find_package(SFML 2.5.1 COMPONENTS graphics audio window system REQUIRED)
 
