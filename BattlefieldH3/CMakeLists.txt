@@ -3,64 +3,64 @@ cmake_minimum_required(VERSION 3.10.7)
 project(BattlefieldH3Engine)
 
 set(SRCS 
-	BattlefieldH3/BattlefieldH3.cpp
-	BattlefieldH3/AnimationComponent.cpp
-	BattlefieldH3/Game.cpp
-	BattlefieldH3/Battlefiled.cpp
-	BattlefieldH3/BattleHandler.cpp
-	BattlefieldH3/BattlePathFinder.cpp
-	BattlefieldH3/BattleUnit.cpp
-	BattlefieldH3/Button.cpp
-	BattlefieldH3/GameConstants.cpp
-	BattlefieldH3/Graphics.cpp
-	BattlefieldH3/Graphics2.cpp
-	BattlefieldH3/GuiHandler.cpp
-	BattlefieldH3/Garrnison.cpp
-	BattlefieldH3/InterfaceElem.cpp
-	BattlefieldH3/Monser.cpp
-	BattlefieldH3/CreatureInfo.cpp
-	BattlefieldH3/Player.cpp
-	BattlefieldH3/SelectionWindow.cpp
-	BattlefieldH3/Spell.cpp
-	BattlefieldH3/SpellBook.cpp
-	BattlefieldH3/WindowObject.cpp
-	BattlefieldH3/Configuration.cpp
+	src/BattlefieldH3.cpp
+	src/AnimationComponent.cpp
+	src/Game.cpp
+	src/Battlefiled.cpp
+	src/BattleHandler.cpp
+	src/BattlePathFinder.cpp
+	src/BattleUnit.cpp
+	src/Button.cpp
+	src/GameConstants.cpp
+	src/Graphics.cpp
+	src/Graphics2.cpp
+	src/GuiHandler.cpp
+	src/Garrnison.cpp
+	src/InterfaceElem.cpp
+	src/Monser.cpp
+	src/CreatureInfo.cpp
+	src/Player.cpp
+	src/SelectionWindow.cpp
+	src/Spell.cpp
+	src/SpellBook.cpp
+	src/WindowObject.cpp
+	src/Configuration.cpp
 )
 set(HEADERS
-	BattlefieldH3/AnimationComponent.h
-	BattlefieldH3/Battlefiled.h
-	BattlefieldH3/BattleHandler.h
-	BattlefieldH3/BattlePathFinder.h
-	BattlefieldH3/BattleUnit.h
-	BattlefieldH3/Game.h
-	BattlefieldH3/GameConstants.h
-	BattlefieldH3/Graphics.h
-	BattlefieldH3/Graphics2.h
-	BattlefieldH3/Button.h
-	BattlefieldH3/GuiHandler.h
-	BattlefieldH3/Garrnison.h
-	BattlefieldH3/InterfaceElem.h
-	BattlefieldH3/Monser.h
-	BattlefieldH3/CreatureInfo.h
-	BattlefieldH3/Player.h
-	BattlefieldH3/PCH.hpp
-	BattlefieldH3/SelectionWindow.h
-	BattlefieldH3/Spell.h
-	BattlefieldH3/SpellBook.h
-	BattlefieldH3/WindowObject.h
-	BattlefieldH3/Configuration.h
+	src/AnimationComponent.h
+	src/Battlefiled.h
+	src/BattleHandler.h
+	src/BattlePathFinder.h
+	src/BattleUnit.h
+	src/Game.h
+	src/GameConstants.h
+	src/Graphics.h
+	src/Graphics2.h
+	src/Button.h
+	src/GuiHandler.h
+	src/Garrnison.h
+	src/InterfaceElem.h
+	src/Monser.h
+	src/CreatureInfo.h
+	src/Player.h
+	src/PCH.hpp
+	src/SelectionWindow.h
+	src/Spell.h
+	src/SpellBook.h
+	src/WindowObject.h
+	src/Configuration.h
 )
 set(RESOURCES
-	BattlefieldH3/startMap.txt
-	BattlefieldH3/config.txt
-	BattlefieldH3/Textures
-	BattlefieldH3/Fonts
+	res/startMap.txt
+	res/config.txt
+	res/Textures
+	res/Fonts
 	)
 	
                        
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/BattlefieldH3)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-set(SFML_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Extensions/SFML/lib/cmake/SFML")
+set(SFML_DIR ${CMAKE_CURRENT_SOURCE_DIR}/SFML-2.5.1 EXCLUDE_FROM_ALL)
 
 find_package(SFML 2.5.1 COMPONENTS graphics audio window system REQUIRED)
 
