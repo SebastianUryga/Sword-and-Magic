@@ -581,6 +581,7 @@ BattleUnit::BattleUnit(Monster type) :
 	this->initStatistic();
 	this->initAnimation2();
 	this->animationState = AnimationState::IDLE;
+	this->lastDirection = false;
 	this->target = nullptr;
 	this->order = Order::AGRESIVE_STANCE;
 	this->spellToAnimate = Spell::SpellType::NONE;
