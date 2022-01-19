@@ -14,6 +14,10 @@ class Missle;
 template <typename T>
 struct VectorCompare
 {
+	/*bool operator==(const sf::Vector2<T>& a, const sf::Vector2<T>& b)
+	{
+		return(a == b);
+	}*/
 	bool operator()(const sf::Vector2<T>& a, const sf::Vector2<T>& b) const
 	{
 		if (a.y < b.y)
@@ -92,12 +96,15 @@ private:
 	bool recivingDamage;
 	bool lastDirection; // false - left, true - right
 	std::shared_ptr<Battle::PathFinder> pathfinder;
+	bool pathfinderNeedToUpdate;
+
 	float timeToUpdatePathfinder;
 	TileSet neighbourTilePos;
+	sf::Vector2i usedTiles;
 	struct DamageText
 	{
 		sf::Text number;
-		float displayTimeRemain;
+		float displayTimeRemain=0;
 	};
 	std::list<DamageText> damageTexts;
 	std::list<CastedSpell> castedSpellList;
@@ -121,10 +128,15 @@ private:
 	void initTextDmg(const int dmg);
 
 public:
+	bool thread = false;
+
 	bool moveMakeColision(const sf::Vector2i& moveDirection, const std::shared_ptr<Battlefield> battlefield) const;
 	bool isShouter() const;
 	bool isBig() const;
 	TileSet& getNeighbourTilePos();
+	TileSet getUsedTilesPos();
+	bool containsPos(sf::Vector2i pos);
+	sf::Vector2i getSize() const;
 	sf::Vector2i getPos() const;
 	sf::Vector2i getPos2() const;
 	BattleUnit* getTarget() const;
@@ -159,6 +171,7 @@ public:
 	BattleUnit(Monster type);
 	virtual ~BattleUnit();
 
+	bool calculatingPaths();
 	void updatePathfinder(const float& dt);
 	void updateNeighbourPos();
 	void updateAnimation(const float& dt);

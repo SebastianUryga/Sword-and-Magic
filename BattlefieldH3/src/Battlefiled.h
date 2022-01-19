@@ -8,14 +8,6 @@
 
 class BattleUnit;
 
-#define BATTLE_OFFSET_X 2
-#define BATTLE_OFFSET_Y 3
-
-#define B_TILE_WIDTH 60.f
-#define B_TILE_HEIGHT 60.f
-#define BATTLEFIELD_WIDHT 24
-#define BATTLEFIELD_HEIGHT 12
-
 struct BattleTile
 {
 	sf::Vector2i pos;
@@ -40,7 +32,6 @@ private:
 	GameMode mode;
 
 	std::vector<std::vector<BattleTile>> tiles;
-	std::vector<std::shared_ptr<BattleUnit>> units;
 	std::vector<std::shared_ptr<BattleObstacle>> obstacles;
 	std::set<BattleUnit*> selectedUnits;
 
@@ -53,7 +44,7 @@ private:
 
 	void initArmy();
 	void initPlayers();
-	void initArmy2();
+	void initPlayersArmy2();
 	void initButtons();
 	void initStartUnits();
 	void initMovmentMarker();
@@ -70,6 +61,8 @@ private:
 	void putMovmentMarker(const sf::Vector2i& pos, bool attck);
 
 public:
+	std::vector<std::shared_ptr<BattleUnit>> units;
+
 	bool containsIsBattlefield(sf::Vector2i pos) const;
 	std::shared_ptr<BattleUnit> getUnit(sf::Vector2i pos) const;
 	sf::Vector2i getSize() const;
@@ -78,7 +71,7 @@ public:
 	bool isTileBlocked(const sf::Vector2i pos) const;
 	const BattleTile& getTile(const sf::Vector2i pos) const;
 	void changeUnitPos(BattleUnit* unit, sf::Vector2i oldPos, sf::Vector2i newPos);
-	void addUnit(std::shared_ptr<BattleUnit> unit, sf::Vector2i pos, bool enemy);
+	bool addUnit(std::shared_ptr<BattleUnit> unit, sf::Vector2i pos, bool enemy);
 	void addObsticle(BattleObstacle::Type type, sf::Vector2i pos);
 	void removeUnit(std::shared_ptr<BattleUnit> unit);
 	void removeObsticle(std::shared_ptr<BattleObstacle> obs);

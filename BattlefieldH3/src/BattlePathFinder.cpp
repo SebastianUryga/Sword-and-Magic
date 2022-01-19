@@ -16,18 +16,21 @@ Battle::PathFinder::~PathFinder()
 
 void Battle::PathFinder::initializeGraph()
 {
+	mutex.lock();
 	sf::Vector2i pos;
 	const sf::Vector2i sizes = this->battlefield->getSize();
 	for (pos.x = 0; pos.x < sizes.x; ++pos.x)
 	{
 		for (pos.y = 0; pos.y < sizes.y; ++pos.y)
 		{
-			auto tile = this->battlefield->getTile(pos);
+			const auto tile = this->battlefield->getTile(pos);
 			this->getNode(pos)->reset();
 			this->getNode(pos)->coord = pos;
 			this->getNode(pos)->accessible = this->evaluateAccessibility(tile);
 		}
 	}
+	mutex.unlock();
+	
 }
 
 void Battle::PathFinder::resetGraph()
@@ -39,11 +42,14 @@ void Battle::PathFinder::resetGraph()
 		}
 }
 
-bool Battle::PathFinder::getPath(Battle::BPath& out, const sf::Vector2i& dst) const
+bool Battle::PathFinder::getPath(Battle::BPath& out, const sf::Vector2i& dst)
 {
+	if (!this->battlefield->containsIsBattlefield(dst)) return false;
+	mutex.lock();
 	out.nodes.clear();
-	auto curnode = &(this->nodes[dst.x][dst.y]);											// nie wiem czemu nie moze byc
-	if (!curnode->theNodeBefore || curnode->accessible == PathNode::Accessibility::BLOCKED) // this->getNode(dst);
+	auto curnode = &(this->nodes[dst.x][dst.y]);										// nie wiem czemu nie moze byc
+	mutex.unlock();
+	if (!curnode->theNodeBefore ) // this->getNode(dst);
 		return false;
 
 	while (curnode)
@@ -74,13 +80,28 @@ void Battle::PathFinder::calculatePaths()
 				continue;
 
 			auto destination = neighbour;
-			auto pos2 = destination->coord - sf::Vector2i(bigCreature, 0);
-			if (!battlefield->containsIsBattlefield(pos2))
-				continue;
+			std::vector<sf::Vector2i> tiles;
 
-			auto destination2 = this->getNode(pos2);
-			pos2 = source->coord - sf::Vector2i(bigCreature, 0);
-			auto source2 = this->getNode(pos2);
+			if (source->coord.x < destination->coord.x)
+			{
+				for (int y = 0; y < unit->getSize().y; y++)
+					tiles.push_back(destination->coord + sf::Vector2i(unit->getSize().x -1, y));
+			}
+			if (source->coord.y < destination->coord.y)
+			{
+				for (int x = 0; x < unit->getSize().x; x++)
+					tiles.push_back(destination->coord + sf::Vector2i(x,unit->getSize().y - 1));
+			}
+			if (source->coord.x > destination->coord.x)
+			{
+				for (int y = 0; y < unit->getSize().y; y++)
+					tiles.push_back(destination->coord + sf::Vector2i(0, y));
+			}
+			if (source->coord.y > destination->coord.y)
+			{
+				for (int x = 0; x < unit->getSize().x; x++)
+					tiles.push_back(destination->coord + sf::Vector2i(x, 0));
+			}
 
 			float cost = this->getMovementCost(source->coord, destination->coord);
 			float costAtNextTile = source->getCost() + static_cast<float>(cost);
@@ -90,11 +111,23 @@ void Battle::PathFinder::calculatePaths()
 				destination->setCost(costAtNextTile);
 				destination->theNodeBefore = source;
 			}
-
-			if ((destination2->accessible == PathNode::Accessibility::ACCESSIBLE ||
-				destination2->coord == source->coord) &&
-				(destination->accessible == PathNode::Accessibility::ACCESSIBLE ||
-				source2->coord == destination->coord))
+			bool availble = true;
+			for (auto tile : tiles)
+			{
+				if (!battlefield->containsIsBattlefield(tile))
+				{
+					availble = false;
+					break;
+				}
+				auto node = this->getNode(tile);
+				if (node->accessible == PathNode::Accessibility::BLOCKED ||
+					node->accessible == PathNode::Accessibility::BLOCKVIS)
+				{
+					availble = false;
+					break;
+				}
+			}
+			if (availble)
 				push(neighbour);
 		}
 	}
@@ -102,6 +135,8 @@ void Battle::PathFinder::calculatePaths()
 
 Battle::PathNode::Accessibility Battle::PathFinder::evaluateAccessibility(const BattleTile& tinfo)
 {
+	if (tinfo.unit == this->unit)
+		return PathNode::Accessibility::ACCESSIBLE;
 	if (tinfo.unit && tinfo.blocked)
 		return PathNode::Accessibility::BLOCKVIS;
 	if (tinfo.blocked)

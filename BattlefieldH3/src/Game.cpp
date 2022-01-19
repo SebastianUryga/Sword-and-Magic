@@ -14,7 +14,7 @@ void Game::initWindow()
 void Game::initFonts()
 {
 	this->font = new sf::Font();
-	if (!this->font->loadFromFile("res/Fonts/Alice_in_Wonderland_3.ttf"))
+	if (!this->font->loadFromFile("Fonts/Alice_in_Wonderland_3.ttf"))
 	{
 		throw("ERROR::MAINMENUSTATE:: COULD NOT LOAD FONT");
 	}
@@ -113,11 +113,11 @@ void Game::settingState()
 		*this->font);
 
 	auto marker = std::make_shared<sf::Text>("->",GH.globalFont,30);
-	if (Config.battlefiledTileHegiht == 7 && Config.battlefiledTileWidth == 14)
+	if (Config.battlefiledTileHegiht == 12 && Config.battlefiledTileWidth == 30)
 		marker->setPosition(160, 280);
-	else if (Config.battlefiledTileHegiht == 9 && Config.battlefiledTileWidth == 20)
+	else if (Config.battlefiledTileHegiht == 16 && Config.battlefiledTileWidth == 40)
 		marker->setPosition(160, 350);
-	else if (Config.battlefiledTileHegiht == 12 && Config.battlefiledTileWidth == 30)
+	else if (Config.battlefiledTileHegiht == 20 && Config.battlefiledTileWidth == 50)
 		marker->setPosition(160, 420);
 	else
 		marker->setPosition(-1000, -1000);
@@ -126,11 +126,11 @@ void Game::settingState()
 	settingMenu->background.setTexture(graphics.menuBackgroud.get());
 	settingMenu->addText("Select battle size in tiles", sf::Vector2f(200, 240));
 	settingMenu->buttons["SizeOption1"] = std::make_shared<Button>(
-		200, 280, 250, 50, this->font, "14 x 7");
+		200, 280, 250, 50, this->font, "30 x 12");
 	settingMenu->buttons["SizeOption2"] = std::make_shared<Button>(
-		200, 350, 250, 50, this->font, "20 x 9");
+		200, 350, 250, 50, this->font, "40 x 16");
 	settingMenu->buttons["SizeOption3"] = std::make_shared<Button>(
-		200, 420, 250, 50, this->font, "30 x 12");
+		200, 420, 250, 50, this->font, "50 x 20");
 
 
 	settingMenu->buttons["EXIT_GAME"] = std::make_shared<Button>(
@@ -140,20 +140,20 @@ void Game::settingState()
 		GH.popWindow(settingMenu);
 	});
 	settingMenu->buttons["SizeOption1"]->addFuctionallity([=]() {
-		Config.battlefiledTileWidth = 14;
-		Config.battlefiledTileHegiht = 7;
+		Config.battlefiledTileWidth = 30;
+		Config.battlefiledTileHegiht = 12;
 		marker->setPosition(160, 280);
 		Config.save();
 	});
 	settingMenu->buttons["SizeOption2"]->addFuctionallity([=]() {
-		Config.battlefiledTileWidth = 20;
-		Config.battlefiledTileHegiht = 9;
+		Config.battlefiledTileWidth = 40;
+		Config.battlefiledTileHegiht = 16;
 		marker->setPosition(160, 350);
 		Config.save();
 	});
 	settingMenu->buttons["SizeOption3"]->addFuctionallity([=]() {
-		Config.battlefiledTileWidth = 30;
-		Config.battlefiledTileHegiht = 12;
+		Config.battlefiledTileWidth = 50;
+		Config.battlefiledTileHegiht = 20;
 		marker->setPosition(160, 420);
 		Config.save();
 	});
@@ -170,7 +170,7 @@ void Game::gameState()
 void Game::editorState()
 {
 	auto battlefield = std::make_shared<Battlefield>(GameMode::Editor);
-	battlefield->load("res/startMap.txt");
+	battlefield->load("startMap.txt");
 	battlefield->interactiveElem.push_back(battlefield);
 	GH.pushWindow(battlefield);
 }

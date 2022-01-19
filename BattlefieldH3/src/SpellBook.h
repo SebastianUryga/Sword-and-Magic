@@ -31,10 +31,11 @@ class SpellBook :
 	public WindowObject
 {
 public:
-	SpellBook(Spell& selectedSpell);
+	SpellBook(Spell& selectedSpell, int actualMana);
 	~SpellBook();
 	Spell& spellToCast;
 	std::list<std::shared_ptr<SpellIcon>> spellIcons;
+	std::shared_ptr<sf::Text> manaQuantityText;
 
 	void render(sf::RenderTarget* target) override;
 };

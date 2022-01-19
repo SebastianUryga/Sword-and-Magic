@@ -33,13 +33,15 @@ public:
 		{	
 			int i = 0;
 			auto temp = std::make_shared<sf::Texture>();
+			temp->setSmooth(true);
 			this->portrait = std::make_shared<sf::Texture>();
-			std::string s = "res/Textures/" +creatureName + "/" + creatureName;
+			std::string s = "Textures/" +creatureName + "/" + creatureName;
 			this->portrait->loadFromFile(s + "_head" + ".png");
 			while(temp->loadFromFile(s + "_IDLE_00" + std::to_string(i) + ".png"))
 			{
 				idle.push_back(temp);
 				temp = std::make_shared<sf::Texture>();
+				temp->setSmooth(true);
 				if (++i > 9) break;
 			}
 			i = 0;
@@ -47,6 +49,7 @@ public:
 			{
 				attak.push_back(temp);
 				temp = std::make_shared<sf::Texture>();
+				temp->setSmooth(true);
 				if (++i > 9) break;
 			}
 			i = 0;
@@ -54,6 +57,8 @@ public:
 			{
 				move.push_back(temp);
 				temp = std::make_shared<sf::Texture>();
+				temp->setSmooth(true);
+
 				if (++i > 9) break;
 			}
 			i = 0;
@@ -68,6 +73,7 @@ public:
 			{
 				hurt.push_back(temp);
 				temp = std::make_shared<sf::Texture>();
+				temp->setSmooth(true);
 				if (++i > 9) break;
 			}
 			i = 0;
@@ -75,6 +81,7 @@ public:
 			{
 				run.push_back(temp);
 				temp = std::make_shared<sf::Texture>();
+				temp->setSmooth(true);
 				if (++i > 9) break;
 			}
 			i = 0;

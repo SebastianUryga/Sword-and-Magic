@@ -53,12 +53,12 @@ namespace Battle
 			this->locked = false;
 			this->accessible = Accessibility::NOT_SET;
 			this->cost = std::numeric_limits<float>::max();
-			this->theNodeBefore = nullptr;
 			this->inPQ = false;
+			this->theNodeBefore = nullptr;
 		}
 		sf::Vector2i coord;
 		Accessibility accessible;
-		PathNode* theNodeBefore;
+		PathNode* theNodeBefore = nullptr;
 		bool inPQ;
 		bool locked;
 	};
@@ -77,13 +77,14 @@ namespace Battle
 	public:
 		const BattleUnit* unit;
 
+		std::mutex mutex;
 		PathFinder(Battlefield* map, BattleUnit* unit);
 		virtual ~PathFinder();
 
 		//functions
 		void initializeGraph();
 		void resetGraph();
-		bool getPath(BPath& out, const sf::Vector2i& dst) const;
+		bool getPath(BPath& out, const sf::Vector2i& dst);
 		void calculatePaths();
 
 		PathNode* getNode(const sf::Vector2i& coord)

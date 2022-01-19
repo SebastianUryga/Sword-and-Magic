@@ -3,7 +3,7 @@
 void Battlefield::initButtons()
 {
 	this->buttons["Quit"] = std::make_shared<Button>(
-		1400, 740, 60, 30, &this->font, "Quit");
+		1400, 770, 60, 30, &this->font, "Quit");
 	this->buttons["Quit"]->addFuctionallity([=]() { close(); });
 	this->interactiveElem.push_back(this->buttons["Quit"]);
 	if (this->mode == GameMode::Game)
@@ -33,13 +33,15 @@ void Battlefield::initButtons()
 		this->buttons["SpellBook"] = std::make_shared<Button>(
 			500, 770, 170, 30, &this->font, "Spell Book");
 		this->buttons["SpellBook"]->addFuctionallity([=]() {
-			GH.pushWindowT<SpellBook>(this->spellToCast);
+			assert(!players[0]->isAI());
+			GH.pushWindowT<SpellBook>(this->spellToCast,players[0]->getActuallMana());
 		});
 		this->interactiveElem.push_back(this->buttons["SpellBook"]);
 
 		this->cooldownNumber = std::make_shared<sf::Text>(
 			std::to_string(std::ceil(players[0]->getSpellCooldown())),
 			GH.globalFont, 30);
+
 		this->cooldownNumber->setPosition(680, 770);
 		this->texts.push_back(cooldownNumber);
 
@@ -63,18 +65,18 @@ void Battlefield::initButtons()
 	{
 		this->buttons["Save"] = std::make_shared<Button>(
 			750, 770, 60, 30, &this->font, "Save");
-		this->buttons["Save"]->addFuctionallity([=]() { save("res/startMap.txt"); });
+		this->buttons["Save"]->addFuctionallity([=]() { save("startMap.txt"); });
 		this->interactiveElem.push_back(this->buttons["Save"]);
 
 		this->buttons["Load"] = std::make_shared<Button>(
 			650, 770, 60, 30, &this->font, "Load");
-		this->buttons["Load"]->addFuctionallity([=]() { load("res/startMap.txt"); });
+		this->buttons["Load"]->addFuctionallity([=]() { load("startMap.txt"); });
 		this->interactiveElem.push_back(this->buttons["Load"]);
 
 		this->gar1 = std::make_shared<Garrnison>(
-			army[0], this->background.getPosition() + sf::Vector2f(50, 740));
+			players[0]->army, this->background.getPosition() + sf::Vector2f(50, 740));
 		this->gar2 = std::make_shared<Garrnison>(
-			army[1], this->background.getPosition() + sf::Vector2f(850, 740));
+			players[1]->army, this->background.getPosition() + sf::Vector2f(850, 740));
 		for (auto slot : gar1->slots)
 		{
 			this->texts.push_back(slot->number);
@@ -131,8 +133,8 @@ void Battlefield::sortUnits()
 {
 	std::sort(units.begin(), units.end(), [](const std::shared_ptr<BattleUnit>& a, const std::shared_ptr<BattleUnit>& b) {
 		return a->getPos().y < b->getPos().y || 
-			(a->getPos().y == b->getPos().y && !a->getAlive() && b->getAlive()) ||
-			(a->getPos().y == b->getPos().y && !a->getAlive() && a->getPos().x > b->getPos().x);
+			(a->getPos().y == b->getPos().y && a->getAlive() < b->getAlive()) ||
+			(a->getPos().y == b->getPos().y && a->getAlive() == b->getAlive() && a->getPos().x > b->getPos().x);
 	});
 }
 
@@ -145,14 +147,14 @@ void Battlefield::initArmy()
 void Battlefield::initPlayers()
 {
 	this->players.resize(2);
-	this->players[0] = std::make_shared<Player>(true, 20);
-	this->players[1] = std::make_shared<Player>(false, 10);
+	this->players[0] = std::make_shared<Player>(false, 20);
+	this->players[1] = std::make_shared<Player>(true, 10);
 }
 
-void Battlefield::initArmy2()
+void Battlefield::initPlayersArmy2()
 {
-	this->army[0] = { { Monster::ELF1, 1 }, { Monster::NO_CREATURE, 1 }, { Monster::NO_CREATURE, 1 }, { Monster::NO_CREATURE, 1 }, { Monster::NO_CREATURE, 2 }, { Monster::NO_CREATURE, 3 }, { Monster::NO_CREATURE, 0 } };
-	this->army[1] = { { Monster::KNIGHT2, 1 }, { Monster::NO_CREATURE, 1 }, { Monster::NO_CREATURE, 1 }, { Monster::NO_CREATURE, 1 }, { Monster::NO_CREATURE, 3 }, { Monster::NO_CREATURE, 0 }, { Monster::NO_CREATURE, 0 } };
+	this->players[0]->army = { { Monster::ELF1, 1 }, { Monster::NO_CREATURE, 1 }, { Monster::NO_CREATURE, 1 }, { Monster::NO_CREATURE, 1 }, { Monster::NO_CREATURE, 2 }, { Monster::NO_CREATURE, 3 }, { Monster::NO_CREATURE, 0 } };
+	this->players[1]->army = { { Monster::KNIGHT2, 1 }, { Monster::NO_CREATURE, 1 }, { Monster::NO_CREATURE, 1 }, { Monster::NO_CREATURE, 1 }, { Monster::NO_CREATURE, 3 }, { Monster::NO_CREATURE, 0 }, { Monster::NO_CREATURE, 0 } };
 }
 
 void Battlefield::putMovmentMarker(const sf::Vector2i& tilePos, bool attck)
@@ -229,43 +231,49 @@ void Battlefield::changeUnitPos(BattleUnit* unit, sf::Vector2i oldPos, sf::Vecto
 {
 	if (oldPos == newPos)
 		return;
-	if (unit != this->getTile(oldPos).unit)
-		std::cout << "cos nie gra 1" << std::endl;
-	if (this->getTile(newPos).unit && this->isTileBlocked(newPos) && unit->getPos2() != newPos)
-		std::cout << "cos nie gra 2" << std::endl;
 
-	if (this->getTile(oldPos).unit == unit)
+	for (auto tile : unit->getUsedTilesPos())
 	{
-		this->getTile(oldPos).unit = nullptr;
-		this->getTile(oldPos).blocked = false;
-		this->getTile(unit->getPos2()).unit = nullptr;
-		this->getTile(unit->getPos2()).blocked = false;
+		this->getTile(tile).unit = nullptr;
+		this->getTile(tile).blocked = false;
 	}
-	this->getTile(newPos).unit = unit;
-	this->getTile(newPos).blocked = true;
 	unit->setPos(newPos);
-	this->getTile(unit->getPos2()).unit = unit;
-	this->getTile(unit->getPos2()).blocked = true;
+	for (auto tile : unit->getUsedTilesPos())
+	{
+		this->getTile(tile).unit = unit;
+		this->getTile(tile).blocked = true;
+	}
 	this->sortUnits();
 }
 
-void Battlefield::addUnit(std::shared_ptr<BattleUnit> unit, sf::Vector2i pos, bool enemy)
+bool Battlefield::addUnit(std::shared_ptr<BattleUnit> unit, sf::Vector2i pos, bool enemy)
 {
 	//if(unit->isBig())
-	if (!this->containsIsBattlefield(pos) || this->isTileBlocked(pos))
+	unit->setPos(pos);
+	for (auto tile : unit->getUsedTilesPos())
+	if (!this->containsIsBattlefield(tile) || this->isTileBlocked(tile))
 	{
-		std::cout << "erorr: wrong position" << std::endl;
-		return;
+		return false;
 	}
 
-	this->units.push_back(unit);
 	unit->setPathfinder(this);
-	unit->setPos(pos);
+	
 	unit->setEnemy(enemy);
-	this->tiles[unit->getPos().x][unit->getPos().y].unit = unit.get();
-	this->tiles[unit->getPos2().x][unit->getPos2().y].unit = unit.get();
-	this->tiles[unit->getPos().x][unit->getPos().y].blocked = true;
-	this->tiles[unit->getPos2().x][unit->getPos2().y].blocked = true;
+	for (auto tile : unit->getUsedTilesPos())
+	{
+		this->getTile(tile).unit = unit.get();
+		this->getTile(tile).blocked = true;
+	}
+	auto foo = [](std::shared_ptr<BattleUnit> unit)
+	{
+		std::cout << "started" << std::endl;
+		
+	};
+	//std::thread calculating(foo, unit);
+	
+	
+	this->units.push_back(unit);
+	return true;
 }
 
 void Battlefield::addObsticle(BattleObstacle::Type type, sf::Vector2i tilePos)
@@ -304,13 +312,15 @@ void Battlefield::addObsticle(BattleObstacle::Type type, sf::Vector2i tilePos)
 
 void Battlefield::removeUnit(std::shared_ptr<BattleUnit> unit)
 {
+	unit->thread = false;
 	for (int i = 0; i < (int)this->units.size(); i++)
 		if (unit == this->units[i])
 			this->units.erase(this->units.begin() + i);
-	this->tiles[unit->getPos().x][unit->getPos().y].blocked = false;
-	this->tiles[unit->getPos().x][unit->getPos().y].unit = nullptr;
-	this->tiles[unit->getPos2().x][unit->getPos2().y].blocked = false;
-	this->tiles[unit->getPos2().x][unit->getPos2().y].unit = nullptr;
+	for (auto pos : unit->getUsedTilesPos())
+	{
+		this->getTile(pos).blocked = false;
+		this->getTile(pos).unit = nullptr;
+	}
 }
 
 void Battlefield::removeObsticle(std::shared_ptr<BattleObstacle> obs)
@@ -325,6 +335,7 @@ void Battlefield::removeObsticle(std::shared_ptr<BattleObstacle> obs)
 void Battlefield::close()
 {
 	WindowObject::close();
+		
 	BH.battlefield = nullptr;
 }
 
@@ -488,7 +499,7 @@ Battlefield::Battlefield(GameMode mode) :
 				y * Config.tileHeight) + Config.battlefieldOffset);
 			tiles[x][y].shape.setFillColor(sf::Color(20, 20, 20, 90));
 			tiles[x][y].shape.setOutlineColor(sf::Color::Yellow);
-			tiles[x][y].shape.setOutlineThickness(0.5f);
+			//tiles[x][y].shape.setOutlineThickness(0.5f);
 			tiles[x][y].blocked = false;
 			tiles[x][y].unit = nullptr;
 		}
@@ -528,10 +539,14 @@ void Battlefield::update(const float dt)
 	if (this->mode == GameMode::Game)
 	{
 		for (auto& player : this->players)
-			player->update(dt);
+			if (gamePaused)
+				player->update(0.f);
+			else
+				player->update(dt);
+
 		bool cooldownPassed = this->players[0]->getSpellCooldown() <= 0;
 		this->buttons["SpellBook"]->block(!cooldownPassed);
-		this->cooldownNumber->setString(std::to_string(std::ceil(players[0]->getSpellCooldown())));
+		this->cooldownNumber->setString(std::to_string((int)std::ceil(players[0]->getSpellCooldown())));
 		this->updateMovmentMarker(dt);
 		BH.update(dt);
 	}
@@ -555,7 +570,8 @@ void Battlefield::render(sf::RenderTarget* target)
 
 				tile.shape.setFillColor(sf::Color(120, 120, 120, 70));
 				for (auto u : this->selectedUnits)
-					if (u->getTarget() && u->getTarget()->getPos() == tile.pos)
+					//if (u->getTarget() && u->getTarget()->getPos() == tile.pos)
+					if (u->getTarget() && u->getTarget()->containsPos(tile.pos))
 						tile.shape.setFillColor(sf::Color(240, 5, 5, 100));
 
 				if (this->selectedUnits.find(tile.unit) != this->selectedUnits.end())
@@ -576,6 +592,8 @@ void Battlefield::render(sf::RenderTarget* target)
 		target->draw(this->movmentMarker);
 	for (auto& btn : this->buttons)
 		btn.second->render(target);
+	if(this->cooldownNumber)
+		target->draw(*this->cooldownNumber);
 	target->draw(selectingArea);
 	if (this->mode == GameMode::Editor)
 	{

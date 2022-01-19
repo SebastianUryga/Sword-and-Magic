@@ -129,7 +129,7 @@ GarrnisonSlot::GarrnisonSlot(Garrnison* owner, int id, float x, float y) :
 	id(id),
 	owner(owner)
 {
-	this->selectFrame = sf::RectangleShape(sf::Vector2f(70, 67));
+	this->selectFrame = sf::RectangleShape(sf::Vector2f(60, 64));
 	this->selectFrame.setOutlineThickness(3);
 	this->selectFrame.setOutlineColor(sf::Color::Yellow);
 	this->selectFrame.setFillColor(sf::Color::Transparent);

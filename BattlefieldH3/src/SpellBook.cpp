@@ -1,6 +1,6 @@
 #include "GuiHandler.h"
 
-SpellBook::SpellBook(Spell& selectedSpell)
+SpellBook::SpellBook(Spell& selectedSpell, int actualMana)
 	:WindowObject(400,200,700,400,GH.globalFont), spellToCast(selectedSpell)
 {
 	for (size_t i = 0; i < allSpells.size(); i++)
@@ -11,6 +11,11 @@ SpellBook::SpellBook(Spell& selectedSpell)
 		this->spellIcons.push_back(temp);
 		this->interactiveElem.push_back(this->spellIcons.back());
 	}
+
+	this->manaQuantityText = std::make_shared<sf::Text>("Mana: "+ std::to_string(actualMana), this->font, 20);
+	this->manaQuantityText->setPosition(400 + 10, 200 + 360);
+	this->texts.push_back(manaQuantityText);
+
 	this->buttons["OK"] = std::make_shared<Button>(
 		400+620, 200+350, 60, 30, &this->font, "OK"
 		);

@@ -11,7 +11,7 @@ public:
 	virtual ~BattleHandler();
 
 	std::shared_ptr<Battlefield> battlefield;
-	
+	bool battleBegan = false;
 	void startBallte();
 
 	void spellCasted(Spell spell, Player* player);

@@ -44,6 +44,7 @@ Player::Player(bool AI, int manaPoints = 30)
 {
 	this->initArmy();
 	_actualManaPoints = _maxManaPoints;
+	_spellCooldown = 0.f;
 }
 
 Player::~Player()
@@ -68,7 +69,7 @@ bool Player::save(std::fstream file)
 
 void Player::initArmy()
 {
-	this->army = { { Monster::ELF1, 1 }, { Monster::NO_CREATURE, 1 }, { Monster::NO_CREATURE, 1 }, { Monster::NO_CREATURE, 1 }, { Monster::NO_CREATURE, 2 }, { Monster::NO_CREATURE, 3 }, { Monster::NO_CREATURE, 0 } };
+	this->army = { { Monster::ELF1, 1 }, { Monster::NO_CREATURE, 1 }, { Monster::NO_CREATURE, 1 }, { Monster::NO_CREATURE, 1 }, { Monster::NO_CREATURE, 2 }, { Monster::NO_CREATURE, 2 }, { Monster::NO_CREATURE, 0 } };
 
 }
 

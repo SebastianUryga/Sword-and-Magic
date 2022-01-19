@@ -51,11 +51,13 @@ void Animator::play(const std::string key, const float& dt, bool flipHorizontall
 	if (flipHorizontally)
 	{
 		this->sprite.setOrigin((float)(tile.left + width), (float)tile.top);
-		this->sprite.setScale(-0.5, 0.5);
+		if(this->sprite.getScale().x > 0)
+			this->sprite.scale(-1, 1);
 	}
 	else
 	{
-		this->sprite.setScale(0.5, 0.5);
+		if (this->sprite.getScale().x < 0)
+			this->sprite.scale(-1, 1);
 		this->sprite.setOrigin((float)tile.left, (float)tile.top);
 	}
 	this->animations[key]->play(dt, inversely);

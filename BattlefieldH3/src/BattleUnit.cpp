@@ -7,6 +7,7 @@ void BattleUnit::initAnimation2()
 	if (graphics2.creaturesTextures.find(this->type) == graphics2.creaturesTextures.end())
 	{
 		this->sprite.setScale(0.5f, 0.5f);
+		
 		this->animator = std::make_shared<Animator>(this->sprite);
 		animator->addAnimotion("IDLE", graphics2.creaturesTextures[Monster::ORK1].idle,
 			0.8f, 340, 120, sf::Vector2f(150, 160), Config.tileWidth + 20);
@@ -24,20 +25,21 @@ void BattleUnit::initAnimation2()
 	}
 	else
 	{
-		this->sprite.setScale(0.5f, 0.5f);
+		auto scalar = (2 * Config.tileWidth) / 130.f;
+		this->sprite.setScale(scalar, scalar);
 		this->animator = std::make_shared<Animator>(this->sprite);
 		animator->addAnimotion("IDLE", graphics2.creaturesTextures[this->type].idle,
-			0.8f, 340, 120, creatureTexturesOffest[this->type], Config.tileWidth + 20);
+			0.8f, 340, 120, creatureTexturesOffest[this->type], 65.f * this->usedTiles.x);
 		animator->addAnimotion("MOVE", graphics2.creaturesTextures[this->type].move,
-			0.8f, 340, 120, creatureTexturesOffest[this->type], Config.tileWidth + 20);
+			0.8f, 340, 120, creatureTexturesOffest[this->type], 65.f * this->usedTiles.x);
 		animator->addAnimotion("ATTAK", graphics2.creaturesTextures[this->type].attak,
-			0.8f, 340, 120, creatureTexturesOffest[this->type], Config.tileWidth + 20);
+			0.8f, 340, 120, creatureTexturesOffest[this->type], 65.f * this->usedTiles.x);
 		animator->addAnimotion("DIE", graphics2.creaturesTextures[this->type].die,
-			0.8f, 340, 120, creatureTexturesOffest[this->type], Config.tileWidth + 20);
+			0.8f, 340, 120, creatureTexturesOffest[this->type], 65.f * this->usedTiles.x);
 		animator->addAnimotion("RUN", graphics2.creaturesTextures[this->type].run,
-			0.8f, 340, 120, creatureTexturesOffest[this->type], Config.tileWidth + 20);
+			0.8f, 340, 120, creatureTexturesOffest[this->type], 65.f * this->usedTiles.x);
 		animator->addAnimotion("HURT", graphics2.creaturesTextures[this->type].hurt,
-			0.8f, 340, 120, creatureTexturesOffest[this->type], Config.tileWidth + 20);
+			0.8f, 340, 120, creatureTexturesOffest[this->type], 65.f * this->usedTiles.x);
 	}
 	this->spellEffectAnimation =
 		new AnimationComponent(this->spellEffect, *graphics2.battleEffectsSheet);
@@ -226,6 +228,7 @@ void BattleUnit::initAnimation()
 void BattleUnit::initStatistic()
 {
 	struct MonsterStats stats = creaturesStats[type];
+	this->usedTiles = stats.size;
 	this->bigCreature = stats.bigCreature;
 	this->shooter = stats.archer;
 	this->maxHp = stats.hp;
@@ -252,17 +255,45 @@ bool BattleUnit::moveMakeColision(const sf::Vector2i& moveDirection, const std::
 {
 	if (moveDirection == sf::Vector2i { 0, 0 })
 		return false;
-	bool result = battlefield->isTileBlocked(this->getPos() + moveDirection);
-	if (bigCreature)
+	sf::Vector2i temp;
+
+	if (moveDirection.x > 0)
 	{
-		if (result && this->getPos() + moveDirection == this->getPos2())
+		for (int y = 0; y < getSize().y; y++)
 		{
-			return battlefield->isTileBlocked(this->getPos2() + moveDirection);
+			temp = this->pos + moveDirection + sf::Vector2i(getSize().x - 1, y);
+			if (battlefield->isTileBlocked(temp))
+				return true;
 		}
-		if (this->getPos2() + moveDirection == this->getPos())
-			return result;
 	}
-	return result || battlefield->isTileBlocked(this->getPos2() + moveDirection);
+	if (moveDirection.y > 0)
+	{
+		for (int x = 0; x < getSize().x; x++)
+		{
+			temp = this->pos + moveDirection + sf::Vector2i(x, getSize().y - 1);
+			if (battlefield->isTileBlocked(temp))
+				return true;
+		}
+	}
+	if (moveDirection.x < 0)
+	{
+		for (int y = 0; y < getSize().y; y++)
+		{
+			temp = this->pos + moveDirection + sf::Vector2i(0, y);
+			if (battlefield->isTileBlocked(temp))
+				return true;
+		}
+	}
+	if (moveDirection.y < 0)
+	{
+		for (int x = 0; x < getSize().x; x++)
+		{
+			temp = this->pos + moveDirection + sf::Vector2i(x, 0);
+			if (battlefield->isTileBlocked(temp))
+				return true;
+		}
+	}
+	return false;
 }
 
 bool BattleUnit::isShouter() const
@@ -278,6 +309,26 @@ bool BattleUnit::isBig() const
 TileSet& BattleUnit::getNeighbourTilePos()
 {
 	return this->neighbourTilePos;
+}
+
+TileSet BattleUnit::getUsedTilesPos()
+{
+	auto set = TileSet();
+	for (int x = 0; x < this->usedTiles.x; x++)
+		for (int y = 0; y < this->usedTiles.y; y++)
+			set.insert(sf::Vector2i(this->getPos() + sf::Vector2i(x, y)));
+	return set;
+}
+
+bool BattleUnit::containsPos(sf::Vector2i pos)
+{
+	auto set = getUsedTilesPos();
+	return set.find(pos) != set.end();
+}
+
+sf::Vector2i BattleUnit::getSize() const
+{
+	return this->usedTiles;
 }
 
 sf::Vector2i BattleUnit::getPos() const
@@ -449,7 +500,7 @@ void BattleUnit::fixSpritePos()
 		this->getPos().y * Config.tileHeight) + Config.battlefieldOffset;
 	this->sprite.setPosition(fixedPos);
 	this->spellEffect.setPosition(fixedPos);
-	this->lineHP.setPosition(fixedPos - sf::Vector2f { 0, Config.tileHeight });
+	this->lineHP.setPosition(fixedPos - sf::Vector2f { 0, Config.tileHeight*2 });
 	this->text.setPosition(fixedPos - sf::Vector2f(0, Config.tileHeight + 15));
 }
 
@@ -471,7 +522,7 @@ bool BattleUnit::choseTarget(BattleUnit* t)
 void BattleUnit::setPathfinder(Battlefield* field)
 {
 	this->pathfinder = std::make_shared<Battle::PathFinder>(field, this);
-	this->timeToUpdatePathfinder = 100;
+	this->timeToUpdatePathfinder = 200;
 }
 
 void BattleUnit::setPos(sf::Vector2i tilePos)
@@ -499,9 +550,10 @@ void BattleUnit::setPos(sf::Vector2i tilePos)
 void BattleUnit::setVelocity(const sf::Vector2i direction)
 {
 	this->velocity = sf::Vector2f(direction);
-	this->velocity.y *= (Config.tileHeight / Config.tileWidth);
 	if (abs(velocity.x) == 1 && abs(velocity.y) == 1)
 		this->velocity /= 1.41f;
+	this->velocity.y *= (Config.tileHeight / Config.tileWidth);
+	
 }
 
 void BattleUnit::setEnemy(bool enemy)
@@ -511,6 +563,7 @@ void BattleUnit::setEnemy(bool enemy)
 
 void BattleUnit::giveOrder(Order order)
 {
+	this->pathfinderNeedToUpdate = true;
 	this->order = order;
 }
 
@@ -525,8 +578,8 @@ BattleUnit::BattleUnit(Monster type) :
 	alive(true),
 	enemy(false)
 {
-	this->initAnimation2();
 	this->initStatistic();
+	this->initAnimation2();
 	this->target = nullptr;
 	this->order = Order::AGRESIVE_STANCE;
 	this->spellToAnimate = Spell::SpellType::NONE;
@@ -549,19 +602,36 @@ BattleUnit::BattleUnit(Monster type) :
 	this->text.setFont(GH.globalFont);
 	this->text.setCharacterSize(12);
 	this->updateNeighbourPos();
+
+	this->thread = false;
 }
 
 BattleUnit::~BattleUnit()
 {
 }
 
+bool BattleUnit::calculatingPaths()
+{
+	if (this->thread && this->pathfinderNeedToUpdate)
+	{
+		this->pathfinderNeedToUpdate = false;
+		this->pathfinder->initializeGraph();
+		//std::cout << "init path" << std::endl;
+
+		this->pathfinder->calculatePaths();
+		//std::cout << "calculated path" << std::endl;
+
+		return true;
+	}
+	return false;
+}
+
 void BattleUnit::updatePathfinder(const float& dt)
 {
-	this->timeToUpdatePathfinder += dt * this->speed;
-	if (timeToUpdatePathfinder > 100)
+	this->timeToUpdatePathfinder += dt * 20.f + (std::rand() % 10);
+	if (timeToUpdatePathfinder > 140)
 	{
-		this->pathfinder->initializeGraph();
-		this->pathfinder->calculatePaths();
+		pathfinderNeedToUpdate = true;
 		this->timeToUpdatePathfinder = 0;
 	}
 }
@@ -572,13 +642,46 @@ void BattleUnit::updateNeighbourPos()
 	static const sf::Vector2i dirs[] = {
 		sf::Vector2i(-1, -1), sf::Vector2i(0, -1), sf::Vector2i(+1, -1), sf::Vector2i(-1, +0), /* source pos */ sf::Vector2i(+1, +0), sf::Vector2i(-1, +1), sf::Vector2i(0, +1), sf::Vector2i(+1, +1)
 	};
+
 	for (int i = 0; i < 8; i++)
 	{
-		if (neighbourTilePos.find(this->pos + dirs[i]) == neighbourTilePos.end())
-			neighbourTilePos.insert(this->pos + dirs[i]);
-
-		if (neighbourTilePos.find(this->pos2 + dirs[i]) == neighbourTilePos.end())
-			neighbourTilePos.insert(this->pos2 + dirs[i]);
+		sf::Vector2i temp;
+		if (dirs[i].x > 0)
+		{
+			for (int y = 0; y < getSize().y; y++)
+			{
+				temp = this->pos + dirs[i] + sf::Vector2i(getSize().x - 1, y);
+				if(neighbourTilePos.find(temp) == neighbourTilePos.end())
+					neighbourTilePos.insert(temp);
+			}
+		}
+		if (dirs[i].y > 0)
+		{
+			for (int x = 0; x < getSize().x; x++)
+			{
+				temp = this->pos + dirs[i] + sf::Vector2i(x, getSize().y - 1);
+				if (neighbourTilePos.find(temp) == neighbourTilePos.end())
+					neighbourTilePos.insert(temp);
+			}
+		}
+		if (dirs[i].x < 0)
+		{
+			for (int y = 0; y < getSize().y; y++)
+			{
+				temp = this->pos + dirs[i] + sf::Vector2i(0, y);
+				if (neighbourTilePos.find(temp) == neighbourTilePos.end())
+					neighbourTilePos.insert(temp);
+			}
+		}
+		if (dirs[i].y < 0)
+		{
+			for (int x = 0; x < getSize().x; x++)
+			{
+				temp = this->pos + dirs[i] + sf::Vector2i(x, 0);
+				if (neighbourTilePos.find(temp) == neighbourTilePos.end())
+					neighbourTilePos.insert(temp);
+			}
+		}
 	}
 }
 
@@ -731,7 +834,7 @@ void BattleUnit::updateAnimation2(const float& dt)
 	default:
 		break;
 	}
-	this->text.setString(action);
+	//this->text.setString(action);
 	
 	if (this->moving || this->animationState == AnimationState::IDLE)
 		this->animator->play(action, dt, this->lastDirection);

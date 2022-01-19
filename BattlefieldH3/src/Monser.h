@@ -2,17 +2,18 @@
 #include "PCH.hpp"
 struct MonsterStats
 {
-	uint8_t damage;
-	uint8_t attack;
-	uint8_t defence;
-	uint8_t level;
-	uint8_t arrows;
-	uint16_t hp;
-	float speed;
-	float attackSpeed;
-	bool fly;
-	bool archer;
-	bool bigCreature;
+	sf::Vector2i size = { 1,1 };
+	uint8_t damage = 1;
+	uint8_t attack = 0;
+	uint8_t defence = 0;
+	uint8_t level = 1;
+	uint8_t arrows = 0;
+	uint16_t hp = 10;
+	float speed = 50.f;
+	float attackSpeed = 0.5;
+	bool fly = false;
+	bool archer = false;
+	bool bigCreature = false;
 };
 struct MonsterAnimationParametrs
 {
