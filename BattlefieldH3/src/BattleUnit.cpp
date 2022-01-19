@@ -580,6 +580,7 @@ BattleUnit::BattleUnit(Monster type) :
 {
 	this->initStatistic();
 	this->initAnimation2();
+	this->animationState = AnimationState::IDLE;
 	this->target = nullptr;
 	this->order = Order::AGRESIVE_STANCE;
 	this->spellToAnimate = Spell::SpellType::NONE;
@@ -612,7 +613,7 @@ BattleUnit::~BattleUnit()
 
 bool BattleUnit::calculatingPaths()
 {
-	if (this->thread && this->pathfinderNeedToUpdate)
+	if (this->pathfinderNeedToUpdate)
 	{
 		this->pathfinderNeedToUpdate = false;
 		this->pathfinder->initializeGraph();
@@ -853,6 +854,7 @@ void BattleUnit::update(const float& dt)
 		this->updateAnimation2(0);
 
 	this->updatePathfinder(dt);
+	this->calculatingPaths();
 	if (this->spellToAnimate.spell != Spell::SpellType::NONE)
 	{
 		if (spellEffectAnimation->playedOnce(spellToString[this->spellToAnimate.spell]))
