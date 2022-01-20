@@ -16,7 +16,6 @@ Battle::PathFinder::~PathFinder()
 
 void Battle::PathFinder::initializeGraph()
 {
-	mutex.lock();
 	sf::Vector2i pos;
 	const sf::Vector2i sizes = this->battlefield->getSize();
 	for (pos.x = 0; pos.x < sizes.x; ++pos.x)
@@ -29,7 +28,6 @@ void Battle::PathFinder::initializeGraph()
 			this->getNode(pos)->accessible = this->evaluateAccessibility(tile);
 		}
 	}
-	mutex.unlock();
 	
 }
 
@@ -45,10 +43,10 @@ void Battle::PathFinder::resetGraph()
 bool Battle::PathFinder::getPath(Battle::BPath& out, const sf::Vector2i& dst)
 {
 	if (!this->battlefield->containsIsBattlefield(dst)) return false;
-	mutex.lock();
+
 	out.nodes.clear();
 	auto curnode = &(this->nodes[dst.x][dst.y]);										// nie wiem czemu nie moze byc
-	mutex.unlock();
+
 	if (!curnode->theNodeBefore ) // this->getNode(dst);
 		return false;
 
@@ -65,6 +63,8 @@ void Battle::PathFinder::calculatePaths()
 {
 	Battle::PathNode* initialNode = this->getInitialNode();
 	bool bigCreature = unit->isBig();
+	std::vector<Battle::PathNode*> neighbourNodes;
+	std::vector<sf::Vector2i> tiles;
 
 	this->push(initialNode);
 
@@ -73,14 +73,14 @@ void Battle::PathFinder::calculatePaths()
 		auto source = this->topAndPop();
 		source->locked = true;
 
-		auto neighbourNodes = calculateNeighbours(source);
+		this->calculateNeighbours(source, neighbourNodes);
 		for (PathNode* neighbour : neighbourNodes)
 		{
 			if (neighbour->locked)
 				continue;
 
 			auto destination = neighbour;
-			std::vector<sf::Vector2i> tiles;
+			tiles.clear();
 
 			if (source->coord.x < destination->coord.x)
 			{
@@ -144,14 +144,14 @@ Battle::PathNode::Accessibility Battle::PathFinder::evaluateAccessibility(const 
 	return PathNode::Accessibility::ACCESSIBLE;
 }
 
-std::vector<Battle::PathNode*> Battle::PathFinder::calculateNeighbours(const PathNode* source)
+void Battle::PathFinder::calculateNeighbours(const PathNode* source, std::vector<PathNode*>& resultNodes)
 {
-	std::vector<PathNode*> neighbours;
-	neighbours.reserve(16);
-
+	resultNodes.clear();
+	resultNodes.reserve(9);
 	static const sf::Vector2i dirs[] = {
 		sf::Vector2i(-1, +1), sf::Vector2i(0, +1), sf::Vector2i(+1, +1), sf::Vector2i(-1, +0), /* source pos */ sf::Vector2i(+1, +0), sf::Vector2i(-1, -1), sf::Vector2i(0, -1), sf::Vector2i(+1, -1)
 	};
+	
 	for (auto& dir : dirs)
 	{
 		const sf::Vector2i hlp = source->coord + dir;
@@ -161,13 +161,12 @@ std::vector<Battle::PathNode*> Battle::PathFinder::calculateNeighbours(const Pat
 		auto node = this->getNode(hlp);
 		if (node->accessible == PathNode::Accessibility::NOT_SET)
 			continue;
-		neighbours.push_back(node);
+		resultNodes.push_back(node);
 	}
 
-	return neighbours;
 }
 
-float Battle::PathFinder::getMovementCost(const sf::Vector2i& src, const sf::Vector2i& dst)
+float Battle::PathFinder::getMovementCost(sf::Vector2i src, sf::Vector2i dst)
 {
 	if (src == dst) //same tile
 		return 0;

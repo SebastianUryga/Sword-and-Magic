@@ -77,7 +77,6 @@ namespace Battle
 	public:
 		const BattleUnit* unit;
 
-		std::mutex mutex;
 		PathFinder(Battlefield* map, BattleUnit* unit);
 		virtual ~PathFinder();
 
@@ -99,8 +98,8 @@ namespace Battle
 
 		//functions
 		PathNode::Accessibility evaluateAccessibility(const BattleTile& tinfo);
-		std::vector<PathNode*> calculateNeighbours(const PathNode* source);
-		float getMovementCost(const sf::Vector2i& src, const sf::Vector2i& dst);
+		void calculateNeighbours(const PathNode* source, std::vector<PathNode*>& resultNodes);
+		float getMovementCost(sf::Vector2i src, sf::Vector2i dst);
 		PathNode* getInitialNode(bool bigCreature = false);
 		PathNode* topAndPop();
 		void push(PathNode* node);

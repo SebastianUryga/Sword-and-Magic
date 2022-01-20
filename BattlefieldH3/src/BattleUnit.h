@@ -121,7 +121,7 @@ private:
 	std::shared_ptr<Animator> animator;
 	bool isBlid = false;
 	AnimationComponent* animation;
-	AnimationComponent* spellEffectAnimation;
+	std::shared_ptr <AnimationComponent> spellEffectAnimation;
 	void initAnimation();
 	void initAnimation2();
 	void initStatistic();

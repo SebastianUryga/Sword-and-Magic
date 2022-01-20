@@ -42,7 +42,7 @@ void BattleUnit::initAnimation2()
 			0.8f, 340, 120, creatureTexturesOffest[this->type], 65.f * this->usedTiles.x);
 	}
 	this->spellEffectAnimation =
-		new AnimationComponent(this->spellEffect, *graphics2.battleEffectsSheet);
+		std::make_shared<AnimationComponent>(this->spellEffect, *graphics2.battleEffectsSheet);
 	for (auto s : allSpells)
 	{
 		struct EffectsAnimationParametrs stat = batteEffectsAnimationParamets[s];
@@ -55,7 +55,7 @@ void BattleUnit::initAnimation()
 {
 	
 	this->spellEffectAnimation =
-		new AnimationComponent(this->spellEffect, *graphics.battleEffectsSheet);
+		std::make_shared<AnimationComponent>(this->spellEffect, *graphics.battleEffectsSheet);
 	for (auto s : allSpells)
 	{
 		struct EffectsAnimationParametrs stat = batteEffectsAnimationParamets[s];
@@ -563,7 +563,6 @@ void BattleUnit::setEnemy(bool enemy)
 
 void BattleUnit::giveOrder(Order order)
 {
-	this->pathfinderNeedToUpdate = true;
 	this->order = order;
 }
 
