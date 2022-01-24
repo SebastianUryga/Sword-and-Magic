@@ -53,7 +53,7 @@ std::map<Monster, MonsterStats> creaturesStats = {
 	{Monster::KNIGHT1,{{2,2},3,7,10,3,0,31,60.f,0.7f,false,false,false }},
 	{Monster::KNIGHT2,{{2,2},6,4,11,3,0,25,40.f,0.4f,false,false,false }},
 	{Monster::KNIGHT3,{{2,2},5,4,9,3,0,25,90.f,0.55f,false,false,false }},
-	{Monster::ELF1,{{2,2},4,7,5,3,9,10,60.f,0.2f,false,true,false }},
+	{Monster::ELF1,{{2,2},4,7,5,3,10,10,60.f,0.3f,false,true,false }},
 	{Monster::ELF2,{{2,2},5,3,5,3,0,25,90.f,0.6f,false,false,false }},
 	{Monster::ELF3,{{2,2},7,4,3,3,6,20,70.f,0.24f,false,true,false }}
 };

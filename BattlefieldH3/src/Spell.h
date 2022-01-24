@@ -8,12 +8,14 @@ public:
 		WEEKNES,
 		SHIELD,
 		CURSE,
+		BLESS,
 		HASTE,
 		SLOW,
 		COUNTER_STRIKE,
 		BERSERK,
 		FORGETFULNESS,
 		TURN_TO_STONE,
+		STRENGTH,
 	};
 	SpellType spell;
 	Spell(SpellType type = SpellType::NONE):spell(type) {}
@@ -46,6 +48,6 @@ extern std::map<Spell::SpellType, int> spellCost;
 extern std::map<Spell::SpellType, EffectsAnimationParametrs> batteEffectsAnimationParamets;
 static std::vector<Spell::SpellType> allSpells = {
 	Spell::SpellType::WEEKNES,Spell::SpellType::SHIELD,Spell::SpellType::CURSE,
-	Spell::SpellType::HASTE,Spell::SpellType::COUNTER_STRIKE,Spell::SpellType::BERSERK,
-	Spell::SpellType::SLOW,Spell::SpellType::TURN_TO_STONE
+	Spell::SpellType::HASTE,Spell::SpellType::COUNTER_STRIKE,Spell::SpellType::STRENGTH,
+	Spell::SpellType::SLOW,Spell::SpellType::BLESS,Spell::SpellType::TURN_TO_STONE
 };

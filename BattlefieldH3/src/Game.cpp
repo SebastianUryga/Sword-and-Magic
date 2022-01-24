@@ -267,7 +267,7 @@ void Game::run()
 		this->updateDt();
 		this->update();
 		//std::cout << "Time Looptick update : " << measureTime.restart().asMilliseconds() << std::endl;
-
+		//measureTime.restart();
 		this->render();
 		//std::cout << "Time Looptick render: " << measureTime.restart().asMilliseconds() <<std::endl;
 

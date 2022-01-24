@@ -53,19 +53,45 @@ void Graphics2::init()
 	this->arrow.loadFromFile("Textures/arrow.png");
 	this->magicBulet.loadFromFile("Textures/magicBulet.png");
 
-	this->spellIcons[Spell::SpellType::WEEKNES] = sf::IntRect(83 * 1, 65 * 4, 83, 65);
-	this->spellIcons[Spell::SpellType::SHIELD] = sf::IntRect(83 * 5, 65 * 2, 83, 65);
-	this->spellIcons[Spell::SpellType::HASTE] = sf::IntRect(83 * 9, 65 * 4, 83, 65);
-	this->spellIcons[Spell::SpellType::SLOW] = sf::IntRect(83 * 10, 65 * 4, 83, 65);
+	this->spellIcons[Spell::SpellType::WEEKNES] = sf::IntRect(74 * 0, 74 * 1, 74, 74);
+	this->spellIcons[Spell::SpellType::SHIELD] = sf::IntRect(74 * 2, 74 * 2, 74, 74);
+	this->spellIcons[Spell::SpellType::HASTE] = sf::IntRect(74 * 2, 74 * 0, 74, 74);
+	this->spellIcons[Spell::SpellType::CURSE] = sf::IntRect(74 * 1, 74 * 1, 74, 74);
+	this->spellIcons[Spell::SpellType::BLESS] = sf::IntRect(74 * 1, 74 * 0, 74, 74);
+	this->spellIcons[Spell::SpellType::SLOW] = sf::IntRect(74 * 0, 74 * 0, 74, 74);
+	this->spellIcons[Spell::SpellType::TURN_TO_STONE] = sf::IntRect(74 * 1, 74 * 2, 74, 74);
+	this->spellIcons[Spell::SpellType::COUNTER_STRIKE] = sf::IntRect(74 * 0, 74 * 2, 74, 74);
+	this->spellIcons[Spell::SpellType::STRENGTH] = sf::IntRect(74 * 2, 74 * 1, 74, 74);
+	
+	
+	
+	this->battleEffects[Spell::SpellType::WEEKNES] = std::make_shared<sf::Texture>();
+	this->battleEffects[Spell::SpellType::WEEKNES]->loadFromFile("Textures/BattleEffects/broke sword.png");
+	this->battleEffects[Spell::SpellType::BLESS] = std::make_shared<sf::Texture>();
+	this->battleEffects[Spell::SpellType::BLESS]->loadFromFile("Textures/BattleEffects/lidership.png");
+	this->battleEffects[Spell::SpellType::TURN_TO_STONE] = std::make_shared<sf::Texture>();
+	this->battleEffects[Spell::SpellType::TURN_TO_STONE]->loadFromFile("Textures/BattleEffects/blind.png");
+	this->battleEffects[Spell::SpellType::CURSE] = std::make_shared<sf::Texture>();
+	this->battleEffects[Spell::SpellType::CURSE]->loadFromFile("Textures/BattleEffects/skull.png");
+	this->battleEffects[Spell::SpellType::SHIELD] = std::make_shared<sf::Texture>();
+	this->battleEffects[Spell::SpellType::SHIELD]->loadFromFile("Textures/BattleEffects/shield.png");
+	this->battleEffects[Spell::SpellType::HASTE] = std::make_shared<sf::Texture>();
+	this->battleEffects[Spell::SpellType::HASTE]->loadFromFile("Textures/BattleEffects/haste.png");
+	this->battleEffects[Spell::SpellType::COUNTER_STRIKE] = std::make_shared<sf::Texture>();
+	this->battleEffects[Spell::SpellType::COUNTER_STRIKE]->loadFromFile("Textures/BattleEffects/swords.png");
+	this->battleEffects[Spell::SpellType::SLOW] = std::make_shared<sf::Texture>();
+	this->battleEffects[Spell::SpellType::SLOW]->loadFromFile("Textures/BattleEffects/mud.png");
+	this->battleEffects[Spell::SpellType::STRENGTH] = std::make_shared<sf::Texture>();
+	this->battleEffects[Spell::SpellType::STRENGTH]->loadFromFile("Textures/BattleEffects/sword.png");
+
+
 
 	this->battleEffectsSheet = std::make_shared<sf::Texture>();
 	this->allSpellIcons = std::make_shared<sf::Texture>();
-	this->image.loadFromFile("Textures/SpellIcons.png");
-	this->image.createMaskFromColor(this->image.getPixel(1, 1));
+	this->image.loadFromFile("Textures/spellIkons.png");
 	this->allSpellIcons->loadFromImage(this->image);
 
 	this->image.loadFromFile("Textures/BattleEffects.png");
-	this->image.createMaskFromColor(this->image.getPixel(1, 1));
 	this->battleEffectsSheet->loadFromImage(this->image);
 
 }

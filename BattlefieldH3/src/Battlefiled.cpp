@@ -264,14 +264,9 @@ bool Battlefield::addUnit(std::shared_ptr<BattleUnit> unit, sf::Vector2i pos, bo
 		this->getTile(tile).unit = unit.get();
 		this->getTile(tile).blocked = true;
 	}
-	auto foo = [](std::shared_ptr<BattleUnit> unit)
-	{
-		std::cout << "started" << std::endl;
-		
-	};
-	//std::thread calculating(foo, unit);
 	
 	
+	this->interactiveElem.push_back(unit);
 	this->units.push_back(unit);
 	return true;
 }
@@ -559,9 +554,12 @@ void Battlefield::update(const float dt)
 
 void Battlefield::render(sf::RenderTarget* target)
 {
+	sf::Clock measureTime;
+
 	WindowObject::render(target);
 	target->draw(this->backgroud);
-
+	std::cout << "background render: " << measureTime.restart().asMilliseconds() << std::endl;
+	/*
 	for (auto v : this->tiles)
 		for (auto tile : v)
 		{
@@ -581,17 +579,45 @@ void Battlefield::render(sf::RenderTarget* target)
 				tile.shape.setFillColor(sf::Color(200, 120, 200, 20));
 			else
 				tile.shape.setFillColor(sf::Color(20, 20, 20, 20));
-			target->draw(tile.shape);
+			if (tile.blocked)
+				target->draw(tile.shape);
+		}*/
+	for (auto u : this->units)
+	{
+		if (this->selectedUnits.find(u.get()) != this->selectedUnits.end())
+		{
+			if (u->getTarget())
+				for (auto tile : u->getTarget()->getUsedTilesPos())
+				{
+					this->getTile(tile).shape.setFillColor(sf::Color(240, 5, 5, 100));
+					target->draw(this->getTile(tile).shape);
+				}
+			for (auto tile : u->getUsedTilesPos())
+			{
+				this->getTile(tile).shape.setFillColor(sf::Color(190, 190, 190, 200));
+				target->draw(this->getTile(tile).shape);
+			}
 		}
+	}
+	/*for (auto v : this->tiles)
+		for (auto tile : v)
+			if (tile.blocked)
+				target->draw(tile.shape);*/
+	std::cout << "tiles render: " << measureTime.restart().asMilliseconds() << std::endl;
 
 	for (auto& obj : this->obstacles)
 		target->draw(obj->sprite);
+	
 	for (auto& unit : this->units)
 		unit->render(target);
+	std::cout << "units render: " << measureTime.restart().asMilliseconds() << std::endl;
+
 	if (this->markerVisableTimeLeft > 0.f) 
 		target->draw(this->movmentMarker);
 	for (auto& btn : this->buttons)
 		btn.second->render(target);
+	std::cout << "buttons render: " << measureTime.restart().asMilliseconds() << std::endl;
+
 	if(this->cooldownNumber)
 		target->draw(*this->cooldownNumber);
 	target->draw(selectingArea);

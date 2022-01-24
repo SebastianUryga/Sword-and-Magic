@@ -115,6 +115,7 @@ private:
 	sf::Vector2i destenation;
 	float attackCoulddown;
 	float actualAttackCoulddown;
+	float spellVisible = 0;
 	Spell spellToAnimate;
 	sf::Sprite sprite;
 	sf::Sprite spellEffect;
@@ -174,6 +175,7 @@ public:
 	bool calculatingPaths();
 	void updatePathfinder(const float& dt);
 	void updateNeighbourPos();
+	void updateSpellAnimation(const float& dt);
 	void updateAnimation(const float& dt);
 	void updateAnimation2(const float& dt);
 	void update(const float& dt);

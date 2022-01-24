@@ -90,6 +90,7 @@ public:
 	};
 	std::shared_ptr<sf::Texture> allSpellIcons;
 	std::map<Spell::SpellType, sf::IntRect> spellIcons;
+	std::map <Spell::SpellType, std::shared_ptr<sf::Texture>> battleEffects;
 	std::shared_ptr<sf::Texture> battleEffectsSheet;
 	std::map <Background, std::shared_ptr<sf::Texture>> backgroundsTextures;
 	std::map <Monster, CreatureTexture> creaturesTextures;

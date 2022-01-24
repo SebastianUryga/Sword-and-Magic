@@ -15,12 +15,23 @@ void Spell::castSpellOnUnit(BattleUnit& unit, const Spell spell)
 	switch (spell.spell)
 	{
 	case Spell::SpellType::WEEKNES:
-		Spell::takeOffSpellFromUnit(unit, Spell(Spell::SpellType::SHIELD));
-		unit.defence -= 6;
+		Spell::takeOffSpellFromUnit(unit, Spell(Spell::SpellType::STRENGTH));
+		unit.attack -= 6;
+		break;
+	case Spell::SpellType::STRENGTH:
+		Spell::takeOffSpellFromUnit(unit, Spell(Spell::SpellType::WEEKNES));
+		unit.attack += 6;
 		break;
 	case Spell::SpellType::SHIELD:
-		Spell::takeOffSpellFromUnit(unit, Spell(Spell::SpellType::WEEKNES));
 		unit.defence += 6;
+		break; 
+	case Spell::SpellType::BLESS:
+		Spell::takeOffSpellFromUnit(unit, Spell(Spell::SpellType::CURSE));
+		unit.damage += std::ceil((float)creaturesStats[unit.type].damage*(0.25));
+		break;
+	case Spell::SpellType::CURSE:
+		Spell::takeOffSpellFromUnit(unit, Spell(Spell::SpellType::BLESS));
+		unit.damage -= std::ceil((float)creaturesStats[unit.type].damage * (0.25));
 		break;
 	case Spell::SpellType::HASTE:
 		Spell::takeOffSpellFromUnit(unit, Spell(Spell::SpellType::SLOW));
@@ -55,10 +66,19 @@ void Spell::takeOffSpellFromUnit(BattleUnit& unit, const Spell spell)
 		switch (spell.spell)
 		{
 		case Spell::SpellType::WEEKNES:
-			unit.defence += 6;
+			unit.attack += 6;
+			break;
+		case Spell::SpellType::STRENGTH:
+			unit.attack -= 6;
 			break;
 		case Spell::SpellType::SHIELD:
 			unit.defence -= 6;
+			break;
+		case Spell::SpellType::BLESS:
+			unit.damage -= std::ceil((float)creaturesStats[unit.type].damage * (0.25));
+			break;
+		case Spell::SpellType::CURSE:
+			unit.damage += std::ceil((float)creaturesStats[unit.type].damage * (0.25));
 			break;
 		case Spell::SpellType::HASTE:
 			unit.speed -= 30.f;
@@ -99,7 +119,9 @@ std::map<Spell::SpellType, std::string> spellToString = {
 	{Spell::SpellType::WEEKNES, "Weeknes"},
 	{Spell::SpellType::SHIELD, "Shield"},
 	{Spell::SpellType::HASTE, "Haste"},
+	{Spell::SpellType::STRENGTH, "Strength"},
 	{Spell::SpellType::CURSE, "Curse"},
+	{Spell::SpellType::BLESS, "Bless"},
 	{Spell::SpellType::SLOW, "Slow"},
 	{Spell::SpellType::COUNTER_STRIKE, "Counter Strike"},
 	{Spell::SpellType::BERSERK, "Berserk"},
@@ -114,6 +136,7 @@ std::map<Spell::SpellType, int> spellCost =
 	{Spell::SpellType::SHIELD, 5},
 	{Spell::SpellType::HASTE, 5},
 	{Spell::SpellType::CURSE, 6},
+	{Spell::SpellType::BLESS, 6},
 	{Spell::SpellType::SLOW, 5},
 	{Spell::SpellType::COUNTER_STRIKE, 8},
 	{Spell::SpellType::BERSERK, 12},

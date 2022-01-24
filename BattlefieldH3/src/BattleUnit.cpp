@@ -27,9 +27,10 @@ void BattleUnit::initAnimation2()
 	{
 		auto scalar = (2 * Config.tileWidth) / 130.f;
 		this->sprite.setScale(scalar, scalar);
+		this->spellEffect.setScale(scalar, scalar);
 		this->animator = std::make_shared<Animator>(this->sprite);
 		animator->addAnimotion("IDLE", graphics2.creaturesTextures[this->type].idle,
-			0.8f, 340, 120, creatureTexturesOffest[this->type], 65.f * this->usedTiles.x);
+			0.9f, 340, 120, creatureTexturesOffest[this->type], 65.f * this->usedTiles.x);
 		animator->addAnimotion("MOVE", graphics2.creaturesTextures[this->type].move,
 			0.8f, 340, 120, creatureTexturesOffest[this->type], 65.f * this->usedTiles.x);
 		animator->addAnimotion("ATTAK", graphics2.creaturesTextures[this->type].attak,
@@ -39,16 +40,16 @@ void BattleUnit::initAnimation2()
 		animator->addAnimotion("RUN", graphics2.creaturesTextures[this->type].run,
 			0.8f, 340, 120, creatureTexturesOffest[this->type], 65.f * this->usedTiles.x);
 		animator->addAnimotion("HURT", graphics2.creaturesTextures[this->type].hurt,
-			0.8f, 340, 120, creatureTexturesOffest[this->type], 65.f * this->usedTiles.x);
+			0.6f, 340, 120, creatureTexturesOffest[this->type], 65.f * this->usedTiles.x);
 	}
-	this->spellEffectAnimation =
+	/*this->spellEffectAnimation =
 		std::make_shared<AnimationComponent>(this->spellEffect, *graphics2.battleEffectsSheet);
 	for (auto s : allSpells)
 	{
 		struct EffectsAnimationParametrs stat = batteEffectsAnimationParamets[s];
 		this->spellEffectAnimation->addAnimotion(
 			spellToString[s], stat.animationTimer, stat.start_frame_x, stat.start_frame_y, stat.frames_x, stat.frames_y, stat.width, stat.height, false, { 6, 50 }, Config.tileWidth);
-	}
+	}*/
 }
 
 void BattleUnit::initAnimation()
@@ -499,7 +500,7 @@ void BattleUnit::fixSpritePos()
 		this->getPos().x * Config.tileWidth,
 		this->getPos().y * Config.tileHeight) + Config.battlefieldOffset;
 	this->sprite.setPosition(fixedPos);
-	this->spellEffect.setPosition(fixedPos);
+	this->spellEffect.setPosition(fixedPos - sf::Vector2f(0, Config.tileHeight + 15));
 	this->lineHP.setPosition(fixedPos - sf::Vector2f { 0, Config.tileHeight*2 });
 	this->text.setPosition(fixedPos - sf::Vector2f(0, Config.tileHeight + 15));
 }
@@ -568,6 +569,7 @@ void BattleUnit::giveOrder(Order order)
 
 void BattleUnit::clickLeft([[maybe_unused]] bool down, [[maybe_unused]] bool previousState)
 {
+	;
 }
 
 BattleUnit::BattleUnit(Monster type) :
@@ -584,6 +586,7 @@ BattleUnit::BattleUnit(Monster type) :
 	this->target = nullptr;
 	this->order = Order::AGRESIVE_STANCE;
 	this->spellToAnimate = Spell::SpellType::NONE;
+	this->spellEffect.setColor(sf::Color(255,255,255,0));
 	this->destenation = { 0, 0 };
 	this->attacking = false;
 	this->attacked = false;
@@ -603,7 +606,7 @@ BattleUnit::BattleUnit(Monster type) :
 	this->text.setFont(GH.globalFont);
 	this->text.setCharacterSize(12);
 	this->updateNeighbourPos();
-
+	this->fixSpritePos();
 	this->thread = false;
 }
 
@@ -630,7 +633,7 @@ bool BattleUnit::calculatingPaths()
 void BattleUnit::updatePathfinder(const float& dt)
 {
 	this->timeToUpdatePathfinder += dt * 20.f + (std::rand() % 10);
-	if (timeToUpdatePathfinder > 140)
+	if (this->alive && timeToUpdatePathfinder > 140)
 	{
 		pathfinderNeedToUpdate = true;
 		this->timeToUpdatePathfinder = 0;
@@ -684,6 +687,39 @@ void BattleUnit::updateNeighbourPos()
 			}
 		}
 	}
+}
+
+void BattleUnit::updateSpellAnimation(const float& dt)
+{
+	if (this->spellToAnimate.spell != Spell::SpellType::NONE)
+	{
+		if(spellVisible == 0)
+			this->spellEffect.setTexture(*graphics2.battleEffects[this->spellToAnimate.spell]);
+		this->spellVisible += dt;
+	
+		auto color = this->spellEffect.getColor();
+		
+		this->spellEffect.setColor(color);
+		if (spellVisible > 3)
+		{
+			spellVisible = 0;
+			this->spellToAnimate.spell = Spell::SpellType::NONE;
+		}
+		else if(spellVisible > 1.5)
+		{
+			if (color.a < 20) color.a = 0;
+			else color.a -= 20;
+
+		}
+		else
+		{
+			if (color.a > 235) color.a = 255;
+			else color.a += 20;
+		}
+
+		this->spellEffect.setColor(color);
+	}
+
 }
 
 void BattleUnit::updateAnimation(const float& dt)
@@ -855,6 +891,7 @@ void BattleUnit::update(const float& dt)
 
 	this->updatePathfinder(dt);
 	this->calculatingPaths();
+	/*
 	if (this->spellToAnimate.spell != Spell::SpellType::NONE)
 	{
 		if (spellEffectAnimation->playedOnce(spellToString[this->spellToAnimate.spell]))
@@ -862,6 +899,8 @@ void BattleUnit::update(const float& dt)
 		else
 			spellEffectAnimation->play(spellToString[this->spellToAnimate.spell], dt, false);
 	}
+	*/
+	this->updateSpellAnimation(dt);
 	for (auto& s : this->castedSpellList)
 	{
 		s.timeRemain -= dt;

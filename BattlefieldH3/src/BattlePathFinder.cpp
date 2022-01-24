@@ -63,14 +63,18 @@ void Battle::PathFinder::calculatePaths()
 {
 	Battle::PathNode* initialNode = this->getInitialNode();
 	bool bigCreature = unit->isBig();
-	std::vector<Battle::PathNode*> neighbourNodes;
-	std::vector<sf::Vector2i> tiles;
+	static std::vector<Battle::PathNode*> neighbourNodes;
+	static std::vector<sf::Vector2i> tiles;
 
 	this->push(initialNode);
+	sf::Clock clock;
+	clock.restart();
 
 	while (!this->pq.empty())
 	{
 		auto source = this->topAndPop();
+		//if (clock.getElapsedTime().asMilliseconds() > 15) while (!this->pq.empty()) this->pq.pop();
+
 		source->locked = true;
 
 		this->calculateNeighbours(source, neighbourNodes);
@@ -131,6 +135,7 @@ void Battle::PathFinder::calculatePaths()
 				push(neighbour);
 		}
 	}
+	std::cout << " path finder time" << clock.getElapsedTime().asMilliseconds() << std::endl;
 }
 
 Battle::PathNode::Accessibility Battle::PathFinder::evaluateAccessibility(const BattleTile& tinfo)

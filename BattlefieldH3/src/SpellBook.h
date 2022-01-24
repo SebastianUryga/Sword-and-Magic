@@ -15,9 +15,9 @@ public:
 		owner(book),
 		type(type)
 	{
-		this->shape = sf::FloatRect(pos, { 83, 65 });
+		this->shape = sf::FloatRect(pos, { 74, 74 });
 		this->sprite.setTexture(*graphics2.allSpellIcons);
-		this->sprite.setTextureRect(Graphics::selectSpellIcon(type));
+		this->sprite.setTextureRect(Graphics2::selectSpellIcon(type));
 		this->sprite.setPosition(pos);
 	}
 	void render(sf::RenderTarget* target)
