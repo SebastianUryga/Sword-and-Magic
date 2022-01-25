@@ -115,23 +115,23 @@ void Game::settingState()
 
 	auto marker = std::make_shared<sf::Text>("->",GH.globalFont,30);
 	if (Config.battlefiledTileHegiht == 20 && Config.battlefiledTileWidth == 50)
-		marker->setPosition(160, 280);
+		marker->setPosition(260, 280);
 	else if (Config.battlefiledTileHegiht == 26 && Config.battlefiledTileWidth == 60)
-		marker->setPosition(160, 350);
+		marker->setPosition(260, 350);
 	else if (Config.battlefiledTileHegiht == 34 && Config.battlefiledTileWidth == 70)
-		marker->setPosition(160, 420);
+		marker->setPosition(260, 420);
 	else
 		marker->setPosition(-1000, -1000);
 	settingMenu->texts.push_back(marker);
 	
 	settingMenu->background.setTexture(graphics.menuBackgroud.get());
-	settingMenu->addText("Select battle size in tiles", sf::Vector2f(200, 240));
+	settingMenu->addText("Select battle size in tiles", sf::Vector2f(300, 240));
 	settingMenu->buttons["SizeOption1"] = std::make_shared<Button>(
-		200, 280, 250, 50, this->font, "50 x 20");
+		300, 280, 250, 50, this->font, "50 x 20");
 	settingMenu->buttons["SizeOption2"] = std::make_shared<Button>(
-		200, 350, 250, 50, this->font, "60 x 26");
+		300, 350, 250, 50, this->font, "60 x 26");
 	settingMenu->buttons["SizeOption3"] = std::make_shared<Button>(
-		200, 420, 250, 50, this->font, "70 x 34");
+		300, 420, 250, 50, this->font, "70 x 34");
 
 
 	settingMenu->buttons["EXIT_GAME"] = std::make_shared<Button>(
@@ -143,19 +143,19 @@ void Game::settingState()
 	settingMenu->buttons["SizeOption1"]->addFuctionallity([=]() {
 		Config.battlefiledTileWidth = 50;
 		Config.battlefiledTileHegiht = 20;
-		marker->setPosition(160, 280);
+		marker->setPosition(260, 280);
 		Config.save();
 	});
 	settingMenu->buttons["SizeOption2"]->addFuctionallity([=]() {
 		Config.battlefiledTileWidth = 60;
 		Config.battlefiledTileHegiht = 26;
-		marker->setPosition(160, 350);
+		marker->setPosition(260, 350);
 		Config.save();
 	});
 	settingMenu->buttons["SizeOption3"]->addFuctionallity([=]() {
 		Config.battlefiledTileWidth = 70;
 		Config.battlefiledTileHegiht = 34;
-		marker->setPosition(160, 420);
+		marker->setPosition(260, 420);
 		Config.save();
 	});
 	for(auto button : settingMenu->buttons)

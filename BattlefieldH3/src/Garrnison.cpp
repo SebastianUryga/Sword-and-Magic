@@ -70,7 +70,7 @@ void GarrnisonSlot::setPos(sf::Vector2f pos)
 {
 	this->shape = sf::FloatRect(pos.x, pos.y, 70, 67);
 	this->sprite.setPosition(pos);
-	this->number->setPosition(pos + sf::Vector2f(2, 48));
+	this->number->setPosition(pos + sf::Vector2f(4, 49));
 	this->selectFrame.setPosition(pos);
 }
 
@@ -136,6 +136,6 @@ GarrnisonSlot::GarrnisonSlot(Garrnison* owner, int id, float x, float y) :
 	//this->sprite.setTexture(*graphics.allCreaturePortraits);
 	this->number = std::make_shared < sf::Text>();
 	this->number->setFont(GH.globalFont);
-	this->number->setCharacterSize(15);
+	this->number->setCharacterSize(22);
 	this->setPos(sf::Vector2f(x, y));
 }

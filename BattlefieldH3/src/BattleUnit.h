@@ -119,6 +119,7 @@ private:
 	Spell spellToAnimate;
 	sf::Sprite sprite;
 	sf::Sprite spellEffect;
+	sf::RectangleShape rect;
 	std::shared_ptr<Animator> animator;
 	bool isBlid = false;
 	AnimationComponent* animation;
@@ -127,10 +128,11 @@ private:
 	void initAnimation2();
 	void initStatistic();
 	void initTextDmg(const int dmg);
-
+	float keyTime = 10.f;
 public:
 	bool thread = false;
-
+	std::function<void()> onClick;
+	std::function<void()> onDoubleClick;
 	bool moveMakeColision(const sf::Vector2i& moveDirection, const std::shared_ptr<Battlefield> battlefield) const;
 	bool isShouter() const;
 	bool isBig() const;
@@ -141,6 +143,7 @@ public:
 	sf::Vector2i getPos() const;
 	sf::Vector2i getPos2() const;
 	BattleUnit* getTarget() const;
+	Order getOrder() const;
 	bool getAttacked();
 	bool getShooted();
 	bool getAlive() const;

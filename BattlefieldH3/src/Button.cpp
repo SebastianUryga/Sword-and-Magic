@@ -76,6 +76,34 @@ void Button::hover(bool on)
 	}
 }
 
+void Button::changeColorRed(bool red)
+{
+	if (red)
+	{
+		idleColor.r = 170;
+		hoverColor.r = 250;
+	}
+	else
+	{
+		idleColor.r = 70;
+		hoverColor.r = 150;
+	}
+}
+
+void Button::changeColorGreen(bool green)
+{
+	if (green)
+	{
+		idleColor.g = 170;
+		hoverColor.g = 250;
+	}
+	else
+	{
+		idleColor.g = 70;
+		hoverColor.g = 150;
+	}
+}
+
 void Button::addFuctionallity(const std::function<void()>& f)
 {
 	this->onClick = f;

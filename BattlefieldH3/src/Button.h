@@ -46,6 +46,8 @@ public:
 	void hover(bool on) override;
 
 	//functions
+	void changeColorRed(bool);
+	void changeColorGreen(bool);
 	void addFuctionallity(const std::function<void()>& f);
 	void addRightClickPopup(const std::shared_ptr<WindowObject> window);
 	void block(bool on);

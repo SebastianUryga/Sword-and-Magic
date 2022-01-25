@@ -2,14 +2,16 @@
 
 void Battlefield::initButtons()
 {
+	auto pos = sf::Vector2f((140.f / 160.f) * Config.windowSize.x, (77.f / 90.f) * Config.windowSize.y);
 	this->buttons["Quit"] = std::make_shared<Button>(
-		1400, 770, 60, 30, &this->font, "Quit");
+		pos.x, pos.y, 60, 50, &this->font, "Quit");
 	this->buttons["Quit"]->addFuctionallity([=]() { close(); });
 	this->interactiveElem.push_back(this->buttons["Quit"]);
 	if (this->mode == GameMode::Game)
 	{
+		pos = sf::Vector2f((9.f / 160.f) * Config.windowSize.x, (77.f / 90.f) * Config.windowSize.y);
 		this->buttons["Defensive"] = std::make_shared<Button>(
-			100, 770, 170, 30, &this->font, "Defensive Position");
+			pos.x, pos.y, 190, 50, &this->font, "Defensive Position");
 		this->buttons["Defensive"]->addFuctionallity([=]() {
 			for (auto& unit : selectedUnits)
 			{
@@ -19,8 +21,9 @@ void Battlefield::initButtons()
 		});
 		this->interactiveElem.push_back(this->buttons["Defensive"]);
 
+		pos = sf::Vector2f((29.f / 160.f) * Config.windowSize.x, (77.f / 90.f) * Config.windowSize.y);
 		this->buttons["Agresive"] = std::make_shared<Button>(
-			310, 770, 170, 30, &this->font, "Agresive Position");
+			pos.x, pos.y, 190, 50, &this->font, "Agresive Position");
 		this->buttons["Agresive"]->addFuctionallity([=]() {
 			for (auto& unit : selectedUnits)
 			{
@@ -30,8 +33,9 @@ void Battlefield::initButtons()
 		});
 		this->interactiveElem.push_back(this->buttons["Agresive"]);
 
+		pos = sf::Vector2f((5.f / 16.f) * Config.windowSize.x, (77.f / 90.f) * Config.windowSize.y);
 		this->buttons["SpellBook"] = std::make_shared<Button>(
-			500, 770, 170, 30, &this->font, "Spell Book");
+			pos.x, pos.y, 170, 50, &this->font, "Spell Book");
 		this->buttons["SpellBook"]->addFuctionallity([=]() {
 			assert(!players[0]->isAI());
 			GH.pushWindowT<SpellBook>(this->spellToCast,players[0]->getActuallMana());
@@ -42,11 +46,13 @@ void Battlefield::initButtons()
 			std::to_string(std::ceil(players[0]->getSpellCooldown())),
 			GH.globalFont, 30);
 
-		this->cooldownNumber->setPosition(680, 770);
+		pos = sf::Vector2f((17.f / 40.f) * Config.windowSize.x, (77.f / 90.f) * Config.windowSize.y);
+		this->cooldownNumber->setPosition(pos);
 		this->texts.push_back(cooldownNumber);
 
+		pos = sf::Vector2f((73.f / 160.f) * Config.windowSize.x, (77.f / 90.f) * Config.windowSize.y);
 		this->buttons["PauseStartGame"] = std::make_shared<Button>(
-			730, 770, 170, 30, &this->font, "Pause Game");
+			pos.x, pos.y, 170, 50, &this->font, "Pause Game");
 		this->buttons["PauseStartGame"]->addFuctionallity([=]() {
 			if (gamePaused)
 			{
@@ -63,20 +69,24 @@ void Battlefield::initButtons()
 	}
 	if (this->mode == GameMode::Editor)
 	{
+		pos = sf::Vector2f((75.f / 160.f) * Config.windowSize.x, (77.f / 90.f) * Config.windowSize.y);
 		this->buttons["Save"] = std::make_shared<Button>(
-			750, 770, 60, 30, &this->font, "Save");
+			pos.x, pos.y, 60, 50, &this->font, "Save");
 		this->buttons["Save"]->addFuctionallity([=]() { save("startMap.txt"); });
 		this->interactiveElem.push_back(this->buttons["Save"]);
 
+		pos = sf::Vector2f((65.f / 160.f) * Config.windowSize.x, (77.f / 90.f) * Config.windowSize.y);
 		this->buttons["Load"] = std::make_shared<Button>(
-			650, 770, 60, 30, &this->font, "Load");
+			pos.x, pos.y, 60, 50, &this->font, "Load");
 		this->buttons["Load"]->addFuctionallity([=]() { load("startMap.txt"); });
 		this->interactiveElem.push_back(this->buttons["Load"]);
 
+		pos = sf::Vector2f((5.f / 160.f) * Config.windowSize.x, (74.f / 90.f) * Config.windowSize.y);
 		this->gar1 = std::make_shared<Garrnison>(
-			players[0]->army, this->background.getPosition() + sf::Vector2f(50, 740));
+			players[0]->army, this->background.getPosition() + sf::Vector2f(pos.x, pos.y));
+		pos = sf::Vector2f((85.f / 160.f) * Config.windowSize.x, (74.f / 90.f) * Config.windowSize.y);
 		this->gar2 = std::make_shared<Garrnison>(
-			players[1]->army, this->background.getPosition() + sf::Vector2f(850, 740));
+			players[1]->army, this->background.getPosition() + sf::Vector2f(pos.x, pos.y));
 		for (auto slot : gar1->slots)
 		{
 			this->texts.push_back(slot->number);
@@ -264,7 +274,34 @@ bool Battlefield::addUnit(std::shared_ptr<BattleUnit> unit, sf::Vector2i pos, bo
 		this->getTile(tile).unit = unit.get();
 		this->getTile(tile).blocked = true;
 	}
-	
+	unit->onDoubleClick = [=]()
+	{
+		selectedUnits.clear();
+		for (auto u : units)
+		{
+			if (u->getAlive() 
+				&& u->isEnemy() == unit->isEnemy() 
+				&& u->getType() == unit->getType())
+				selectedUnits.insert(u.get());
+		}
+	};
+	unit->onClick = [=]()
+	{
+		if (!unit->getAlive()) return;
+		if (this->spellToCast != Spell::SpellType::NONE)
+		{
+			
+			Spell::castSpellOnUnit(*unit, this->spellToCast);
+			BH.spellCasted(this->spellToCast, this->players[0].get());
+			this->spellToCast = Spell::SpellType::NONE;
+			
+		}
+		else
+		{
+			selectedUnits.clear();
+			selectedUnits.insert(unit.get());
+		}
+	};
 	
 	this->interactiveElem.push_back(unit);
 	this->units.push_back(unit);
@@ -368,7 +405,7 @@ void Battlefield::clickLeft(bool down, bool previousState)
 	{
 		if (this->mode == GameMode::Game)
 		{
-			if (this->spellToCast != Spell::SpellType::NONE)
+			/*if (this->spellToCast != Spell::SpellType::NONE)
 			{
 				auto tilePos = GH.mouseTilePos;
 				if (!this->containsIsBattlefield(tilePos))
@@ -380,7 +417,7 @@ void Battlefield::clickLeft(bool down, bool previousState)
 					BH.spellCasted(this->spellToCast,this->players[0].get());
 					this->spellToCast = Spell::SpellType::NONE;
 				}
-			}
+			}*/
 			this->selectingArea.setFillColor(sf::Color(120, 120, 120, 0));
 			this->selectedUnits.clear();
 			sf::FloatRect bounds = this->selectingArea.getGlobalBounds();
@@ -542,6 +579,21 @@ void Battlefield::update(const float dt)
 		bool cooldownPassed = this->players[0]->getSpellCooldown() <= 0;
 		this->buttons["SpellBook"]->block(!cooldownPassed);
 		this->cooldownNumber->setString(std::to_string((int)std::ceil(players[0]->getSpellCooldown())));
+		
+		bool makeGreenBtn = false, makeRedBtn = false;
+		if (!this->selectedUnits.empty())
+		{
+			for (auto u : this->selectedUnits)
+			{
+				auto order = u->getOrder();
+				if (order == Order::MOVE || order == Order::DEFENSIVE_POS)
+					makeGreenBtn = true;
+				if (order == Order::ATTACK || order == Order::AGRESIVE_STANCE)
+					makeRedBtn = true;
+			}
+		}
+		this->buttons["Agresive"]->changeColorRed(makeRedBtn);
+		this->buttons["Defensive"]->changeColorGreen(makeGreenBtn);
 		this->updateMovmentMarker(dt);
 		BH.update(dt);
 	}
@@ -554,34 +606,11 @@ void Battlefield::update(const float dt)
 
 void Battlefield::render(sf::RenderTarget* target)
 {
-	sf::Clock measureTime;
+	//sf::Clock measureTime;
 
 	WindowObject::render(target);
 	target->draw(this->backgroud);
-	std::cout << "background render: " << measureTime.restart().asMilliseconds() << std::endl;
-	/*
-	for (auto v : this->tiles)
-		for (auto tile : v)
-		{
-			if (tile.unit)
-			{
-
-				tile.shape.setFillColor(sf::Color(120, 120, 120, 70));
-				for (auto u : this->selectedUnits)
-					//if (u->getTarget() && u->getTarget()->getPos() == tile.pos)
-					if (u->getTarget() && u->getTarget()->containsPos(tile.pos))
-						tile.shape.setFillColor(sf::Color(240, 5, 5, 100));
-
-				if (this->selectedUnits.find(tile.unit) != this->selectedUnits.end())
-					tile.shape.setFillColor(sf::Color(190, 190, 190, 200));
-			}
-			else if (tile.blocked)
-				tile.shape.setFillColor(sf::Color(200, 120, 200, 20));
-			else
-				tile.shape.setFillColor(sf::Color(20, 20, 20, 20));
-			if (tile.blocked)
-				target->draw(tile.shape);
-		}*/
+	
 	for (auto u : this->units)
 	{
 		if (this->selectedUnits.find(u.get()) != this->selectedUnits.end())
@@ -603,20 +632,20 @@ void Battlefield::render(sf::RenderTarget* target)
 		for (auto tile : v)
 			if (tile.blocked)
 				target->draw(tile.shape);*/
-	std::cout << "tiles render: " << measureTime.restart().asMilliseconds() << std::endl;
+	//std::cout << "tiles render: " << measureTime.restart().asMilliseconds() << std::endl;
 
 	for (auto& obj : this->obstacles)
 		target->draw(obj->sprite);
 	
 	for (auto& unit : this->units)
 		unit->render(target);
-	std::cout << "units render: " << measureTime.restart().asMilliseconds() << std::endl;
+	//std::cout << "units render: " << measureTime.restart().asMilliseconds() << std::endl;
 
 	if (this->markerVisableTimeLeft > 0.f) 
 		target->draw(this->movmentMarker);
 	for (auto& btn : this->buttons)
 		btn.second->render(target);
-	std::cout << "buttons render: " << measureTime.restart().asMilliseconds() << std::endl;
+	//std::cout << "buttons render: " << measureTime.restart().asMilliseconds() << std::endl;
 
 	if(this->cooldownNumber)
 		target->draw(*this->cooldownNumber);

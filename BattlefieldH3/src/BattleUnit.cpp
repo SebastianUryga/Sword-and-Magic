@@ -347,6 +347,11 @@ BattleUnit* BattleUnit::getTarget() const
 	return this->target;
 }
 
+Order BattleUnit::getOrder() const
+{
+	return this->order;
+}
+
 bool BattleUnit::getAttacked()
 {
 	if (this->attacked)
@@ -500,8 +505,14 @@ void BattleUnit::fixSpritePos()
 		this->getPos().x * Config.tileWidth,
 		this->getPos().y * Config.tileHeight) + Config.battlefieldOffset;
 	this->sprite.setPosition(fixedPos);
+	this->shape.top = this->sprite.getPosition().y - (creatureTexturesOffest[this->type].y / 2.f) *this->sprite.getScale().y;
+	this->shape.left = this->sprite.getPosition().x + 10 * this->sprite.getScale().y;
+	this->shape.height = 180 * this->sprite.getScale().y;
+	this->shape.width = 50.f*this->getSize().x * this->sprite.getScale().y;
+	this->rect.setPosition(shape.left, shape.top);
+	this->rect.setSize(sf::Vector2f((float)shape.width, (float)shape.height));
 	this->spellEffect.setPosition(fixedPos - sf::Vector2f(0, Config.tileHeight + 15));
-	this->lineHP.setPosition(fixedPos - sf::Vector2f { 0, Config.tileHeight*2 });
+	this->lineHP.setPosition(shape.left-5, shape.top);
 	this->text.setPosition(fixedPos - sf::Vector2f(0, Config.tileHeight + 15));
 }
 
@@ -538,8 +549,6 @@ void BattleUnit::setPos(sf::Vector2i tilePos)
 		this->lineHP.setPosition(pixelPos - sf::Vector2f(0,Config.tileHeight));
 		this->text.setPosition(pixelPos - sf::Vector2f(0, 60));
 	}
-	this->shape.left = pixelPos.x;
-	this->shape.top = pixelPos.y;
 	this->pos = tilePos;
 	this->pos2.y = tilePos.y;
 	if (this->bigCreature)
@@ -559,6 +568,10 @@ void BattleUnit::setVelocity(const sf::Vector2i direction)
 
 void BattleUnit::setEnemy(bool enemy)
 {
+	if(enemy)
+		this->lineHP.setFillColor(sf::Color::Red);
+	else
+		this->lineHP.setFillColor(sf::Color::Green);
 	this->enemy = enemy;
 }
 
@@ -569,7 +582,18 @@ void BattleUnit::giveOrder(Order order)
 
 void BattleUnit::clickLeft([[maybe_unused]] bool down, [[maybe_unused]] bool previousState)
 {
-	;
+	if (previousState && down == false)
+	{
+		if (this->keyTime < 0.5)
+		{
+			this->onDoubleClick();
+		}
+		else
+		{
+			this->onClick();
+			this->keyTime = 0;
+		}
+	}
 }
 
 BattleUnit::BattleUnit(Monster type) :
@@ -597,12 +621,7 @@ BattleUnit::BattleUnit(Monster type) :
 	this->moving2 = false;
 	this->offset = { 100, 100 };
 	this->actualAttackCoulddown = (float)(rand() % 73) / 21.f;
-	this->shape.top = sprite.getPosition().y;
-	this->shape.left = sprite.getPosition().x;
-	this->shape.height = 90;
-	this->shape.width = 50;
-	this->lineHP.setFillColor(sf::Color::Green);
-	this->lineHP.setSize(sf::Vector2f(50, 3));
+	this->lineHP.setSize(sf::Vector2f(25 * this->getSize().x, 3));
 	this->text.setFont(GH.globalFont);
 	this->text.setCharacterSize(12);
 	this->updateNeighbourPos();
@@ -888,7 +907,7 @@ void BattleUnit::update(const float& dt)
 		this->updateAnimation2(dt);
 	if (this->isBlid)
 		this->updateAnimation2(0);
-
+	this->keyTime = std::min(this->keyTime + std::max(dt,0.02f), 10.f);
 	this->updatePathfinder(dt);
 	this->calculatingPaths();
 	/*
@@ -925,6 +944,9 @@ void BattleUnit::update(const float& dt)
 	this->lineHP.move(toMove);
 	this->text.move(toMove);
 	this->offset += (toMove);
+	this->shape.left += (toMove.x);
+	this->shape.top += (toMove.y);
+	rect.setPosition(shape.left, shape.top);
 	if (Config.tileWidth < abs(this->offset.x) || Config.tileHeight < abs(this->offset.y))
 	{
 		this->moving = false;
@@ -956,7 +978,7 @@ void BattleUnit::update(const float& dt)
 	{
 		hp = 0;
 	}
-	this->lineHP.setSize(sf::Vector2f(50 * ((float)hp / (float)maxHp), 3));
+	this->lineHP.setSize(sf::Vector2f(25 * this->getSize().x * ((float)hp / (float)maxHp), 3));
 }
 
 void BattleUnit::render(sf::RenderTarget* target)
@@ -966,6 +988,8 @@ void BattleUnit::render(sf::RenderTarget* target)
 		this->missle->render(target);
 	if (this->spellToAnimate.spell != Spell::SpellType::NONE)
 		target->draw(this->spellEffect);
+	//this->rect.setFillColor(sf::Color(200,200,200,130));
+	//target->draw(this->rect);
 	target->draw(this->lineHP);
 	target->draw(text);
 	for (auto text : this->damageTexts)

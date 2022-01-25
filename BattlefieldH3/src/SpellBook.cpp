@@ -6,8 +6,11 @@ SpellBook::SpellBook(Spell& selectedSpell, int actualMana)
 	for (size_t i = 0; i < allSpells.size(); i++)
 	{
 		auto pos = this->background.getPosition();
-		pos += sf::Vector2f{ 20.f + (i % 7) * 90,10.f + (i / 7) * 80 };
+		pos += sf::Vector2f{ 20.f + (i % 7) * 90,10.f + (i / 7) * 95 };
 		auto temp = std::make_shared<SpellIcon>(*this, pos, allSpells[i]);
+		auto text = std::make_shared<sf::Text>("Cost: " + std::to_string(spellCost[allSpells[i]]), this->font, 16);
+		text->setPosition(pos + sf::Vector2f(0, 75));
+		this->texts.push_back(text);
 		this->spellIcons.push_back(temp);
 		this->interactiveElem.push_back(this->spellIcons.back());
 	}
