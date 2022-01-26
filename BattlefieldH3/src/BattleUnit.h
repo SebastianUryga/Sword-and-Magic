@@ -97,6 +97,7 @@ private:
 	bool lastDirection; // false - left, true - right
 	std::shared_ptr<Battle::PathFinder> pathfinder;
 	bool pathfinderNeedToUpdate;
+	int tryToMove = 0;
 
 	float timeToUpdatePathfinder;
 	TileSet neighbourTilePos;

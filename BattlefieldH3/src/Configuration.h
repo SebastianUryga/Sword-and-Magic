@@ -13,6 +13,10 @@ public:
 	sf::Vector2i battleTileOffset = { 1,6 };
 	sf::Vector2f battlefieldOffset = { 20.f,250.f };
 	sf::Vector2u windowSize;
+
+	bool PvP = true;
+	int availableLevels = 1;
+
 	static Configuration& Get();
 
 	bool load();

@@ -27,6 +27,7 @@ public:
 	void mainMenuState();
 	void settingState();
 	void gameState();
+	void campainState();
 	void editorState();
 	void endApplication();
 

@@ -110,11 +110,7 @@ void Battle::PathFinder::calculatePaths()
 			float cost = this->getMovementCost(source->coord, destination->coord);
 			float costAtNextTile = source->getCost() + static_cast<float>(cost);
 
-			if (destination->getCost() > costAtNextTile)
-			{
-				destination->setCost(costAtNextTile);
-				destination->theNodeBefore = source;
-			}
+			
 			bool availble = true;
 			for (auto tile : tiles)
 			{
@@ -124,13 +120,24 @@ void Battle::PathFinder::calculatePaths()
 					break;
 				}
 				auto node = this->getNode(tile);
-				if (node->accessible == PathNode::Accessibility::BLOCKED ||
-					node->accessible == PathNode::Accessibility::BLOCKVIS)
+				if (node->accessible == PathNode::Accessibility::BLOCKED)
+				{
+					availble = false;
+					break;
+				}
+				if (node->accessible == PathNode::Accessibility::BLOCKVIS)
 				{
 					availble = false;
 					break;
 				}
 			}
+
+			if (destination->getCost() > costAtNextTile)
+			{
+				destination->setCost(costAtNextTile);
+				destination->theNodeBefore = source;
+			}
+
 			if (availble)
 				push(neighbour);
 		}

@@ -50,12 +50,16 @@ sf::Vector2i BattleHandler::choseMoveDirection(BattleUnit* unit) const
 			}
 		}
 		static const sf::Vector2i dirs[] = {
-			sf::Vector2i(0, 0),sf::Vector2i(-1, +1), sf::Vector2i(0, +1), sf::Vector2i(+1, +1), sf::Vector2i(-1, +0), /* source pos */ sf::Vector2i(+1, +0), sf::Vector2i(-1, -1), sf::Vector2i(0, -1), sf::Vector2i(+1, -1)
+			sf::Vector2i(0, 0),sf::Vector2i(-1, +1), sf::Vector2i(0, +1), sf::Vector2i(+1, +1), sf::Vector2i(-1, +0),
+			sf::Vector2i(+1, +0), sf::Vector2i(-1, -1), sf::Vector2i(0, -1), sf::Vector2i(+1, -1),
+			sf::Vector2i(-1, +2),sf::Vector2i(-2, +1), sf::Vector2i(0, +2), sf::Vector2i(+2, +1), sf::Vector2i(-2, +0),
+			sf::Vector2i(+2, +0), sf::Vector2i(-2, -1), sf::Vector2i(0, -2), sf::Vector2i(+1, -2),sf::Vector2i(+1,+2)
 		};
 		Battle::BPath path;
-		for (int i = 0; !unit->pathfinder->getPath(path, unit->destenation + dirs[i]) && i < 8; i++)
+		for (int i = 0; !unit->pathfinder->getPath(path, unit->destenation + dirs[i]) && i < 18; i++)
 		{
-			if(i > 7)
+			
+			if(i > 16)
 				std::cout << "cos nie ten z pathem" << std::endl;
 		}
 		for (int i = 0; i < path.nodes.size(); i++)
@@ -81,7 +85,19 @@ sf::Vector2i BattleHandler::choseMoveDirection(BattleUnit* unit) const
 			velocity.y = -1;
 		if (dir.y > 0)
 			velocity.y = 1;
-		while (unit->moveMakeColision(velocity, this->battlefield))
+		if (unit->moveMakeColision(velocity, this->battlefield) && unit->timeToUpdatePathfinder < 30 && unit->tryToMove > 4)
+		{
+			unit->giveOrder(Order::DEFENSIVE_POS);
+			velocity = { 0, 0 };
+		}
+		else if (unit->moveMakeColision(velocity, this->battlefield))
+		{
+			velocity = { 0, 0 };
+			unit->tryToMove++;
+			unit->timeToUpdatePathfinder += 20;
+		}
+	}
+		/*while (unit->moveMakeColision(velocity, this->battlefield))
 		{
 			switch (rand() % 4)
 			{
@@ -118,7 +134,7 @@ sf::Vector2i BattleHandler::choseMoveDirection(BattleUnit* unit) const
 				break;
 			}
 		}
-	}
+	}*/
 	return velocity;
 }
 
@@ -162,8 +178,8 @@ BattleUnit* BattleHandler::calculateBestTargetFor(BattleUnit* unit)
 		if (!unit->isEnemyWith(u.get()) || !u->getAlive())
 			continue;
 
-		float cost =
-			unit->pathfinder->getNode(u->getPos())->getCost();
+		float cost = 10000;
+			//unit->pathfinder->getNode(u->getPos())->getCost();
 		for(auto pos: u->getUsedTilesPos())
 			cost = std::min(cost, unit->pathfinder->getNode(pos)->getCost());
 		float value = 100;
@@ -219,9 +235,15 @@ void BattleHandler::unitAttakced(BattleUnit* unit)
 		return;
 	bool attackBlocked = false;
 	if (target->haveDefensePosition())
+	{
 		if (rand() % 100 < ((target->defence < 0 ? 0 : target->defence) - unit->attack) * 3 + 50)
 			attackBlocked = true;
-
+	}
+	else
+	{
+		if (rand() % 100 < ((target->defence < 0 ? 0 : target->defence) - unit->attack) * 3 )
+			attackBlocked = true;
+	}
 	int damage = this->calculateDamage(unit, target, attackBlocked);
 	if (attackBlocked)
 		target->makeBlock(unit->pos, damage);
@@ -314,17 +336,17 @@ void BattleHandler::update(const float& dt)
 		{
 			std::shared_ptr<WindowObject> win;
 			win = std::make_shared<WindowObject>(500, 300, 450, 400, GH.globalFont);
-			win->addText("Battle Result", { 180, 10 });
+			win->addText("Battle Result", { 180, 40 });
 			if(this->nuberUnitsInBattle[0] > 0)
-				win->addText("Player1 won:", { 10, 10 });
+				win->addText("Player1 won:", { 180, 10 });
 			else
-				win->addText("Player2 won:", { 10, 10 });
+				win->addText("Player2 won:", { 180, 10 });
 
 			for(int i = 0 ; i < 2 ; i++)
 				if(this->battlefield->players[i]->isAI())
-					win->addText("Player" + std::to_string(i+1) +"(AI) lost:", { 10 + i * 250.f, 40 });
+					win->addText("Player" + std::to_string(i+1) +"(AI) lost:", { 10 + i * 250.f, 70 });
 				else
-					win->addText("Player" + std::to_string(i+1) + " lost:", { 10 + i * 250.f, 40 });
+					win->addText("Player" + std::to_string(i+1) + " lost:", { 10 + i * 250.f, 70 });
 
 			float i = 0, j = 0;
 			for (auto type : allMonseters2)
@@ -337,12 +359,12 @@ void BattleHandler::update(const float& dt)
 				}
 				if (number[0] != 0)
 				{
-					win->addText(creatureToString[type] + "\t " + std::to_string(number[0]), { 10, 70 + i });
+					win->addText(creatureToString[type] + "\t " + std::to_string(number[0]), { 10, 100 + i });
 					i += 24;
 				}
 				if (number[1] != 0)
 				{
-					win->addText(creatureToString[type] + "\t " + std::to_string(number[1]), { 240, 70 + j });
+					win->addText(creatureToString[type] + "\t " + std::to_string(number[1]), { 240, 100 + j });
 					j += 24;
 				}
 			}
@@ -361,7 +383,6 @@ void BattleHandler::update(const float& dt)
 void BattleHandler::handleAggressiveStance(BattleUnit* unit)
 {
 	bool result;
-	// gdy jednostka stoi i czeka to metoda się cały czas wykonuje
 	auto target = this->calculateBestTargetFor(unit);
 	unit->choseTarget(target);
 			

@@ -62,6 +62,7 @@ void Graphics2::init()
 	this->spellIcons[Spell::SpellType::TURN_TO_STONE] = sf::IntRect(74 * 1, 74 * 2, 74, 74);
 	this->spellIcons[Spell::SpellType::COUNTER_STRIKE] = sf::IntRect(74 * 0, 74 * 2, 74, 74);
 	this->spellIcons[Spell::SpellType::STRENGTH] = sf::IntRect(74 * 2, 74 * 1, 74, 74);
+	this->spellIcons[Spell::SpellType::NONE] = sf::IntRect(0 , 0, 0, 0);
 	
 	
 	

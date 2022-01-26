@@ -417,6 +417,7 @@ void BattleUnit::doMove(sf::Vector2i direction)
 {
 	if (direction != sf::Vector2i(0, 0))
 	{
+		this->tryToMove = 0;
 		this->moving = true;
 		if (this->animationState != AnimationState::MOVING)
 		{

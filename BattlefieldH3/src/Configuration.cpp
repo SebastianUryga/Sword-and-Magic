@@ -30,6 +30,8 @@ bool Configuration::load()
 	if (battleTileOffset.y > 10) battleTileOffset.y = 10;
 	if (battleTileOffset.y < 0) battleTileOffset.y = 0;
 	file >> battlefieldOffset.x >> battlefieldOffset.y;
+	file >> PvP;
+	file >> availableLevels;
 	file.close();
 	
 	tileWidth = ((float)windowSize.x - (battlefieldOffset.x + 20)) / (float)battlefiledTileWidth;
@@ -48,6 +50,8 @@ bool Configuration::save()
 	file << battlefiledTileWidth << " " << battlefiledTileHegiht << std::endl;
 	file << battleTileOffset.x << " " << battleTileOffset.y << std::endl;
 	file << battlefieldOffset.x << " " << battlefieldOffset.y << std::endl;
+	file << PvP << std::endl;
+	file << availableLevels << std::endl;
 	file.close();
 
 	tileWidth = ((float)windowSize.x - (battlefieldOffset.x+20)) / (float)battlefiledTileWidth;

@@ -77,15 +77,20 @@ void Game::mainMenuState()
 
 	mainMenu->background.setTexture(graphics.menuBackgroud.get());
 
+	mainMenu->buttons["CAMPAIN_STATE_BTN"] = std::make_shared<Button>(
+		300, 180, 250, 50, this->font, "Campain");
 	mainMenu->buttons["GAME_STATE_BTN"] = std::make_shared<Button>(
-		300, 280, 250, 50, this->font, "New Game");
+		300, 280, 250, 50, this->font, "Start Custom Game");
 	mainMenu->buttons["SETTINGS_STATE_BTN"] = std::make_shared<Button>(
 		300, 380, 250, 50, this->font, "Settings");
 	mainMenu->buttons["EDITOR_STATE_BTN"] = std::make_shared<Button>(
-		300, 480, 250, 50, this->font, "Editor");
+		300, 480, 250, 50, this->font, "Edit Custom Game");
 	mainMenu->buttons["EXIT_GAME"] = std::make_shared<Button>(
-		300, 680, 250, 50, this->font, "Quit");
+		300, 620, 250, 50, this->font, "Quit");
 
+	mainMenu->buttons["CAMPAIN_STATE_BTN"]->addFuctionallity([=]() {
+		this->campainState();
+	}); 
 	mainMenu->buttons["GAME_STATE_BTN"]->addFuctionallity([=]() {
 		this->gameState();
 	});
@@ -113,6 +118,7 @@ void Game::settingState()
 		this->window->getSize().y,
 		*this->font);
 
+	// Battle size settings
 	auto marker = std::make_shared<sf::Text>("->",GH.globalFont,30);
 	if (Config.battlefiledTileHegiht == 20 && Config.battlefiledTileWidth == 50)
 		marker->setPosition(260, 280);
@@ -134,12 +140,6 @@ void Game::settingState()
 		300, 420, 250, 50, this->font, "70 x 34");
 
 
-	settingMenu->buttons["EXIT_GAME"] = std::make_shared<Button>(
-		300, 680, 250, 50, this->font, "Quit");
-
-	settingMenu->buttons["EXIT_GAME"]->addFuctionallity([=]() {
-		GH.popWindow(settingMenu);
-	});
 	settingMenu->buttons["SizeOption1"]->addFuctionallity([=]() {
 		Config.battlefiledTileWidth = 50;
 		Config.battlefiledTileHegiht = 20;
@@ -158,6 +158,39 @@ void Game::settingState()
 		marker->setPosition(260, 420);
 		Config.save();
 	});
+
+	// PvP settings
+	auto marker2 = std::make_shared<sf::Text>("->", GH.globalFont, 30);
+	if (Config.PvP)
+		marker2->setPosition(560, 280);
+	else 
+		marker2->setPosition(560, 350);
+	settingMenu->texts.push_back(marker2);
+
+	settingMenu->addText("Choose Game Mode", sf::Vector2f(600, 240));
+	settingMenu->buttons["ModeOption1"] = std::make_shared<Button>(
+		600, 280, 250, 50, this->font, "Player vs AI");
+	settingMenu->buttons["ModeOption2"] = std::make_shared<Button>(
+		600, 350, 250, 50, this->font, "Player vs Player");
+
+	settingMenu->buttons["ModeOption1"]->addFuctionallity([=]() {
+		Config.PvP = false;
+		marker2->setPosition(560, 280);
+		Config.save();
+	});
+	settingMenu->buttons["ModeOption2"]->addFuctionallity([=]() {
+		Config.PvP = true;
+		marker2->setPosition(560, 350);
+		Config.save();
+	});
+
+	settingMenu->buttons["EXIT_GAME"] = std::make_shared<Button>(
+		300, 680, 250, 50, this->font, "Quit");
+
+	settingMenu->buttons["EXIT_GAME"]->addFuctionallity([=]() {
+		GH.popWindow(settingMenu);
+	});
+	
 	for(auto button : settingMenu->buttons)
 		settingMenu->interactiveElem.push_back(button.second);
 	GH.pushWindow(settingMenu);
@@ -166,6 +199,66 @@ void Game::settingState()
 void Game::gameState()
 {
 	BH.startBallte();
+}
+
+void Game::campainState()
+{
+	std::shared_ptr<WindowObject> campainMenu = std::make_shared<WindowObject>(
+		(float)this->window->getPosition().x,
+		(float)this->window->getPosition().y,
+		this->window->getSize().x,
+		this->window->getSize().y,
+		*this->font);
+
+	campainMenu->addText("Choose Level", sf::Vector2f(300, 240));
+	campainMenu->buttons["Level1"] = std::make_shared<Button>(
+		300, 280, 250, 50, this->font, "Level 1");
+	campainMenu->buttons["Level2"] = std::make_shared<Button>(
+		300, 350, 250, 50, this->font, "Level 2");
+	campainMenu->buttons["Level3"] = std::make_shared<Button>(
+		300, 420, 250, 50, this->font, "Level 3");
+	campainMenu->buttons["Level4"] = std::make_shared<Button>(
+		300, 490, 250, 50, this->font, "Level 4");
+	campainMenu->buttons["Level5"] = std::make_shared<Button>(
+		300, 560, 250, 50, this->font, "Level 5");
+	campainMenu->buttons["Level6"] = std::make_shared<Button>(
+		600, 280, 250, 50, this->font, "Level 6");
+	campainMenu->buttons["Level7"] = std::make_shared<Button>(
+		600, 350, 250, 50, this->font, "Level 7");
+	campainMenu->buttons["Level8"] = std::make_shared<Button>(
+		600, 420, 250, 50, this->font, "Level 8");
+	campainMenu->buttons["Level9"] = std::make_shared<Button>(
+		600, 490, 250, 50, this->font, "Level 9");
+
+	campainMenu->buttons["Level1"]->addFuctionallity([=]() {
+		;
+	});
+	campainMenu->buttons["Level2"]->addFuctionallity([=]() {
+		;
+	});
+	campainMenu->buttons["Level3"]->addFuctionallity([=]() {
+		;
+	});
+	campainMenu->buttons["Level4"]->addFuctionallity([=]() {
+		;
+	});
+
+	for (int i = 1; i <= 9; i++)
+		if (i <= Config.availableLevels)
+			campainMenu->buttons["Level" + std::to_string(i)]->block(false);
+		else
+			campainMenu->buttons["Level" + std::to_string(i)]->block(true);
+
+	campainMenu->buttons["EXIT_GAME"] = std::make_shared<Button>(
+		300, 680, 250, 50, this->font, "Quit");
+
+	campainMenu->buttons["EXIT_GAME"]->addFuctionallity([=]() {
+		GH.popWindow(campainMenu);
+	});
+
+	for (auto button : campainMenu->buttons)
+		campainMenu->interactiveElem.push_back(button.second);
+	GH.pushWindow(campainMenu);
 }
 
 void Game::editorState()
@@ -219,7 +312,6 @@ void Game::updateEvents()
 			GH.handleMouseButtonClick(sf::Mouse::Left, false);
 			GH.handleMouseButtonClick(sf::Mouse::Right, false);
 		}
-		
 	}
 }
 

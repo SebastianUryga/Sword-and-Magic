@@ -32,8 +32,12 @@ void Battlefield::initButtons()
 			}
 		});
 		this->interactiveElem.push_back(this->buttons["Agresive"]);
+		
+		pos = sf::Vector2f((59.f / 160.f) * Config.windowSize.x, (75.f / 90.f) * Config.windowSize.y);
+		this->activeSpellIcon.setPosition(pos);
+		this->activeSpellIcon.setTexture(*graphics2.allSpellIcons);
 
-		pos = sf::Vector2f((5.f / 16.f) * Config.windowSize.x, (77.f / 90.f) * Config.windowSize.y);
+		pos = sf::Vector2f((67.f / 160.f) * Config.windowSize.x, (77.f / 90.f) * Config.windowSize.y);
 		this->buttons["SpellBook"] = std::make_shared<Button>(
 			pos.x, pos.y, 170, 50, &this->font, "Spell Book");
 		this->buttons["SpellBook"]->addFuctionallity([=]() {
@@ -46,11 +50,11 @@ void Battlefield::initButtons()
 			std::to_string(std::ceil(players[0]->getSpellCooldown())),
 			GH.globalFont, 30);
 
-		pos = sf::Vector2f((17.f / 40.f) * Config.windowSize.x, (77.f / 90.f) * Config.windowSize.y);
+		pos = sf::Vector2f((81.f / 160.f) * Config.windowSize.x, (77.f / 90.f) * Config.windowSize.y);
 		this->cooldownNumber->setPosition(pos);
 		this->texts.push_back(cooldownNumber);
 
-		pos = sf::Vector2f((73.f / 160.f) * Config.windowSize.x, (77.f / 90.f) * Config.windowSize.y);
+		pos = sf::Vector2f((90.f / 160.f) * Config.windowSize.x, (77.f / 90.f) * Config.windowSize.y);
 		this->buttons["PauseStartGame"] = std::make_shared<Button>(
 			pos.x, pos.y, 170, 50, &this->font, "Pause Game");
 		this->buttons["PauseStartGame"]->addFuctionallity([=]() {
@@ -69,17 +73,30 @@ void Battlefield::initButtons()
 	}
 	if (this->mode == GameMode::Editor)
 	{
-		pos = sf::Vector2f((75.f / 160.f) * Config.windowSize.x, (77.f / 90.f) * Config.windowSize.y);
+		pos = sf::Vector2f((75.f / 160.f) * Config.windowSize.x, (78.f / 90.f) * Config.windowSize.y);
 		this->buttons["Save"] = std::make_shared<Button>(
-			pos.x, pos.y, 60, 50, &this->font, "Save");
+			pos.x, pos.y, 60, 40, &this->font, "Save");
 		this->buttons["Save"]->addFuctionallity([=]() { save("startMap.txt"); });
 		this->interactiveElem.push_back(this->buttons["Save"]);
 
-		pos = sf::Vector2f((65.f / 160.f) * Config.windowSize.x, (77.f / 90.f) * Config.windowSize.y);
+		pos = sf::Vector2f((65.f / 160.f) * Config.windowSize.x, (78.f / 90.f) * Config.windowSize.y);
 		this->buttons["Load"] = std::make_shared<Button>(
-			pos.x, pos.y, 60, 50, &this->font, "Load");
+			pos.x, pos.y, 60, 40, &this->font, "Load");
 		this->buttons["Load"]->addFuctionallity([=]() { load("startMap.txt"); });
 		this->interactiveElem.push_back(this->buttons["Load"]);
+
+		pos = sf::Vector2f((63.f / 160.f) * Config.windowSize.x, (74.f / 90.f) * Config.windowSize.y);
+		this->buttons["Background"] = std::make_shared<Button>(
+			pos.x, pos.y, 200, 35, &this->font, "Change Background");
+		this->buttons["Background"]->addFuctionallity([=]() {
+			if(backgroundType == Background::BACKGROUND1)
+				this->backgroundType = Background::BACKGROUND2;
+			else
+				this->backgroundType = Background::BACKGROUND1;
+
+			backgroud.setTexture(*graphics2.backgroundsTextures[backgroundType]);
+		});
+		this->interactiveElem.push_back(this->buttons["Background"]);
 
 		pos = sf::Vector2f((5.f / 160.f) * Config.windowSize.x, (74.f / 90.f) * Config.windowSize.y);
 		this->gar1 = std::make_shared<Garrnison>(
@@ -241,7 +258,7 @@ void Battlefield::changeUnitPos(BattleUnit* unit, sf::Vector2i oldPos, sf::Vecto
 {
 	if (oldPos == newPos)
 		return;
-
+	
 	for (auto tile : unit->getUsedTilesPos())
 	{
 		this->getTile(tile).unit = nullptr;
@@ -405,21 +422,13 @@ void Battlefield::clickLeft(bool down, bool previousState)
 	{
 		if (this->mode == GameMode::Game)
 		{
-			/*if (this->spellToCast != Spell::SpellType::NONE)
-			{
-				auto tilePos = GH.mouseTilePos;
-				if (!this->containsIsBattlefield(tilePos))
-					return;
-				BattleTile& clickedTile = this->getTile(tilePos);
-				if (clickedTile.unit && clickedTile.unit->getAlive())
-				{
-					Spell::castSpellOnUnit(*clickedTile.unit, this->spellToCast);
-					BH.spellCasted(this->spellToCast,this->players[0].get());
-					this->spellToCast = Spell::SpellType::NONE;
-				}
-			}*/
 			this->selectingArea.setFillColor(sf::Color(120, 120, 120, 0));
-			this->selectedUnits.clear();
+			bool clearSelected = true;
+			for(auto btn : this->buttons) 
+				if(btn.second->contains(GH.mousePosWindow))
+					clearSelected = false;
+			if(clearSelected) this->selectedUnits.clear();
+
 			sf::FloatRect bounds = this->selectingArea.getGlobalBounds();
 			for (int x = (bounds.left - Config.battlefieldOffset.x) / Config.tileWidth;
 			x < (bounds.left + bounds.width - Config.battlefieldOffset.x) / Config.tileWidth;
@@ -510,8 +519,10 @@ Battlefield::Battlefield(GameMode mode) :
 	this->shape = sf::FloatRect(20, 20, Config.windowSize.x - 20, Config.windowSize.y - 20);
 
 	this->mode = mode;
-	this->selectingArea.setFillColor(sf::Color(120, 120, 120, 0));
+	this->backgroundType = Background::BACKGROUND1;
 
+	this->selectingArea.setFillColor(sf::Color(120, 120, 120, 0));
+	
 	//this->initArmy();
 	this->initPlayers();
 	this->initButtons();
@@ -579,7 +590,8 @@ void Battlefield::update(const float dt)
 		bool cooldownPassed = this->players[0]->getSpellCooldown() <= 0;
 		this->buttons["SpellBook"]->block(!cooldownPassed);
 		this->cooldownNumber->setString(std::to_string((int)std::ceil(players[0]->getSpellCooldown())));
-		
+		this->activeSpellIcon.setTextureRect(Graphics2::selectSpellIcon(this->spellToCast));
+
 		bool makeGreenBtn = false, makeRedBtn = false;
 		if (!this->selectedUnits.empty())
 		{
@@ -645,6 +657,7 @@ void Battlefield::render(sf::RenderTarget* target)
 		target->draw(this->movmentMarker);
 	for (auto& btn : this->buttons)
 		btn.second->render(target);
+	target->draw(activeSpellIcon);
 	//std::cout << "buttons render: " << measureTime.restart().asMilliseconds() << std::endl;
 
 	if(this->cooldownNumber)
@@ -681,6 +694,7 @@ void Battlefield::save(const std::string& path)
 		{
 			file << " " << troop.monster.monster << " " << troop.count << " ";
 		}
+	file << (int) this->backgroundType << std::endl;
 }
 
 bool Battlefield::load(const std::string& path)
@@ -689,7 +703,7 @@ bool Battlefield::load(const std::string& path)
 	file.open(path);
 	int temp, type;
 	sf::Vector2i pos1, pos2;
-	// loading ObstaclesBigFon
+	// loading Obstacles
 	file >> temp;
 	if (temp < 0)
 		return false;
@@ -721,6 +735,9 @@ bool Battlefield::load(const std::string& path)
 			Monster temp(type);
 			troop.monster = temp;
 		}
+	// loading BackgroundType
+	file >> temp;
+	this->backgroundType = (Background)temp;
 
 	return true;
 }

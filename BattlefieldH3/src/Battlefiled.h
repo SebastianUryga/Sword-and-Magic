@@ -29,6 +29,7 @@ class Battlefield :
 {
 private:
 	sf::Sprite backgroud;
+	Background backgroundType;
 	GameMode mode;
 
 	std::vector<std::vector<BattleTile>> tiles;
@@ -53,6 +54,7 @@ private:
 	bool gamePaused = false;
 	Monster selectedUnitType;
 	Spell spellToCast;
+	sf::Sprite activeSpellIcon;
 	sf::RectangleShape selectingArea;
 	std::shared_ptr<sf::Text> cooldownNumber;
 
