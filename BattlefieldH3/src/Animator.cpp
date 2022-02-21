@@ -1,5 +1,60 @@
 #include "Animator.h"
 
+Animator::Animation::Animation(sf::Sprite & sprite,
+	std::vector<std::shared_ptr<sf::Texture>>& textures,
+	float animationTimer,
+	int width, int height,
+	sf::Vector2f origin, float tileWidth) :
+	sprite(sprite),
+	textures(textures),
+	animationTimer(animationTimer),
+	width(width),
+	height(height),
+	origin(origin),
+	tileWidth(tileWidth)
+{}
+
+void Animator::Animation::play(const float& dt, bool inversely)
+{
+	// Set Frame
+
+	this->sprite.setTexture(*textures[currentFrame]);
+
+	this->timer += speed * dt;
+	if (this->timer > animationTimer)
+	{
+		if (!inversely)
+		{
+			if (++currentFrame >= textures.size())
+			{
+				currentFrame = 0;
+				this->playedOnce = true;
+			}
+
+		}
+		else
+		{
+			if (--currentFrame <= 0)
+			{
+				currentFrame = (int)textures.size() - 1;
+				this->playedOnce = true;
+			}
+		}
+		//reset timer;
+		this->timer = 0.f;
+	}
+
+}
+
+void Animator::Animation::reset(bool inversely)
+{
+	if (!inversely)
+		currentFrame = 0;
+	else
+		currentFrame = (int)textures.size() - 1;
+	this->playedOnce = false;
+	this->timer = 0;
+}
 
 Animator::Animator(sf::Sprite& sprite)
 	: sprite(sprite)

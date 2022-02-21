@@ -1,4 +1,7 @@
 #pragma once
+#include "PCH.hpp"
+class BattleUnit;
+
 class Spell
 {
 public:

@@ -1,5 +1,9 @@
 
 #include "GuiHandler.h"
+#include "WindowObject.h"
+
+class WindowObject;
+class PopupWindow;
 
 GuiHandler& GH = GuiHandler::Get();
 
@@ -51,6 +55,10 @@ std::shared_ptr<WindowObject> GuiHandler::topWindow()
 bool GuiHandler::empty()
 {
 	return this->vecWindow.empty();
+}
+
+GuiHandler::GuiHandler()
+{
 }
 
 GuiHandler::~GuiHandler()

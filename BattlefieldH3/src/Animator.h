@@ -12,16 +12,7 @@ public:
 			std::vector<std::shared_ptr<sf::Texture>>& textures,
 			float animationTimer,
 			int width, int height,
-			sf::Vector2f origin, float tileWidth) :
-			sprite(sprite),
-			textures(textures),
-			animationTimer(animationTimer),
-			width(width),
-			height(height),
-			origin(origin),
-			tileWidth(tileWidth)
-			
-		{}
+			sf::Vector2f origin, float tileWidth);
 		std::vector<std::shared_ptr<sf::Texture>>& textures;
 		sf::Sprite& sprite;
 		sf::Vector2f origin;
@@ -33,46 +24,10 @@ public:
 		int height;
 		float speed= 10.f;
 		bool playedOnce = false;
-		void play(const float& dt, bool inversely)
-		{
-			// Set Frame
 
-			this->sprite.setTexture(*textures[currentFrame]);
-
-			this->timer += speed * dt;
-			if (this->timer > animationTimer)
-			{
-				if (!inversely)
-				{
-					if (++currentFrame >= textures.size())
-					{
-						currentFrame = 0;
-						this->playedOnce = true;
-					}
-					
-				}
-				else
-				{
-					if (--currentFrame <= 0)
-					{
-						currentFrame = (int)textures.size()-1;
-						this->playedOnce = true;
-					}
-				}
-				//reset timer;
-				this->timer = 0.f;
-			}
-			
-		}
-		void reset(bool inversely)
-		{
-			if (!inversely)
-				currentFrame = 0;
-			else
-				currentFrame = (int)textures.size()-1;
-			this->playedOnce = false;
-			this->timer = 0;
-		}
+		void play(const float& dt, bool inversely);
+		
+		void reset(bool inversely);
 	};
 	std::map<std::string, Animation*> animations;
 	Animation* lastAnimation = nullptr;

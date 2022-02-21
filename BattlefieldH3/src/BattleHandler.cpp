@@ -1,18 +1,29 @@
-#include "GuiHandler.h"
+#include "BattleHandler.h"
+#include "Battlefiled.h"
+
+class Monster;
+class Battlefield;
+class Spell;
+class InterfaceElem;
+class Battlefield;
+class BattleUnit;
+class Player;
 
 BattleHandler::BattleHandler()
 {
+	this->nuberUnitsInBattle[0] = 0;
+	this->nuberUnitsInBattle[1] = 0;
 }
 
 BattleHandler::~BattleHandler()
 {
 }
 
-void BattleHandler::startBallte()
+void BattleHandler::startBallte(std::string path)
 {
 	if (!this->battlefield)
 		battlefield = std::make_shared<Battlefield>(GameMode::Game);
-	battlefield->load("startMap.txt");
+	battlefield->load(path);
 	this->initArmyQueque();
 	this->battlefield->interactiveElem.push_back(this->battlefield);
 	GH.pushWindow(this->battlefield);
@@ -62,12 +73,23 @@ sf::Vector2i BattleHandler::choseMoveDirection(BattleUnit* unit) const
 			if(i > 16)
 				std::cout << "cos nie ten z pathem" << std::endl;
 		}
+		bool checkBetterWay = true;
 		for (int i = 0; i < path.nodes.size(); i++)
 		{
-			dir = path.nodes[i].coord - unit->getPos();
-			if (abs(dir.x) <= 1 && abs(dir.y) <= 1)
+			dir = this->length(path.nodes[i].coord - unit->getPos()) < this->length(dir) ? path.nodes[i].coord - unit->getPos() : dir;
+			if (dir.x == 0 && dir.y == 0 && i > 0)
+			{
+				dir = path.nodes[i - 1].coord - unit->getPos();
+				checkBetterWay = false;
 				break;
+			}
+			
+				//if (abs(dir.x) <= 1 && abs(dir.y) <= 1)
+			//	break;
 		}
+		auto temp = (path.nodes.empty() ? unit->destenation : path.endPos()) - unit->getPos();
+		if (length(temp) < length(temp - dir) +2 && checkBetterWay)
+			dir = temp;
 		if (path.nextPos() == sf::Vector2i(-1, -1))
 		{
 			unit->giveOrder(Order::AGRESIVE_STANCE);
@@ -257,7 +279,7 @@ void BattleHandler::unitAttakced(BattleUnit* unit)
 void BattleHandler::unitMadeShot(BattleUnit* unit)
 {
 	if (unit->target)
-		unit->missle->setTarget(unit->target->pos);
+		unit->missle->setTarget(unit->target);
 }
 
 void BattleHandler::unitKilled(BattleUnit* unit)
@@ -289,8 +311,15 @@ void BattleHandler::updateMissle(BattleUnit* unit)
 			auto target = this->battlefield->getTile(pos).unit;
 			bool attackBlocked = false;
 			if (target->haveDefensePosition())
-				if (rand() % 100 < (target->defence - unit->attack) * 3 + 50)
+			{
+				if (rand() % 100 < ((target->defence < 0 ? 0 : target->defence) - unit->attack) * 3 + 50)
 					attackBlocked = true;
+			}
+			else
+			{
+				if (rand() % 100 < ((target->defence < 0 ? 0 : target->defence) - unit->attack) * 3)
+					attackBlocked = true;
+			}
 
 			int damage = this->calculateDamage(unit, target, attackBlocked);
 			if (attackBlocked)
@@ -298,7 +327,7 @@ void BattleHandler::updateMissle(BattleUnit* unit)
 			else
 				target->reciveDamage(unit->pos, damage);
 			target->hp -= (int)damage;
-			if (target->hp < 1)
+			if (target->alive && !target->getAlive())
 				this->unitKilled(target);
 			unit->missle = nullptr;
 		}
@@ -315,6 +344,7 @@ void BattleHandler::update(const float& dt)
 				unit->update(0.f);
 			else
 				unit->update(dt);
+			
 			if (unit->getAttacked())
 			{
 				this->unitAttakced(unit.get());
@@ -327,26 +357,30 @@ void BattleHandler::update(const float& dt)
 			if (unit->animationState != AnimationState::ATTACKING && unit->animationState != AnimationState::SHOOTHING && unit->animationState != AnimationState::RECIVING_DMG && unit->animationState != AnimationState::BLOCKING && unit->getAlive() && !unit->moving)
 			{
 				//this->battlefield->changeUnitPos(unit->id,unit->pos,unit)
-				this->makeDecision(unit.get());
+				if (!this->battlefield->gamePaused)
+					this->makeDecision(unit.get());
 			}
 		}
 		this->updateQueque();
 
-		if (this->nuberUnitsInBattle[0] <= 0 || this->nuberUnitsInBattle[1] <= 0)
+		if ((this->nuberUnitsInBattle[0] <= 0 && this->armyQueque[0].empty())
+			|| (this->nuberUnitsInBattle[1] <= 0 && this->armyQueque[1].empty()))
 		{
 			std::shared_ptr<WindowObject> win;
-			win = std::make_shared<WindowObject>(500, 300, 450, 400, GH.globalFont);
-			win->addText("Battle Result", { 180, 40 });
-			if(this->nuberUnitsInBattle[0] > 0)
-				win->addText("Player1 won:", { 180, 10 });
+			win = std::make_shared<WindowObject>(400, 200, 600, 400, GH.globalFont);
+			
+			if (this->nuberUnitsInBattle[0] > 0)
+				win->addText("Player1 won:", { 250, 10 });
 			else
-				win->addText("Player2 won:", { 180, 10 });
+				win->addText("Player2 won:", { 250, 10 });
 
-			for(int i = 0 ; i < 2 ; i++)
-				if(this->battlefield->players[i]->isAI())
-					win->addText("Player" + std::to_string(i+1) +"(AI) lost:", { 10 + i * 250.f, 70 });
+			win->addText("Battle Result", { 240, 40 });
+
+			for (int i = 0; i < 2; i++)
+				if (this->battlefield->players[i]->isAI())
+					win->addText("Player" + std::to_string(i + 1) + "(AI) lost:", { 10 + i * 360.f, 70 });
 				else
-					win->addText("Player" + std::to_string(i+1) + " lost:", { 10 + i * 250.f, 70 });
+					win->addText("Player" + std::to_string(i + 1) + " lost:", { 10 + i * 360.f, 70 });
 
 			float i = 0, j = 0;
 			for (auto type : allMonseters2)
@@ -364,14 +398,17 @@ void BattleHandler::update(const float& dt)
 				}
 				if (number[1] != 0)
 				{
-					win->addText(creatureToString[type] + "\t " + std::to_string(number[1]), { 240, 100 + j });
+					win->addText(creatureToString[type] + "\t " + std::to_string(number[1]), { 370, 100 + j });
 					j += 24;
 				}
 			}
 
-			win->buttons["OK"] = std::make_shared<Button>(450 + 450, 260 + 400, 40, 40, &win->font, "OK");
+			win->buttons["OK"] = std::make_shared<Button>(400 + 550, 160 + 400, 40, 40, &win->font, "OK");
 			win->buttons["OK"]->addFuctionallity([=]() {
 				win->close();
+				auto playerWon = this->nuberUnitsInBattle[0] > 0;
+				if (playerWon)
+					Config.unlockNextLevel(battlefield->level + 1);
 				battlefield->close();
 			});
 			win->interactiveElem.push_back(win->buttons["OK"]);
@@ -411,7 +448,8 @@ void BattleHandler::handleAggressiveStance(BattleUnit* unit)
 //It can be more clear
 void BattleHandler::handleDefenceStance(BattleUnit* unit)
 {
-	
+	if (this->battlefield->players[1]->isAI() && unit->isEnemy())
+		unit->giveOrder(Order::AGRESIVE_STANCE);
 	bool result;
 
 	auto target = this->calculateBestTargetFor(unit);
@@ -490,6 +528,11 @@ void BattleHandler::handleMoveOrder(BattleUnit* unit)
 		unit->giveOrder(Order::DEFENSIVE_POS);
 }
 
+double BattleHandler::length(sf::Vector2i vec) const
+{
+	return pow(vec.x, 2.0) + pow(vec.y, 2.0);
+}
+
 int BattleHandler::calculateDamage(BattleUnit* unit, BattleUnit* target, bool attackBlocked)
 {
 	int distance =
@@ -500,8 +543,6 @@ int BattleHandler::calculateDamage(BattleUnit* unit, BattleUnit* target, bool at
 	float damage = (float)unit->damage;
 	if (attackBlocked)
 		damage /= 2;
-	if (distance > 15)
-		damage *= 0.5;
 	if (damage < 1)
 		damage = 1;
 	return (int)std::round(damage);
@@ -546,7 +587,7 @@ void BattleHandler::updateQueque()
 			int conut = 0;
 			do
 			{
-				int temp = rand() % Config.battlefiledTileHegiht;;
+				int temp = rand() % Config.battlefiledTileHegiht;
 				pos = { i * (Config.battlefiledTileWidth - creaturesStats[creature].size.x) , temp };
 			} while (this->battlefield->isTileBlocked(pos) && conut++ < 60);
 

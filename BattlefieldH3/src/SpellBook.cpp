@@ -1,21 +1,21 @@
-#include "GuiHandler.h"
+#include "SpellBook.h"
 
-SpellBook::SpellBook(Spell& selectedSpell, int actualMana)
-	:WindowObject(400,200,700,400,GH.globalFont), spellToCast(selectedSpell)
+SpellBook::SpellBook(Spell& selectedSpell, Player& player)
+	:WindowObject(400,200,700,400,GH.globalFont), spellToCast(selectedSpell), player(player)
 {
-	for (size_t i = 0; i < allSpells.size(); i++)
+	for (size_t i = 0; i < player.availbleSpells.size(); i++)
 	{
 		auto pos = this->background.getPosition();
 		pos += sf::Vector2f{ 20.f + (i % 7) * 90,10.f + (i / 7) * 95 };
-		auto temp = std::make_shared<SpellIcon>(*this, pos, allSpells[i]);
-		auto text = std::make_shared<sf::Text>("Cost: " + std::to_string(spellCost[allSpells[i]]), this->font, 16);
+		auto temp = std::make_shared<SpellIcon>(*this, pos, player.availbleSpells[i]);
+		auto text = std::make_shared<sf::Text>("Cost: " + std::to_string(spellCost[player.availbleSpells[i].spell]), this->font, 16);
 		text->setPosition(pos + sf::Vector2f(0, 75));
 		this->texts.push_back(text);
 		this->spellIcons.push_back(temp);
 		this->interactiveElem.push_back(this->spellIcons.back());
 	}
 
-	this->manaQuantityText = std::make_shared<sf::Text>("Mana: "+ std::to_string(actualMana), this->font, 20);
+	this->manaQuantityText = std::make_shared<sf::Text>("Mana: "+ std::to_string(player.getActuallMana()), this->font, 20);
 	this->manaQuantityText->setPosition(400 + 10, 200 + 360);
 	this->texts.push_back(manaQuantityText);
 
@@ -43,8 +43,23 @@ void SpellIcon::clickLeft(bool down, bool previousState)
 {
 	if (down == false && previousState)
 	{
-		owner.spellToCast = this->type;
-		owner.close();
+		if (owner.player.getActuallMana() < spellCost[this->type.spell])
+		{
+			auto pos = sprite.getPosition();
+			auto win = std::make_shared<WindowObject>(pos.x, pos.y, 245, 160, GH.globalFont);
+			win->background.setFillColor(sf::Color(110, 120, 98));
+			win->addText("Not enough mana points\nto cast this spell.", { 20,20 });
+			win->buttons["QUIT"] = std::make_shared<Button>(
+				pos.x + 100, pos.y + 110,40,30, &GH.globalFont, "OK");
+			win->buttons["QUIT"]->addFuctionallity([=](){ win->close(); });
+			win->interactiveElem.push_back(win->buttons["QUIT"]);
+			GH.pushWindow(win);
+		}
+		else
+		{
+			owner.spellToCast = this->type;
+			owner.close();
+		}
 	}
 }
 

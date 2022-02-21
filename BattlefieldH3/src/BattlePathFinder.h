@@ -1,5 +1,5 @@
 #pragma once
-
+#include "PCH.hpp"
 class Battlefield;
 class BattleUnit;
 struct BattleTile;
@@ -56,6 +56,7 @@ namespace Battle
 			this->inPQ = false;
 			this->theNodeBefore = nullptr;
 		}
+		std::vector<Battle::PathNode*> neighbourNodes;
 		sf::Vector2i coord;
 		Accessibility accessible;
 		PathNode* theNodeBefore = nullptr;
@@ -100,6 +101,7 @@ namespace Battle
 		PathNode::Accessibility evaluateAccessibility(const BattleTile& tinfo);
 		void calculateNeighbours(const PathNode* source, std::vector<PathNode*>& resultNodes);
 		float getMovementCost(sf::Vector2i src, sf::Vector2i dst);
+		bool checkTileAvailable(sf::Vector2i tile);
 		PathNode* getInitialNode(bool bigCreature = false);
 		PathNode* topAndPop();
 		void push(PathNode* node);

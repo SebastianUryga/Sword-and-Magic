@@ -1,4 +1,5 @@
 #pragma once
+#include "PCH.hpp"
 class AnimationComponent
 {
 private:
@@ -8,27 +9,7 @@ private:
 		Animation(sf::Sprite& sprite, sf::Texture& textureSheet,
 			float animationTimer, int start_frame_x, int start_frame_y,
 			int frames_x, int frames_y, int width, int height,
-			bool turn, sf::Vector2f orgin, float tileWidth) :
-			sprite(sprite),
-			textureSheet(textureSheet),
-			animationTimer(animationTimer),
-			first_frame(start_frame_x),
-			last_frame(start_frame_x + frames_x),
-			row(start_frame_y),
-			width(width),
-			height(height),
-			turn(turn),
-			orgin(orgin),
-			tileWidth(tileWidth),
-			frames_y(frames_y)
-		{
-			this->playedOnce = false;
-			this->timer = 0.f;
-			this->speed = 10.f;
-			this->currnet_frame = sf::IntRect(first_frame * width, row * height, width, height);
-			this->sprite.setTexture(textureSheet, true);
-			this->sprite.setTextureRect(currnet_frame);
-		}
+			bool turn, sf::Vector2f orgin, float tileWidth);
 		//Variables
 		sf::Sprite& sprite;
 		sf::Texture& textureSheet;
@@ -47,45 +28,10 @@ private:
 		float speed;
 		sf::IntRect currnet_frame;
 		//Functions
-		void play(const float& dt, bool inversely)
-		{
-			// Set Frame
-			this->sprite.setTextureRect(currnet_frame);
+		void play(const float& dt, bool inversely);
 
-			this->timer += speed * dt;
-			if (this->timer > animationTimer)
-			{
-				//reset timer;
-				this->timer = 0.f;
-				//Animate
-				if ((!inversely && this->currnet_frame.left < last_frame * width) || (inversely && this->currnet_frame.left > first_frame * width))
-				{
-
-					if (inversely)
-						this->currnet_frame.left -= width;
-					else
-						this->currnet_frame.left += width;
-				}
-				else
-				{
-					if (inversely)
-						this->currnet_frame.left = last_frame * width;
-					else
-						this->currnet_frame.left = first_frame * width;
-					this->playedOnce = true;
-				}
-			}
-		}
-
-		void reset(bool inversely)
-		{
-			this->playedOnce = false;
-			this->timer = 0;
-			if (inversely)
-				this->currnet_frame.left = last_frame * width;
-			else
-				this->currnet_frame.left = first_frame * width;
-		}
+		void reset(bool inversely);
+		
 	};
 
 	sf::Sprite& sprite;

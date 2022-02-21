@@ -1,5 +1,7 @@
 #pragma once
 #include "Button.h"
+#include "GuiHandler.h"
+
 class WindowObject
 {
 public:
@@ -32,16 +34,16 @@ public:
 	std::shared_ptr<WindowObject> iner;
 
 	template <typename T, typename... Args>
-	void setWindow(Args&&... args)
-	{
-		this->iner = std::make_shared<T>(std::forward<Args>(args)...);
-	}
-
-	bool contains([[maybe_unused]] sf::Vector2f mousePos) override
-	{
-		return true;
-	}
+	void setWindow(Args&&... args);
+	
+	bool contains([[maybe_unused]] sf::Vector2f mousePos) override;
 	void clickRight(bool down, bool previousState) override;
 	PopupWindow();
 	virtual ~PopupWindow();
 };
+
+template<typename T, typename ...Args>
+inline void PopupWindow::setWindow(Args && ...args)
+{
+	this->iner = std::make_shared<T>(std::forward<Args>(args)...);
+}

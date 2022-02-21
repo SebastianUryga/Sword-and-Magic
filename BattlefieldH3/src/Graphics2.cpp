@@ -1,4 +1,5 @@
-#include"GuiHandler.h"
+//#include"GuiHandler.h"
+#include "Graphics2.h"
 
 Graphics2& graphics2 = Graphics2::Get();
 
@@ -8,6 +9,65 @@ Graphics2::Graphics2()
 
 Graphics2::~Graphics2()
 {
+}
+
+void Graphics2::CreatureTexture::Load(std::string creatureName)
+{
+	int i = 0;
+	auto temp = std::make_shared<sf::Texture>();
+	temp->setSmooth(true);
+	this->portrait = std::make_shared<sf::Texture>();
+	std::string s = "Textures/" + creatureName + "/" + creatureName;
+	this->portrait->loadFromFile(s + "_head" + ".png");
+	while (temp->loadFromFile(s + "_IDLE_00" + std::to_string(i) + ".png"))
+	{
+		idle.push_back(temp);
+		temp = std::make_shared<sf::Texture>();
+		temp->setSmooth(true);
+		if (++i > 9) break;
+	}
+	i = 0;
+	while (temp->loadFromFile(s + "_ATTACK_00" + std::to_string(i) + ".png"))
+	{
+		attak.push_back(temp);
+		temp = std::make_shared<sf::Texture>();
+		temp->setSmooth(true);
+		if (++i > 9) break;
+	}
+	i = 0;
+	while (temp->loadFromFile(s + "_WALK_00" + std::to_string(i) + ".png"))
+	{
+		move.push_back(temp);
+		temp = std::make_shared<sf::Texture>();
+		temp->setSmooth(true);
+
+		if (++i > 9) break;
+	}
+	i = 0;
+	while (temp->loadFromFile(s + "_DIE_00" + std::to_string(i) + ".png"))
+	{
+		die.push_back(temp);
+		temp = std::make_shared<sf::Texture>();
+		if (++i > 9) break;
+	}
+	i = 0;
+	while (temp->loadFromFile(s + "_HURT_00" + std::to_string(i) + ".png"))
+	{
+		hurt.push_back(temp);
+		temp = std::make_shared<sf::Texture>();
+		temp->setSmooth(true);
+		if (++i > 9) break;
+	}
+	i = 0;
+	while (temp->loadFromFile(s + "_RUN_00" + std::to_string(i) + ".png"))
+	{
+		run.push_back(temp);
+		temp = std::make_shared<sf::Texture>();
+		temp->setSmooth(true);
+		if (++i > 9) break;
+	}
+	i = 0;
+
 }
 
 void Graphics2::init()
@@ -47,9 +107,14 @@ void Graphics2::init()
 	backgroundsTextures[Background::BACKGROUND1]->loadFromFile("Textures/game_background_1/game_background_1.png");
 	backgroundsTextures[Background::BACKGROUND2] = std::make_shared<sf::Texture>();
 	backgroundsTextures[Background::BACKGROUND2]->loadFromFile("Textures/game_background_2/game_background_2.png");
-	/*backgroundsTextures[Background::BACKGROUND3] = std::make_shared<sf::Texture>();
+	backgroundsTextures[Background::BACKGROUND3] = std::make_shared<sf::Texture>();
 	backgroundsTextures[Background::BACKGROUND3]->loadFromFile("Textures/game_background_3/game_background_3.png");
-	*/
+	
+	this->battleObsticles[BattleObstacle::Type::ROCK1] = std::make_shared<sf::Texture>();
+	this->battleObsticles[BattleObstacle::Type::ROCK2] = std::make_shared<sf::Texture>();
+	this->battleObsticles[BattleObstacle::Type::ROCK1]->loadFromFile("Textures/Obstacle1.png");
+	this->battleObsticles[BattleObstacle::Type::ROCK2]->loadFromFile("Textures/Obstacle2.png");
+
 	this->arrow.loadFromFile("Textures/arrow.png");
 	this->magicBulet.loadFromFile("Textures/magicBulet.png");
 

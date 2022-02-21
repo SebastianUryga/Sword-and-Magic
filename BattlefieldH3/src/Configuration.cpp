@@ -12,38 +12,67 @@ Configuration& Configuration::Get()
 	return config;
 }
 
-bool Configuration::load()
+void Configuration::unlockNextLevel(int level)
 {
-	std::string path = "config.txt";
+	if (level < 1 || level > 10)
+		return;
 	std::fstream file;
-	file.open(path);
+	file.open("config.txt");
+	this->load(file, false);
+	if(this->availableLevels < level)
+		this->availableLevels = level;
+	this->save(file);
+	file.close();
+}
+
+bool Configuration::load(std::fstream& file, bool ignoreMapSize)
+{
+	if (!file.is_open())
+		return false;
+	
 	if(file.fail() || file.bad())
 		return false;
-	file >> battlefiledTileWidth >> battlefiledTileHegiht;
-	if (battlefiledTileHegiht < 5) battlefiledTileHegiht = 5;
-	if (battlefiledTileHegiht > 40) battlefiledTileHegiht = 40;
-	if (battlefiledTileWidth < 8) battlefiledTileWidth = 8;
-	if (battlefiledTileWidth > 70) battlefiledTileWidth = 70;
-	file >> battleTileOffset.x >> battleTileOffset.y;
-	if (battleTileOffset.x < 0) battleTileOffset.x = 0;
-	if (battleTileOffset.x > 10) battleTileOffset.x = 10;
-	if (battleTileOffset.y > 10) battleTileOffset.y = 10;
-	if (battleTileOffset.y < 0) battleTileOffset.y = 0;
-	file >> battlefieldOffset.x >> battlefieldOffset.y;
-	file >> PvP;
-	file >> availableLevels;
-	file.close();
-	
+
+	if (ignoreMapSize)
+	{
+		int nothing;
+		file >> nothing >> nothing;
+		file >> nothing >> nothing;
+		file >> nothing >> nothing;
+		file >> nothing >> nothing;
+	}
+	else
+	{
+		file >> battlefiledTileWidth >> battlefiledTileHegiht;
+		if (battlefiledTileHegiht < 5) battlefiledTileHegiht = 5;
+		if (battlefiledTileHegiht > 40) battlefiledTileHegiht = 40;
+		if (battlefiledTileWidth < 8) battlefiledTileWidth = 8;
+		if (battlefiledTileWidth > 70) battlefiledTileWidth = 70;
+		file >> battleTileOffset.x >> battleTileOffset.y;
+		if (battleTileOffset.x < 0) battleTileOffset.x = 0;
+		if (battleTileOffset.x > 10) battleTileOffset.x = 10;
+		if (battleTileOffset.y > 10) battleTileOffset.y = 10;
+		if (battleTileOffset.y < 0) battleTileOffset.y = 0;
+		file >> battlefieldOffset.x >> battlefieldOffset.y;
+		file >> PvP;
+		file >> availableLevels;
+	}
 	tileWidth = ((float)windowSize.x - (battlefieldOffset.x + 20)) / (float)battlefiledTileWidth;
 	tileHeight = ((float)windowSize.y - (battlefieldOffset.y + 170)) / (float)battlefiledTileHegiht;
 	return true;
 }
 
-bool Configuration::save()
+bool Configuration::load(std::string path)
 {
-	std::string path = "config.txt";
 	std::fstream file;
 	file.open(path);
+	return this->load(file, false);
+}
+
+bool Configuration::save(std::fstream& file)
+{
+	if (!file.is_open())
+		return false;
 	if (file.fail() || file.bad())
 		return false;
 	file.clear();
@@ -52,10 +81,18 @@ bool Configuration::save()
 	file << battlefieldOffset.x << " " << battlefieldOffset.y << std::endl;
 	file << PvP << std::endl;
 	file << availableLevels << std::endl;
-	file.close();
+	
 
 	tileWidth = ((float)windowSize.x - (battlefieldOffset.x+20)) / (float)battlefiledTileWidth;
 	tileHeight = ((float)windowSize.y - (battlefieldOffset.y+170)) / (float)battlefiledTileHegiht;
 
 	return true;
+}
+
+bool Configuration::save(std::string path)
+{
+	std::fstream file;
+	file.open(path);
+
+	return save(file);
 }

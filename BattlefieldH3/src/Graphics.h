@@ -2,6 +2,8 @@
 #include "Monser.h"
 #include "GameConstants.h"
 #include "Spell.h"
+class Spell;
+
 class Graphics
 {
 public:

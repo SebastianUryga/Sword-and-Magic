@@ -1,7 +1,9 @@
 #pragma once
 #include "InterfaceElem.h"
+#include "PCH.hpp"
 
 class WindowObject;
+class InterfaceElem;
 
 enum class Button_states
 {

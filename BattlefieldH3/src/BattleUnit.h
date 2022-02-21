@@ -2,14 +2,20 @@
 #include "AnimationComponent.h"
 #include "Animator.h"
 #include "BattlePathFinder.h"
-#include "GameConstants.h"
 #include "Graphics.h"
 #include "Graphics2.h"
 #include "Configuration.h"
+#include "Button.h"
 
-
+class Battlefield;
 class InterfaceElem;
 class Missle;
+class Spell;
+
+namespace Battle
+{
+	class PathFinder;
+}
 
 template <typename T>
 struct VectorCompare
@@ -148,6 +154,7 @@ public:
 	bool getAttacked();
 	bool getShooted();
 	bool getAlive() const;
+	int getActualHp() const;
 	Monster getType() const;
 	bool isEnemy() const;
 	bool isEnemyWith(const BattleUnit* unit) const;
@@ -172,6 +179,7 @@ public:
 	void giveOrder(Order order);
 
 	void clickLeft(bool down, bool previousState) override;
+	void clickRight(bool down, bool previousState) override;
 
 	BattleUnit(Monster type);
 	virtual ~BattleUnit();
@@ -186,6 +194,7 @@ public:
 	void render(sf::RenderTarget* target);
 
 	friend class BattleHandler;
+	friend class CreatureInfo;
 	friend class Spell;
 };
 
@@ -201,7 +210,7 @@ public:
 	sf::Vector2f velocity;
 	sf::Vector2f position;
 
-	void setTarget(sf::Vector2i targetPos);
+	void setTarget(BattleUnit* target);
 	sf::Vector2i getTilePos() const;
 
 	void update(const float& dt);

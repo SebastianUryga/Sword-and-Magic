@@ -1,7 +1,11 @@
 #pragma once
 #include "Monser.h"
 #include "PCH.hpp"
+#include "Spell.h"
+#include "GameConstants.h"
 
+class Spell;
+class Monster;
 
 enum class Background : int
 {
@@ -29,67 +33,11 @@ public:
 		std::vector<std::shared_ptr<sf::Texture>> die;
 		std::vector<std::shared_ptr<sf::Texture>> hurt;
 
-		void Load(std::string creatureName)
-		{	
-			int i = 0;
-			auto temp = std::make_shared<sf::Texture>();
-			temp->setSmooth(true);
-			this->portrait = std::make_shared<sf::Texture>();
-			std::string s = "Textures/" +creatureName + "/" + creatureName;
-			this->portrait->loadFromFile(s + "_head" + ".png");
-			while(temp->loadFromFile(s + "_IDLE_00" + std::to_string(i) + ".png"))
-			{
-				idle.push_back(temp);
-				temp = std::make_shared<sf::Texture>();
-				temp->setSmooth(true);
-				if (++i > 9) break;
-			}
-			i = 0;
-			while (temp->loadFromFile(s + "_ATTACK_00" + std::to_string(i) + ".png"))
-			{
-				attak.push_back(temp);
-				temp = std::make_shared<sf::Texture>();
-				temp->setSmooth(true);
-				if (++i > 9) break;
-			}
-			i = 0;
-			while (temp->loadFromFile(s + "_WALK_00" + std::to_string(i) + ".png"))
-			{
-				move.push_back(temp);
-				temp = std::make_shared<sf::Texture>();
-				temp->setSmooth(true);
-
-				if (++i > 9) break;
-			}
-			i = 0;
-			while (temp->loadFromFile(s + "_DIE_00" + std::to_string(i) + ".png"))
-			{
-				die.push_back(temp);
-				temp = std::make_shared<sf::Texture>();
-				if (++i > 9) break;
-			}
-			i = 0;
-			while (temp->loadFromFile(s + "_HURT_00" + std::to_string(i) + ".png"))
-			{
-				hurt.push_back(temp);
-				temp = std::make_shared<sf::Texture>();
-				temp->setSmooth(true);
-				if (++i > 9) break;
-			}
-			i = 0;
-			while (temp->loadFromFile(s + "_RUN_00" + std::to_string(i) + ".png"))
-			{
-				run.push_back(temp);
-				temp = std::make_shared<sf::Texture>();
-				temp->setSmooth(true);
-				if (++i > 9) break;
-			}
-			i = 0;
-			
-		}
+		void Load(std::string creatureName);
 	};
 	std::shared_ptr<sf::Texture> allSpellIcons;
 	std::map<Spell::SpellType, sf::IntRect> spellIcons;
+	std::map<BattleObstacle::Type, std::shared_ptr<sf::Texture>> battleObsticles;
 	std::map <Spell::SpellType, std::shared_ptr<sf::Texture>> battleEffects;
 	std::shared_ptr<sf::Texture> battleEffectsSheet;
 	std::map <Background, std::shared_ptr<sf::Texture>> backgroundsTextures;

@@ -1,4 +1,4 @@
-#include "GuiHandler.h"
+#include "WindowObject.h"
 
 WindowObject::WindowObject(float x, float y, float width, float height, sf::Font& font)
 {
@@ -71,6 +71,11 @@ void WindowObject::render(sf::RenderTarget* target)
 		target->draw(*text);
 	for (auto& btn : this->buttons)
 		btn.second->render(target);
+}
+
+bool PopupWindow::contains(sf::Vector2f mousePos)
+{
+	return true;
 }
 
 void PopupWindow::clickRight(bool down, [[maybe_unused]] bool previousState)

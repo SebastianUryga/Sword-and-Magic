@@ -1,4 +1,6 @@
-#include "GuiHandler.h"
+#include "SelectionWindow.h"
+#include "Battlefiled.h"
+#include "CreatureInfo.h"
 
 SelectionWindow::SelectionWindow(Troop& troop) :
 	WindowObject(400, 200, 600, 500, GH.globalFont),
@@ -87,6 +89,10 @@ SelectionWindow::SelectionWindow(Troop& troop) :
 	this->interactiveElem.push_back(this->buttons["-"]);
 }
 
+SelectionWindow::~SelectionWindow()
+{
+}
+
 void SelectionWindow::render(sf::RenderTarget* target)
 {
 	WindowObject::render(target);
@@ -127,4 +133,14 @@ void SelectionWindow::ClickablePortrait::clickRight(bool down, bool priviesState
 			this->shape.left, this->shape.top, id);
 		GH.makePopup(creatureInfo);
 	}
+}
+
+SelectionWindow::ClickablePortrait::ClickablePortrait(Monster id)
+	: id(id)
+{
+	this->sprite.setTexture(*graphics2.creaturesTextures[id].portrait);
+	/*
+	this->sprite.setTexture(*graphics.allCreaturePortraits);
+	this->sprite.setTextureRect(Graphics::selectPortrait(id));
+	*/
 }

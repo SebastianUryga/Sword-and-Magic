@@ -1,8 +1,13 @@
 #pragma once
 #include "Battlefiled.h"
 
+class Monster;
+class Battlefield;
+class Spell;
+class InterfaceElem;
 class Battlefield;
 class BattleUnit;
+class Player;
 
 class BattleHandler
 {
@@ -12,7 +17,7 @@ public:
 
 	std::shared_ptr<Battlefield> battlefield;
 	bool battleBegan = false;
-	void startBallte();
+	void startBallte(std::string path);
 
 	void spellCasted(Spell spell, Player* player);
 
@@ -31,7 +36,7 @@ private:
 	void handleDefenceStance(BattleUnit* unit);
 	void handleAttackOrder(BattleUnit* unit);
 	void handleMoveOrder(BattleUnit* unit);
-
+	double length(sf::Vector2i vec) const;
 	int calculateDamage(BattleUnit* unit, BattleUnit* target, bool attackBlocked);
 	std::queue<Monster> armyQueque[2];
 	int nuberUnitsInBattle[2];

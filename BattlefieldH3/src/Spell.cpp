@@ -1,4 +1,5 @@
-#include "GuiHandler.h"
+#include "Spell.h"
+#include "BattleUnit.h"
 
 void Spell::castSpellOnUnit(BattleUnit& unit, const Spell spell)
 {
@@ -27,11 +28,11 @@ void Spell::castSpellOnUnit(BattleUnit& unit, const Spell spell)
 		break; 
 	case Spell::SpellType::BLESS:
 		Spell::takeOffSpellFromUnit(unit, Spell(Spell::SpellType::CURSE));
-		unit.damage += std::ceil((float)creaturesStats[unit.type].damage*(0.25));
+		unit.damage += (int)std::ceil((float)creaturesStats[unit.type].damage*(0.25f));
 		break;
 	case Spell::SpellType::CURSE:
 		Spell::takeOffSpellFromUnit(unit, Spell(Spell::SpellType::BLESS));
-		unit.damage -= std::ceil((float)creaturesStats[unit.type].damage * (0.25));
+		unit.damage -= (int)std::ceil((float)creaturesStats[unit.type].damage * (0.25f));
 		break;
 	case Spell::SpellType::HASTE:
 		Spell::takeOffSpellFromUnit(unit, Spell(Spell::SpellType::SLOW));
@@ -46,12 +47,12 @@ void Spell::castSpellOnUnit(BattleUnit& unit, const Spell spell)
 		unit.speed *= 0.7f;
 		break;
 	case Spell::SpellType::COUNTER_STRIKE:
-		unit.attackCoulddown *= 0.8;
+		unit.attackCoulddown *= 0.8f;
 		break;
 	case Spell::SpellType::BERSERK:
 		unit.setEnemy(!unit.enemy);
 	default:
-		break;
+		;
 	}
 	list.push_front(CastedSpell(spell, 15));
 	unit.spellToAnimate = spell;
@@ -75,10 +76,10 @@ void Spell::takeOffSpellFromUnit(BattleUnit& unit, const Spell spell)
 			unit.defence -= 6;
 			break;
 		case Spell::SpellType::BLESS:
-			unit.damage -= std::ceil((float)creaturesStats[unit.type].damage * (0.25));
+			unit.damage -= (int)std::ceil((float)creaturesStats[unit.type].damage * (0.25));
 			break;
 		case Spell::SpellType::CURSE:
-			unit.damage += std::ceil((float)creaturesStats[unit.type].damage * (0.25));
+			unit.damage += (int)std::ceil((float)creaturesStats[unit.type].damage * (0.25));
 			break;
 		case Spell::SpellType::HASTE:
 			unit.speed -= 30.f;
@@ -90,7 +91,7 @@ void Spell::takeOffSpellFromUnit(BattleUnit& unit, const Spell spell)
 			unit.isBlid = false;
 			break;
 		case Spell::SpellType::COUNTER_STRIKE:
-			unit.attackCoulddown /= 0.8;
+			unit.attackCoulddown /= 0.8f;
 			break;
 		case Spell::SpellType::BERSERK:
 			unit.setEnemy(!unit.enemy);
@@ -141,7 +142,8 @@ std::map<Spell::SpellType, int> spellCost =
 	{Spell::SpellType::COUNTER_STRIKE, 8},
 	{Spell::SpellType::BERSERK, 12},
 	{Spell::SpellType::FORGETFULNESS, 9},
-	{Spell::SpellType::TURN_TO_STONE, 10}
+	{Spell::SpellType::TURN_TO_STONE, 10},
+	{Spell::SpellType::STRENGTH, 5}
 };
 
 

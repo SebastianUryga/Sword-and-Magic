@@ -1,5 +1,9 @@
 #pragma once
-#include "Game.h"
+#include "PCH.hpp"
+
+class WindowObject;
+class PopupWindow;
+
 class GuiHandler
 {
 private:
@@ -10,11 +14,8 @@ public:
 
 	void pushWindow(std::shared_ptr<WindowObject> newInt); //deactivate old top interface, activates this one and pushes to the top
 	template <typename T, typename ... Args>
-	void pushWindowT(Args && ... args)
-	{
-		auto newInt = std::make_shared<T>(std::forward<Args>(args)...);
-		pushWindow(newInt);
-	}
+	void pushWindowT(Args && ... args);
+	
 	void makePopup(std::shared_ptr<WindowObject> w);
 	void closePopup();
 	void popWindow(std::shared_ptr<WindowObject> top);
@@ -25,7 +26,7 @@ public:
 	sf::Vector2f mousePosWindow;
 	sf::Vector2i mouseTilePos;
 
-	GuiHandler() {}
+	GuiHandler();
 	virtual ~GuiHandler();
 
 	void handleMouseMotion();
@@ -37,3 +38,10 @@ public:
 };
 
 extern GuiHandler& GH;
+
+template<typename T, typename ...Args>
+inline void GuiHandler::pushWindowT(Args && ...args)
+{
+	auto newInt = std::make_shared<T>(std::forward<Args>(args)...);
+	pushWindow(newInt);
+}

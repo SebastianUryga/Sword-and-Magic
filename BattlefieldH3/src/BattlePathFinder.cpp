@@ -1,4 +1,5 @@
-#include "GuiHandler.h"
+#include "BattlePathFinder.h"
+#include "Battlefiled.h"
 
 Battle::PathFinder::PathFinder(Battlefield* map, BattleUnit* unit) :
 	unit(unit),
@@ -8,6 +9,7 @@ Battle::PathFinder::PathFinder(Battlefield* map, BattleUnit* unit) :
 	this->nodes.resize(size.x);
 	for (auto& node : this->nodes)
 		node.resize(size.y);
+
 }
 
 Battle::PathFinder::~PathFinder()
@@ -23,12 +25,17 @@ void Battle::PathFinder::initializeGraph()
 		for (pos.y = 0; pos.y < sizes.y; ++pos.y)
 		{
 			const auto tile = this->battlefield->getTile(pos);
-			this->getNode(pos)->reset();
-			this->getNode(pos)->coord = pos;
-			this->getNode(pos)->accessible = this->evaluateAccessibility(tile);
+			auto node = this->getNode(pos);
+			node->reset();
+			node->coord = pos;
+			node->accessible = this->evaluateAccessibility(tile);
+			
 		}
 	}
-	
+	for (auto& node : this->nodes)
+		for (auto& n : node)
+			if (n.neighbourNodes.empty())
+				calculateNeighbours(&n, n.neighbourNodes);
 }
 
 void Battle::PathFinder::resetGraph()
@@ -63,12 +70,12 @@ void Battle::PathFinder::calculatePaths()
 {
 	Battle::PathNode* initialNode = this->getInitialNode();
 	bool bigCreature = unit->isBig();
-	static std::vector<Battle::PathNode*> neighbourNodes;
-	static std::vector<sf::Vector2i> tiles;
+	//static std::vector<Battle::PathNode*> neighbourNodes;
 
 	this->push(initialNode);
 	sf::Clock clock;
 	clock.restart();
+	float sec = 0;
 
 	while (!this->pq.empty())
 	{
@@ -77,60 +84,54 @@ void Battle::PathFinder::calculatePaths()
 
 		source->locked = true;
 
-		this->calculateNeighbours(source, neighbourNodes);
-		for (PathNode* neighbour : neighbourNodes)
+		//this->calculateNeighbours(source, neighbourNodes);
+		for (PathNode* neighbour : source->neighbourNodes)
 		{
 			if (neighbour->locked)
 				continue;
 
 			auto destination = neighbour;
-			tiles.clear();
+			
+			bool available = true;
 
+			clock.restart();
 			if (source->coord.x < destination->coord.x)
 			{
 				for (int y = 0; y < unit->getSize().y; y++)
-					tiles.push_back(destination->coord + sf::Vector2i(unit->getSize().x -1, y));
+				{
+					auto tile = destination->coord + sf::Vector2i(unit->getSize().x - 1, y);
+					available &= this->checkTileAvailable(tile);
+				}
+					
 			}
 			if (source->coord.y < destination->coord.y)
 			{
 				for (int x = 0; x < unit->getSize().x; x++)
-					tiles.push_back(destination->coord + sf::Vector2i(x,unit->getSize().y - 1));
+				{
+					auto tile = destination->coord + sf::Vector2i(x, unit->getSize().y - 1);
+					available &= this->checkTileAvailable(tile);
+				}
 			}
 			if (source->coord.x > destination->coord.x)
 			{
 				for (int y = 0; y < unit->getSize().y; y++)
-					tiles.push_back(destination->coord + sf::Vector2i(0, y));
+				{
+					auto tile = destination->coord + sf::Vector2i(0, y);
+					available &= this->checkTileAvailable(tile);
+				}
 			}
 			if (source->coord.y > destination->coord.y)
 			{
 				for (int x = 0; x < unit->getSize().x; x++)
-					tiles.push_back(destination->coord + sf::Vector2i(x, 0));
+				{
+					auto tile = destination->coord + sf::Vector2i(x, 0);
+					available &= this->checkTileAvailable(tile);
+				}
 			}
-
+			sec += clock.restart().asMicroseconds();
 			float cost = this->getMovementCost(source->coord, destination->coord);
 			float costAtNextTile = source->getCost() + static_cast<float>(cost);
 
-			
-			bool availble = true;
-			for (auto tile : tiles)
-			{
-				if (!battlefield->containsIsBattlefield(tile))
-				{
-					availble = false;
-					break;
-				}
-				auto node = this->getNode(tile);
-				if (node->accessible == PathNode::Accessibility::BLOCKED)
-				{
-					availble = false;
-					break;
-				}
-				if (node->accessible == PathNode::Accessibility::BLOCKVIS)
-				{
-					availble = false;
-					break;
-				}
-			}
 
 			if (destination->getCost() > costAtNextTile)
 			{
@@ -138,11 +139,12 @@ void Battle::PathFinder::calculatePaths()
 				destination->theNodeBefore = source;
 			}
 
-			if (availble)
+			if (available)
 				push(neighbour);
 		}
 	}
-	std::cout << " path finder time" << clock.getElapsedTime().asMilliseconds() << std::endl;
+	//std::cout << " path finder time" << clock.getElapsedTime().asMilliseconds() << std::endl;
+	std::cout << " path finder time" <<sec << std::endl;
 }
 
 Battle::PathNode::Accessibility Battle::PathFinder::evaluateAccessibility(const BattleTile& tinfo)
@@ -186,6 +188,24 @@ float Battle::PathFinder::getMovementCost(sf::Vector2i src, sf::Vector2i dst)
 	if (src.x != dst.x && src.y != dst.y) //it's diagonal move
 		ret *= 1.41;
 	return ret;
+}
+
+bool Battle::PathFinder::checkTileAvailable(sf::Vector2i tile)
+{
+	if (!battlefield->containsIsBattlefield(tile))
+	{
+		return false;
+	}
+	auto node = this->getNode(tile);
+	if (node->accessible == PathNode::Accessibility::BLOCKED)
+	{
+		return false;
+	}
+	if (node->accessible == PathNode::Accessibility::BLOCKVIS)
+	{
+		return false;
+	}
+	return true;
 }
 
 Battle::PathNode* Battle::PathFinder::topAndPop()

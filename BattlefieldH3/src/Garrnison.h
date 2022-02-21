@@ -1,5 +1,12 @@
 #pragma once
+#include "PCH.hpp"
+#include "Monser.h"
+#include "Graphics2.h"
+#include "InterfaceElem.h"
+
+class Monster;
 class GarrnisonSlot;
+class InterfaceElem;
 
 struct Troop
 {
@@ -40,7 +47,7 @@ public:
 	void clickLeft(bool down, bool previousState) override;
 	void clickRight(bool down, bool previousState) override;
 	GarrnisonSlot(Garrnison* owner, int id, float x, float y);
-	virtual ~GarrnisonSlot() {}
+	virtual ~GarrnisonSlot();
 	int id;
 private:
 	Garrnison* owner;

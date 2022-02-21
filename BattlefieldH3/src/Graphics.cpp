@@ -1,4 +1,4 @@
-#include "GuiHandler.h"
+#include "Graphics.h"
 
 Graphics& graphics = Graphics::Get();
 

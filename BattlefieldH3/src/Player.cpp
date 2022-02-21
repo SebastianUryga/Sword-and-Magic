@@ -1,4 +1,12 @@
-#include "GuiHandler.h"
+#include "Player.h"
+#include "Spell.h"
+#include "Monser.h"
+
+bool Player::setMana(int mana)
+{
+	_actualManaPoints = mana;
+	return true;
+}
 
 bool Player::isAI() const
 {
@@ -22,7 +30,7 @@ int Player::getMaxMana() const
 
 int Player::getSpellCooldown() const
 {
-	return this->_spellCooldown;
+	return (int)this->_spellCooldown;
 }
 
 bool Player::refreshColldown()
@@ -43,6 +51,7 @@ Player::Player(bool AI, int manaPoints = 30)
 	: artificalIntelligence(AI), _maxManaPoints(manaPoints)
 {
 	this->initArmy();
+	this->initSpellbook();
 	_actualManaPoints = _maxManaPoints;
 	_spellCooldown = 0.f;
 }
@@ -76,5 +85,7 @@ void Player::initArmy()
 void Player::initSpellbook()
 {
 	auto spell = Spell();
-	this->availbleSpells = { Spell::SpellType::HASTE, Spell::SpellType::SLOW };
+	this->availbleSpells = { Spell::SpellType::WEEKNES,Spell::SpellType::SHIELD,Spell::SpellType::CURSE,
+	Spell::SpellType::HASTE,Spell::SpellType::COUNTER_STRIKE,Spell::SpellType::STRENGTH,
+	Spell::SpellType::SLOW,Spell::SpellType::BLESS,Spell::SpellType::TURN_TO_STONE };
 }

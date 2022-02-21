@@ -18,9 +18,11 @@ public:
 	int availableLevels = 1;
 
 	static Configuration& Get();
-
-	bool load();
-	bool save();
+	void unlockNextLevel(int level);
+	bool load(std::fstream& file, bool ignoreMapSize);
+	bool load(std::string path);
+	bool save(std::fstream& file);
+	bool save(std::string path);
 };
 
 extern Configuration& Config;

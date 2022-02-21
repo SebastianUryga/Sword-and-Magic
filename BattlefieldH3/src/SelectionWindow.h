@@ -1,8 +1,9 @@
 #pragma once
-#include "CreatureInfo.h"
-class CreatureInfo;
+#include "WindowObject.h"
+#include "Monser.h"
 class GarrnisonSlot;
 class WindowObject;
+class Button;
 struct Troop;
 // nazwa do zmiany na cos w rodzaju SelectingCreatureWin
 class SelectionWindow : public WindowObject
@@ -18,14 +19,7 @@ private:
         Monster id;
         void clickLeft(bool down, bool priviesState) ;
         void clickRight(bool down, bool priviesState) ;
-        ClickablePortrait(Monster id) : id(id)
-        {
-            this->sprite.setTexture(*graphics2.creaturesTextures[id].portrait);
-            /*
-            this->sprite.setTexture(*graphics.allCreaturePortraits);
-            this->sprite.setTextureRect(Graphics::selectPortrait(id));
-            */
-        }
+        ClickablePortrait(Monster id);
 
     };
     std::vector<std::shared_ptr<ClickablePortrait>> creaturePortraits;
@@ -36,8 +30,7 @@ private:
 public:
 
     SelectionWindow(Troop& troop);
-    ~SelectionWindow() {}
-
+    ~SelectionWindow();
 
     void render(sf::RenderTarget* target) override;
 };

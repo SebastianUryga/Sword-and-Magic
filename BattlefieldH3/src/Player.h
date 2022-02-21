@@ -1,5 +1,9 @@
 #pragma once
 #include "PCH.hpp"
+#include "Garrnison.h"
+
+
+class Spell;
 
 class Player
 {
@@ -17,6 +21,7 @@ public:
 	std::vector<Troop> army;
 	std::vector<Spell> availbleSpells;
 	
+	bool setMana(int mana);
 	bool isAI() const;
 	bool hasSpell(Spell spell);
 	int getActuallMana() const;

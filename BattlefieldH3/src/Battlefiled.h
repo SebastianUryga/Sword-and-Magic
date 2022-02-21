@@ -1,12 +1,22 @@
 #pragma once
-#include "BattleUnit.h"
+#include "WindowObject.h"
 #include "Garrnison.h"
 #include "SelectionWindow.h"
 #include "SpellBook.h"
-#include "WindowObject.h"
 #include "Player.h"
+#include "BattleUnit.h"
 
+class BattleHandler;
+class Button;
+class WindowObject;
 class BattleUnit;
+struct BattleObstacle;
+class BattleHandler;
+class Garrnison;
+class Spell;
+class Player;
+
+extern BattleHandler BH;
 
 struct BattleTile
 {
@@ -47,7 +57,7 @@ private:
 	void initPlayers();
 	void initPlayersArmy2();
 	void initButtons();
-	void initStartUnits();
+	void initTileMap();
 	void initMovmentMarker();
 	void sortUnits();
 
@@ -63,6 +73,7 @@ private:
 	void putMovmentMarker(const sf::Vector2i& pos, bool attck);
 
 public:
+	int level = -1;
 	std::vector<std::shared_ptr<BattleUnit>> units;
 
 	bool containsIsBattlefield(sf::Vector2i pos) const;
@@ -80,8 +91,7 @@ public:
 
 	void close() override;
 
-	virtual void keyPressed([[maybe_unused]] const sf::Keyboard& key)
-	{}
+	virtual void keyPressed([[maybe_unused]] const sf::Keyboard& key) override;
 
 	virtual void activate() override;
 	virtual void clickLeft(bool down, bool previousState) override;

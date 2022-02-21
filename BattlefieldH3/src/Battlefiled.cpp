@@ -1,4 +1,5 @@
-#include "GuiHandler.h"
+#include "Battlefiled.h"
+#include "BattleHandler.h"
 
 void Battlefield::initButtons()
 {
@@ -42,7 +43,7 @@ void Battlefield::initButtons()
 			pos.x, pos.y, 170, 50, &this->font, "Spell Book");
 		this->buttons["SpellBook"]->addFuctionallity([=]() {
 			assert(!players[0]->isAI());
-			GH.pushWindowT<SpellBook>(this->spellToCast,players[0]->getActuallMana());
+			GH.pushWindowT<SpellBook>(this->spellToCast,*players[0]);
 		});
 		this->interactiveElem.push_back(this->buttons["SpellBook"]);
 
@@ -50,7 +51,7 @@ void Battlefield::initButtons()
 			std::to_string(std::ceil(players[0]->getSpellCooldown())),
 			GH.globalFont, 30);
 
-		pos = sf::Vector2f((81.f / 160.f) * Config.windowSize.x, (77.f / 90.f) * Config.windowSize.y);
+		pos = sf::Vector2f((84.f / 160.f) * Config.windowSize.x, (78.f / 90.f) * Config.windowSize.y);
 		this->cooldownNumber->setPosition(pos);
 		this->texts.push_back(cooldownNumber);
 
@@ -91,6 +92,8 @@ void Battlefield::initButtons()
 		this->buttons["Background"]->addFuctionallity([=]() {
 			if(backgroundType == Background::BACKGROUND1)
 				this->backgroundType = Background::BACKGROUND2;
+			else if(backgroundType == Background::BACKGROUND2)
+				this->backgroundType = Background::BACKGROUND3;
 			else
 				this->backgroundType = Background::BACKGROUND1;
 
@@ -117,33 +120,26 @@ void Battlefield::initButtons()
 	}
 }
 
-void Battlefield::initStartUnits()
+void Battlefield::initTileMap()
 {
-	this->addObsticle(BattleObstacle::Type::ROCK2, sf::Vector2i(10, 9));
-	this->addObsticle(BattleObstacle::Type::ROCK3, sf::Vector2i(18, 1));
-	this->addObsticle(BattleObstacle::Type::ROCK1, sf::Vector2i(8, 5));
-	this->addObsticle(BattleObstacle::Type::ROCK1, sf::Vector2i(3, 1));
-	this->addObsticle(BattleObstacle::Type::ROCK2, sf::Vector2i(3, 2));
-	this->addObsticle(BattleObstacle::Type::ROCK3, sf::Vector2i(1, 3));
-	this->addObsticle(BattleObstacle::Type::ROCK4, sf::Vector2i(16, 8));
+	this->tiles.resize(Config.battlefiledTileWidth);
+	for (auto& tile : this->tiles)
+		tile.resize(Config.battlefiledTileHegiht);
 
-	this->addUnit(std::make_shared<BattleUnit>(Monster::CAVALIER), sf::Vector2i(22, 10), true);
-
-	this->addUnit(std::make_shared<BattleUnit>(Monster::HALBERDIER), sf::Vector2i(6, 7), true);
-	this->addUnit(std::make_shared<BattleUnit>(Monster::HALBERDIER), sf::Vector2i(6, 9), true);
-	this->addUnit(std::make_shared<BattleUnit>(Monster::HALBERDIER), sf::Vector2i(7, 9), true);
-	this->addUnit(std::make_shared<BattleUnit>(Monster::HALBERDIER), sf::Vector2i(7, 10), true);
-	this->addUnit(std::make_shared<BattleUnit>(Monster::HALBERDIER), sf::Vector2i(5, 9), true);
-
-	this->addUnit(std::make_shared<BattleUnit>(Monster::ZEALOT), sf::Vector2i(21, 3), false);
-	this->addUnit(std::make_shared<BattleUnit>(Monster::ZEALOT), sf::Vector2i(14, 3), false);
-	this->addUnit(std::make_shared<BattleUnit>(Monster::ZEALOT), sf::Vector2i(1, 2), false);
-	this->addUnit(std::make_shared<BattleUnit>(Monster::ZEALOT), sf::Vector2i(17, 3), true);
-	this->addUnit(std::make_shared<BattleUnit>(Monster::ZEALOT), sf::Vector2i(12, 8), false);
-	this->addUnit(std::make_shared<BattleUnit>(Monster::ZEALOT), sf::Vector2i(1, 4), false);
-	this->addUnit(std::make_shared<BattleUnit>(Monster::SWORDSMAN), sf::Vector2i(2, 4), false);
-
-	this->addUnit(std::make_shared<BattleUnit>(Monster::ARCHER), sf::Vector2i(20, 1), true);
+	for (int x = 0; x < (int)tiles.size(); x++)
+		for (int y = 0; y < (int)tiles[x].size(); y++)
+		{
+			tiles[x][y].pos = sf::Vector2i(x, y);
+			tiles[x][y].shape = sf::RectangleShape(sf::Vector2f(Config.tileWidth, Config.tileHeight));
+			tiles[x][y].shape.setPosition(sf::Vector2f(
+				x * Config.tileWidth,
+				y * Config.tileHeight) + Config.battlefieldOffset);
+			tiles[x][y].shape.setFillColor(sf::Color(20, 20, 20, 90));
+			tiles[x][y].shape.setOutlineColor(sf::Color::Yellow);
+			//tiles[x][y].shape.setOutlineThickness(0.5f);
+			tiles[x][y].blocked = false;
+			tiles[x][y].unit = nullptr;
+		}
 }
 
 void Battlefield::initMovmentMarker()
@@ -175,7 +171,10 @@ void Battlefield::initPlayers()
 {
 	this->players.resize(2);
 	this->players[0] = std::make_shared<Player>(false, 20);
-	this->players[1] = std::make_shared<Player>(true, 10);
+	if (Config.PvP)
+		this->players[1] = std::make_shared<Player>(false, 10);
+	else
+		this->players[1] = std::make_shared<Player>(true, 10);
 }
 
 void Battlefield::initPlayersArmy2()
@@ -293,14 +292,18 @@ bool Battlefield::addUnit(std::shared_ptr<BattleUnit> unit, sf::Vector2i pos, bo
 	}
 	unit->onDoubleClick = [=]()
 	{
-		selectedUnits.clear();
-		for (auto u : units)
+		if (this->players[unit->isEnemy()]->isAI() == false)
 		{
-			if (u->getAlive() 
-				&& u->isEnemy() == unit->isEnemy() 
-				&& u->getType() == unit->getType())
-				selectedUnits.insert(u.get());
+			selectedUnits.clear();
+			for (auto u : units)
+			{
+				if (u->getAlive()
+					&& u->isEnemy() == unit->isEnemy()
+					&& u->getType() == unit->getType())
+					selectedUnits.insert(u.get());
+			}
 		}
+		
 	};
 	unit->onClick = [=]()
 	{
@@ -316,7 +319,8 @@ bool Battlefield::addUnit(std::shared_ptr<BattleUnit> unit, sf::Vector2i pos, bo
 		else
 		{
 			selectedUnits.clear();
-			selectedUnits.insert(unit.get());
+			if(this->players[unit->isEnemy()]->isAI() == false)
+				selectedUnits.insert(unit.get());
 		}
 	};
 	
@@ -333,13 +337,18 @@ void Battlefield::addObsticle(BattleObstacle::Type type, sf::Vector2i tilePos)
 		tilePos.x * Config.tileWidth,
 		tilePos.y * Config.tileHeight) + Config.battlefieldOffset;
 	std::shared_ptr<BattleObstacle> obj = std::make_shared<BattleObstacle>();
-	obj->sprite.setTexture(*graphics.battleObsticles[type]);
+	obj->sprite.setTexture(*graphics2.battleObsticles[type]);
 	obj->type = type;
 	obj->sprite.setPosition(pixelPos);
+	auto scalar = (2 * Config.tileWidth) / 260.f;
+	obj->sprite.setScale(scalar, scalar);
 	obj->usedTiles = battleObstacleParametrs[type].usedTiles;
 	obj->sprite.setOrigin(sf::Vector2f(
 		Config.tileWidth * obj->usedTiles[0].size() - 1,
 		Config.tileHeight * obj->usedTiles.size() - 1));
+
+	obj->sprite.setOrigin(sf::Vector2f(graphics2.battleObsticles[type]->getSize()));
+	obj->sprite.move(sf::Vector2f(2*Config.tileWidth, Config.tileHeight));
 	obj->pos = tilePos;
 	for (int y = 0; y < (int)obj->usedTiles.size(); y++)
 		for (int x = 0; x < (int)obj->usedTiles[y].size(); x++)
@@ -357,6 +366,10 @@ void Battlefield::addObsticle(BattleObstacle::Type type, sf::Vector2i tilePos)
 			}
 		}
 	this->obstacles.push_back(obj);
+	std::sort(this->obstacles.begin(),this->obstacles.end(), [](const std::shared_ptr<BattleObstacle>& a, const std::shared_ptr<BattleObstacle>& b) {
+		return a->pos.y < b->pos.y ||
+			(a->pos.y == b->pos.y && a->pos.x > b->pos.x);
+	});
 }
 
 void Battlefield::removeUnit(std::shared_ptr<BattleUnit> unit)
@@ -388,6 +401,11 @@ void Battlefield::close()
 	BH.battlefield = nullptr;
 }
 
+void Battlefield::keyPressed([[maybe_unused]] const sf::Keyboard& key)
+{
+
+}
+
 void Battlefield::activate()
 {
 	WindowObject::activate();
@@ -409,7 +427,7 @@ void Battlefield::clickLeft(bool down, bool previousState)
 				return;
 			BattleTile& clickedTile = this->getTile(tilePos);
 			if (!clickedTile.blocked && !clickedTile.unit)
-				this->addObsticle(BattleObstacle::Type::SCIELETON1, clickedTile.pos);
+				this->addObsticle(BattleObstacle::Type::ROCK1, clickedTile.pos);
 		}
 		if (this->mode == GameMode::Game)
 		{
@@ -423,6 +441,19 @@ void Battlefield::clickLeft(bool down, bool previousState)
 		if (this->mode == GameMode::Game)
 		{
 			this->selectingArea.setFillColor(sf::Color(120, 120, 120, 0));
+			if (this->spellToCast != Spell::SpellType::NONE)
+			{
+				auto tilePos = GH.mouseTilePos;
+				if (!this->containsIsBattlefield(tilePos))
+					return;
+				BattleTile& clickedTile = this->getTile(tilePos);
+				if (clickedTile.unit && clickedTile.unit->getAlive())
+				{
+					Spell::castSpellOnUnit(*clickedTile.unit, this->spellToCast);
+					BH.spellCasted(this->spellToCast, this->players[0].get());
+					this->spellToCast = Spell::SpellType::NONE;
+				}
+			}
 			bool clearSelected = true;
 			for(auto btn : this->buttons) 
 				if(btn.second->contains(GH.mousePosWindow))
@@ -441,9 +472,11 @@ void Battlefield::clickLeft(bool down, bool previousState)
 						continue;
 
 					this->tiles[x][y].shape.setFillColor(sf::Color(190, 20, 20, 250));
-					if (this->tiles[x][y].unit && this->tiles[x][y].unit->getAlive())
-						if (this->selectedUnits.find(this->tiles[x][y].unit) == this->selectedUnits.end())
-							this->selectedUnits.insert(this->tiles[x][y].unit);
+					auto unit = this->tiles[x][y].unit;
+					if (unit && unit->getAlive())
+						if (this->players[unit->isEnemy()]->isAI() == false)
+							if (this->selectedUnits.find(this->tiles[x][y].unit) == this->selectedUnits.end())
+								this->selectedUnits.insert(this->tiles[x][y].unit);
 				}
 		}
 	}
@@ -513,10 +546,10 @@ void Battlefield::hover(bool on)
 }
 
 Battlefield::Battlefield(GameMode mode) :
-	WindowObject(20, 20, Config.windowSize.x -20, Config.windowSize.y -20, GH.globalFont),
+	WindowObject(20.f, 20.f, Config.windowSize.x -20.f, Config.windowSize.y -20.f, GH.globalFont),
 	InterfaceElem()
 {
-	this->shape = sf::FloatRect(20, 20, Config.windowSize.x - 20, Config.windowSize.y - 20);
+	this->shape = sf::FloatRect(20.f, 20.f, Config.windowSize.x - 20.f, Config.windowSize.y - 20.f);
 
 	this->mode = mode;
 	this->backgroundType = Background::BACKGROUND1;
@@ -527,25 +560,8 @@ Battlefield::Battlefield(GameMode mode) :
 	this->initPlayers();
 	this->initButtons();
 	this->initMovmentMarker();
-
-	this->tiles.resize(Config.battlefiledTileWidth);
-	for (auto& tile : this->tiles)
-		tile.resize(Config.battlefiledTileHegiht);
-
-	for (int x = 0; x < (int)tiles.size(); x++)
-		for (int y = 0; y < (int)tiles[x].size(); y++)
-		{
-			tiles[x][y].pos = sf::Vector2i(x, y);
-			tiles[x][y].shape = sf::RectangleShape(sf::Vector2f(Config.tileWidth, Config.tileHeight));
-			tiles[x][y].shape.setPosition(sf::Vector2f(
-				x * Config.tileWidth,
-				y * Config.tileHeight) + Config.battlefieldOffset);
-			tiles[x][y].shape.setFillColor(sf::Color(20, 20, 20, 90));
-			tiles[x][y].shape.setOutlineColor(sf::Color::Yellow);
-			//tiles[x][y].shape.setOutlineThickness(0.5f);
-			tiles[x][y].blocked = false;
-			tiles[x][y].unit = nullptr;
-		}
+	this->initTileMap();
+	
 	//this->backgroud.setTexture(*graphics.battleBackgrouds);
 	this->backgroud.setTexture(*graphics2.backgroundsTextures[Background::BACKGROUND1]);
 	this->backgroud.setPosition(
@@ -640,17 +656,29 @@ void Battlefield::render(sf::RenderTarget* target)
 			}
 		}
 	}
-	/*for (auto v : this->tiles)
-		for (auto tile : v)
-			if (tile.blocked)
-				target->draw(tile.shape);*/
+	//for (auto v : this->tiles)
+	//	for (auto tile : v)
+	//		if (tile.blocked)
+	//			target->draw(tile.shape);
 	//std::cout << "tiles render: " << measureTime.restart().asMilliseconds() << std::endl;
-
+	if(this->units.empty())
 	for (auto& obj : this->obstacles)
 		target->draw(obj->sprite);
-	
+	int i = 0;
 	for (auto& unit : this->units)
+	{
+		while (this->obstacles.size() > i && this->obstacles[i]->pos.y <= unit->getPos().y)
+		{
+			target->draw(this->obstacles[i]->sprite);
+			i++;
+		}
 		unit->render(target);
+	}
+	while (this->obstacles.size() > i)
+	{
+		target->draw(this->obstacles[i]->sprite);
+		i++;
+	}
 	//std::cout << "units render: " << measureTime.restart().asMilliseconds() << std::endl;
 
 	if (this->markerVisableTimeLeft > 0.f) 
@@ -675,6 +703,12 @@ void Battlefield::save(const std::string& path)
 	std::fstream file;
 	file.open(path);
 	file.clear();
+	auto saveMapSize = true;
+	file << saveMapSize << std::endl;
+	if (saveMapSize)
+	{
+		Config.save(file);
+	}
 	file << this->obstacles.size() << std::endl;
 	for (auto obs : this->obstacles)
 	{
@@ -694,6 +728,17 @@ void Battlefield::save(const std::string& path)
 		{
 			file << " " << troop.monster.monster << " " << troop.count << " ";
 		}
+	file << std::endl;
+	for (int i = 0; i < 2; i++)
+	{
+		file << players[i]->getActuallMana() << " ";
+		file << players[i]->availbleSpells.size() << std::endl;
+		for (auto spell : players[i]->availbleSpells)
+		{
+			file << " " << (int)spell.spell << " ";
+		}
+	}
+	file << std::endl;
 	file << (int) this->backgroundType << std::endl;
 }
 
@@ -703,6 +748,20 @@ bool Battlefield::load(const std::string& path)
 	file.open(path);
 	int temp, type;
 	sf::Vector2i pos1, pos2;
+	//check if custom game
+	file >> temp;
+	if (temp == true)
+	{
+		if (mode == GameMode::Game)
+		{
+			Config.load(file, false);
+		}
+		else if(mode == GameMode::Editor)
+		{
+			Config.load(file, true);
+		}
+		this->initTileMap();
+	}
 	// loading Obstacles
 	file >> temp;
 	if (temp < 0)
@@ -735,9 +794,25 @@ bool Battlefield::load(const std::string& path)
 			Monster temp(type);
 			troop.monster = temp;
 		}
+	// loading Spells
+	for (int i = 0; i < 2; i++)
+	{
+		// clear players spells
+		int mana;
+		file >> mana;
+		players[i]->setMana(mana);
+		players[i]->availbleSpells.clear();
+		file >> temp;
+		for (int j = 0; j < temp; j++)
+		{
+			int spell;
+			file >> spell;
+			players[i]->availbleSpells.push_back(Spell(spell));
+		}
+	}
 	// loading BackgroundType
 	file >> temp;
 	this->backgroundType = (Background)temp;
-
+	this->backgroud.setTexture(*graphics2.backgroundsTextures[this->backgroundType]);
 	return true;
 }

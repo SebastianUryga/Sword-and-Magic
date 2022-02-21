@@ -1,4 +1,5 @@
-#include "GuiHandler.h"
+#include "Garrnison.h"
+#include "BattleHandler.h"
 
 GarrnisonSlot* Garrnison::getSelected()
 {
@@ -138,4 +139,8 @@ GarrnisonSlot::GarrnisonSlot(Garrnison* owner, int id, float x, float y) :
 	this->number->setFont(GH.globalFont);
 	this->number->setCharacterSize(22);
 	this->setPos(sf::Vector2f(x, y));
+}
+
+GarrnisonSlot::~GarrnisonSlot()
+{
 }

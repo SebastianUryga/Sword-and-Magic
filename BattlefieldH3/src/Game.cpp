@@ -52,7 +52,9 @@ void Game::initTextures()
 Game::Game()
 {
 	this->initWindow();
-	Config.load();
+	std::fstream file;
+	file.open("config.txt");
+	Config.load(file, false);
 	this->initFonts();
 	this->initTextures();
 	this->mainMenuState();
@@ -144,19 +146,19 @@ void Game::settingState()
 		Config.battlefiledTileWidth = 50;
 		Config.battlefiledTileHegiht = 20;
 		marker->setPosition(260, 280);
-		Config.save();
+		Config.save("config.txt");
 	});
 	settingMenu->buttons["SizeOption2"]->addFuctionallity([=]() {
 		Config.battlefiledTileWidth = 60;
 		Config.battlefiledTileHegiht = 26;
 		marker->setPosition(260, 350);
-		Config.save();
+		Config.save("config.txt");
 	});
 	settingMenu->buttons["SizeOption3"]->addFuctionallity([=]() {
 		Config.battlefiledTileWidth = 70;
 		Config.battlefiledTileHegiht = 34;
 		marker->setPosition(260, 420);
-		Config.save();
+		Config.save("config.txt");
 	});
 
 	// PvP settings
@@ -176,12 +178,12 @@ void Game::settingState()
 	settingMenu->buttons["ModeOption1"]->addFuctionallity([=]() {
 		Config.PvP = false;
 		marker2->setPosition(560, 280);
-		Config.save();
+		Config.save("config.txt");
 	});
 	settingMenu->buttons["ModeOption2"]->addFuctionallity([=]() {
 		Config.PvP = true;
 		marker2->setPosition(560, 350);
-		Config.save();
+		Config.save("config.txt");
 	});
 
 	settingMenu->buttons["EXIT_GAME"] = std::make_shared<Button>(
@@ -198,7 +200,7 @@ void Game::settingState()
 
 void Game::gameState()
 {
-	BH.startBallte();
+	BH.startBallte("startMap.txt");
 }
 
 void Game::campainState()
@@ -231,13 +233,16 @@ void Game::campainState()
 		600, 490, 250, 50, this->font, "Level 9");
 
 	campainMenu->buttons["Level1"]->addFuctionallity([=]() {
-		;
+		BH.startBallte("levels/level1.txt");
+		BH.battlefield->level = 1;
 	});
 	campainMenu->buttons["Level2"]->addFuctionallity([=]() {
-		;
+		BH.startBallte("levels/level2.txt");
+		BH.battlefield->level = 2;
 	});
 	campainMenu->buttons["Level3"]->addFuctionallity([=]() {
-		;
+		BH.startBallte("levels/level3.txt");
+		BH.battlefield->level = 3;
 	});
 	campainMenu->buttons["Level4"]->addFuctionallity([=]() {
 		;
@@ -254,6 +259,7 @@ void Game::campainState()
 
 	campainMenu->buttons["EXIT_GAME"]->addFuctionallity([=]() {
 		GH.popWindow(campainMenu);
+		Config.load("config.txt");
 	});
 
 	for (auto button : campainMenu->buttons)

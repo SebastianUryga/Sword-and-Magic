@@ -1,5 +1,5 @@
-#include "GuiHandler.h"
-#include "PCH.hpp"
+#include "Button.h"
+#include "BattleHandler.h"
 
 Button::Button(float x, float y, float width, float height,
 	sf::Font* font, std::string text, sf::Color idleColor,

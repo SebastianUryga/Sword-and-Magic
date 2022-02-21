@@ -1,4 +1,6 @@
-#include "GuiHandler.h"
+#include "BattleUnit.h"
+#include "BattleHandler.h"
+#include "CreatureInfo.h"
 
 class BattleUnit;
 
@@ -383,6 +385,11 @@ bool BattleUnit::getAlive() const
 	return true;
 }
 
+int BattleUnit::getActualHp() const
+{
+	return hp;
+}
+
 Monster BattleUnit::getType() const
 {
 	return this->type;
@@ -597,6 +604,19 @@ void BattleUnit::clickLeft([[maybe_unused]] bool down, [[maybe_unused]] bool pre
 	}
 }
 
+void BattleUnit::clickRight(bool down, bool previousState)
+{
+	if ( down )
+	{
+		if (this->alive)
+		{
+			auto creatureInfo = std::make_shared<CreatureInfo>(
+				this->shape.left, this->shape.top, this);
+			GH.makePopup(creatureInfo);
+		}
+	}
+}
+
 BattleUnit::BattleUnit(Monster type) :
 	InterfaceElem(),
 	type(type),
@@ -622,7 +642,7 @@ BattleUnit::BattleUnit(Monster type) :
 	this->moving2 = false;
 	this->offset = { 100, 100 };
 	this->actualAttackCoulddown = (float)(rand() % 73) / 21.f;
-	this->lineHP.setSize(sf::Vector2f(25 * this->getSize().x, 3));
+	this->lineHP.setSize(sf::Vector2f(25.f * this->getSize().x, 3));
 	this->text.setFont(GH.globalFont);
 	this->text.setCharacterSize(12);
 	this->updateNeighbourPos();
@@ -640,10 +660,8 @@ bool BattleUnit::calculatingPaths()
 	{
 		this->pathfinderNeedToUpdate = false;
 		this->pathfinder->initializeGraph();
-		//std::cout << "init path" << std::endl;
 
 		this->pathfinder->calculatePaths();
-		//std::cout << "calculated path" << std::endl;
 
 		return true;
 	}
@@ -652,8 +670,8 @@ bool BattleUnit::calculatingPaths()
 
 void BattleUnit::updatePathfinder(const float& dt)
 {
-	this->timeToUpdatePathfinder += dt * 20.f + (std::rand() % 10);
-	if (this->alive && timeToUpdatePathfinder > 140)
+	this->timeToUpdatePathfinder += dt * 20.f * (1.f + (std::rand() % 10)/20.f);
+	if (this->getAlive() && timeToUpdatePathfinder > 140)
 	{
 		pathfinderNeedToUpdate = true;
 		this->timeToUpdatePathfinder = 0;
@@ -1017,14 +1035,16 @@ Missle::Missle(BattleUnit* unit) :
 	{
 		this->shape.setFillColor(sf::Color::Yellow);
 	}
-	this->sprite.setScale(0.5, 0.5);
+	
+	auto scalar = (2 * Config.tileWidth) / 130.f;
+	this->sprite.setScale(scalar, scalar);
 	this->shape = sf::RectangleShape(sf::Vector2f(10, 10));
 	this->sprite.setPosition(sf::Vector2f(
 		unit->getPos().x * Config.tileWidth,
-		unit->getPos().y * Config.tileHeight + 15) + Config.battlefieldOffset);
+		unit->getPos().y * Config.tileHeight) + Config.battlefieldOffset);
 	this->shape.setPosition(sf::Vector2f(
 		unit->getPos().x * Config.tileWidth,
-		unit->getPos().y * Config.tileHeight + 15) + Config.battlefieldOffset);
+		unit->getPos().y * Config.tileHeight) + Config.battlefieldOffset);
 	this->velocity = { 0, 0 };
 }
 
@@ -1032,10 +1052,12 @@ Missle::~Missle()
 {
 }
 
-void Missle::setTarget(sf::Vector2i targetPos)
+void Missle::setTarget(BattleUnit* target)
 {
-	sf::Vector2i dir = targetPos - this->startingPos;
-	auto tempp = sf::Vector2f(Config.tileWidth * dir.x, Config.tileHeight * dir.y);
+	sf::Vector2i dir = target->getPos() - this->startingPos;
+	auto tempp = sf::Vector2f(
+		Config.tileWidth * ((float)dir.x + (((float)target->getSize().x / 2.f))),
+		Config.tileHeight * ((float)dir.y + (((float)target->getSize().y / 2.f))));
 	if(dir.x < 0) this->sprite.setRotation(180);
 	float temp;
 	if (abs(tempp.x) > abs(tempp.y))
@@ -1045,15 +1067,14 @@ void Missle::setTarget(sf::Vector2i targetPos)
 	this->velocity.x = tempp.x * abs(temp);
 	this->velocity.y = tempp.y * abs(temp);
 
-	
 }
 
 sf::Vector2i Missle::getTilePos() const
 {
 
 	return sf::Vector2i(
-		(this->shape.getPosition().x - Config.battlefieldOffset.x) / Config.tileWidth,
-		(this->shape.getPosition().y - Config.battlefieldOffset.y) / Config.tileHeight);
+		(int)((this->shape.getPosition().x - Config.battlefieldOffset.x) / Config.tileWidth),
+		(int)((this->shape.getPosition().y - Config.battlefieldOffset.y) / Config.tileHeight));
 }
 
 void Missle::update(const float& dt)
