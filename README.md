@@ -12,9 +12,9 @@ Aby uruchomić aplikacjie na lokalnej maszynie należy:
  - uruchom plik BattlefieldH3.exe
  
 ### Linux
- - Sklonować repozytorium       ```git clone https://github.com/SebastianUryga/Heroes3-engine.git```
+ - Sklonować repozytorium       ```git clone https://github.com/SebastianUryga/Sword-and-Magic.git```
  - zainstalować bibliotekę SFML ```sudo apt install libsfml-dev```
- - przejść do katalogu z kodem źródłowym ```cd Heroes3-engine/BattlefieldH3/BattlefieldH3/```
+ - przejść do katalogu z kodem źródłowym ```cd Sword-and-Magic/BattlefieldH3/BattlefieldH3/```
  - skompilować program          ```g++ -std=c++17 *.cpp -I. -o h3mm $(pkg-config --libs sfml-all)```
  - uruchomić program            ```./h3mm```
 
