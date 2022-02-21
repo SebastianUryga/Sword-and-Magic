@@ -17,12 +17,13 @@ void Configuration::unlockNextLevel(int level)
 	if (level < 1 || level > 10)
 		return;
 	std::fstream file;
-	file.open("config.txt");
+	file.open("res/config.txt");
 	this->load(file, false);
+	file.close();
 	if(this->availableLevels < level)
 		this->availableLevels = level;
-	this->save(file);
-	file.close();
+	this->save("res/config.txt");
+	
 }
 
 bool Configuration::load(std::fstream& file, bool ignoreMapSize)
@@ -66,7 +67,9 @@ bool Configuration::load(std::string path)
 {
 	std::fstream file;
 	file.open(path);
-	return this->load(file, false);
+	auto result = this->load(file, false);
+	file.close();
+	return result;
 }
 
 bool Configuration::save(std::fstream& file)
@@ -94,5 +97,7 @@ bool Configuration::save(std::string path)
 	std::fstream file;
 	file.open(path);
 
-	return save(file);
+	auto result = this->save(file);
+	file.close();
+	return result;
 }

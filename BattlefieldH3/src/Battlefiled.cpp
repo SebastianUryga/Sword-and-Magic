@@ -77,13 +77,13 @@ void Battlefield::initButtons()
 		pos = sf::Vector2f((75.f / 160.f) * Config.windowSize.x, (78.f / 90.f) * Config.windowSize.y);
 		this->buttons["Save"] = std::make_shared<Button>(
 			pos.x, pos.y, 60, 40, &this->font, "Save");
-		this->buttons["Save"]->addFuctionallity([=]() { save("startMap.txt"); });
+		this->buttons["Save"]->addFuctionallity([=]() { save("res/startMap.txt"); });
 		this->interactiveElem.push_back(this->buttons["Save"]);
 
 		pos = sf::Vector2f((65.f / 160.f) * Config.windowSize.x, (78.f / 90.f) * Config.windowSize.y);
 		this->buttons["Load"] = std::make_shared<Button>(
 			pos.x, pos.y, 60, 40, &this->font, "Load");
-		this->buttons["Load"]->addFuctionallity([=]() { load("startMap.txt"); });
+		this->buttons["Load"]->addFuctionallity([=]() { load("res/startMap.txt"); });
 		this->interactiveElem.push_back(this->buttons["Load"]);
 
 		pos = sf::Vector2f((63.f / 160.f) * Config.windowSize.x, (74.f / 90.f) * Config.windowSize.y);

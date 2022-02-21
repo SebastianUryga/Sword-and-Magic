@@ -20,6 +20,8 @@ private:
 	void initFonts();
 	void initKeys();
 	void initTextures();
+
+	void refresh();
 public:
 	Game();
 	virtual ~Game();

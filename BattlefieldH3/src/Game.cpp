@@ -3,7 +3,7 @@
 //Initializer functions
 void Game::initWindow()
 {
-	this->window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(),  "Heroes 3",
+	this->window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(),  "Open Arena of Swords and Magic",
 		 sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
 	this->window->setVerticalSyncEnabled(true);
 	this->window->setFramerateLimit(120);
@@ -14,7 +14,7 @@ void Game::initWindow()
 void Game::initFonts()
 {
 	this->font = new sf::Font();
-	if (!this->font->loadFromFile("Fonts/Alice_in_Wonderland_3.ttf"))
+	if (!this->font->loadFromFile("res/Fonts/Alice_in_Wonderland_3.ttf"))
 	{
 		throw("ERROR::MAINMENUSTATE:: COULD NOT LOAD FONT");
 	}
@@ -49,12 +49,18 @@ void Game::initTextures()
 	graphics2.init();
 }
 
+void Game::refresh()
+{
+
+}
+
 Game::Game()
 {
 	this->initWindow();
 	std::fstream file;
-	file.open("config.txt");
+	file.open("res/config.txt");
 	Config.load(file, false);
+	file.close();
 	this->initFonts();
 	this->initTextures();
 	this->mainMenuState();
@@ -76,6 +82,9 @@ void Game::mainMenuState()
 		this->window->getSize().x,
 		this->window->getSize().y,
 		*this->font);
+
+	auto text = std::make_shared<sf::Text>("Open Arena of Swords and Magic", *this->font, 60);
+	text->setPosition(sf::Vector2f(500, 80));
 
 	mainMenu->background.setTexture(graphics.menuBackgroud.get());
 
@@ -107,6 +116,8 @@ void Game::mainMenuState()
 	});
 	for (auto& btn : mainMenu->buttons)
 		mainMenu->interactiveElem.push_back(btn.second);
+
+	mainMenu->texts.push_back(text);
 
 	GH.pushWindow(mainMenu);
 }
@@ -146,19 +157,19 @@ void Game::settingState()
 		Config.battlefiledTileWidth = 50;
 		Config.battlefiledTileHegiht = 20;
 		marker->setPosition(260, 280);
-		Config.save("config.txt");
+		Config.save("res/config.txt");
 	});
 	settingMenu->buttons["SizeOption2"]->addFuctionallity([=]() {
 		Config.battlefiledTileWidth = 60;
 		Config.battlefiledTileHegiht = 26;
 		marker->setPosition(260, 350);
-		Config.save("config.txt");
+		Config.save("res/config.txt");
 	});
 	settingMenu->buttons["SizeOption3"]->addFuctionallity([=]() {
 		Config.battlefiledTileWidth = 70;
 		Config.battlefiledTileHegiht = 34;
 		marker->setPosition(260, 420);
-		Config.save("config.txt");
+		Config.save("res/config.txt");
 	});
 
 	// PvP settings
@@ -178,12 +189,12 @@ void Game::settingState()
 	settingMenu->buttons["ModeOption1"]->addFuctionallity([=]() {
 		Config.PvP = false;
 		marker2->setPosition(560, 280);
-		Config.save("config.txt");
+		Config.save("res/config.txt");
 	});
 	settingMenu->buttons["ModeOption2"]->addFuctionallity([=]() {
 		Config.PvP = true;
 		marker2->setPosition(560, 350);
-		Config.save("config.txt");
+		Config.save("res/config.txt");
 	});
 
 	settingMenu->buttons["EXIT_GAME"] = std::make_shared<Button>(
@@ -200,7 +211,7 @@ void Game::settingState()
 
 void Game::gameState()
 {
-	BH.startBallte("startMap.txt");
+	BH.startBallte("res/startMap.txt");
 }
 
 void Game::campainState()
@@ -233,19 +244,20 @@ void Game::campainState()
 		600, 490, 250, 50, this->font, "Level 9");
 
 	campainMenu->buttons["Level1"]->addFuctionallity([=]() {
-		BH.startBallte("levels/level1.txt");
+		BH.startBallte("res/Levels/Level1.txt");
 		BH.battlefield->level = 1;
 	});
 	campainMenu->buttons["Level2"]->addFuctionallity([=]() {
-		BH.startBallte("levels/level2.txt");
+		BH.startBallte("res/Levels/Level2.txt");
 		BH.battlefield->level = 2;
 	});
 	campainMenu->buttons["Level3"]->addFuctionallity([=]() {
-		BH.startBallte("levels/level3.txt");
+		BH.startBallte("res/Levels/Level3.txt");
 		BH.battlefield->level = 3;
 	});
 	campainMenu->buttons["Level4"]->addFuctionallity([=]() {
-		;
+		BH.startBallte("res/Levels/Level4.txt");
+		BH.battlefield->level = 4;
 	});
 
 	for (int i = 1; i <= 9; i++)
@@ -259,7 +271,7 @@ void Game::campainState()
 
 	campainMenu->buttons["EXIT_GAME"]->addFuctionallity([=]() {
 		GH.popWindow(campainMenu);
-		Config.load("config.txt");
+		Config.load("res/config.txt");
 	});
 
 	for (auto button : campainMenu->buttons)
@@ -270,7 +282,7 @@ void Game::campainState()
 void Game::editorState()
 {
 	auto battlefield = std::make_shared<Battlefield>(GameMode::Editor);
-	battlefield->load("startMap.txt");
+	battlefield->load("res/startMap.txt");
 	battlefield->interactiveElem.push_back(battlefield);
 	GH.pushWindow(battlefield);
 }

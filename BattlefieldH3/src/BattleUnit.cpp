@@ -1045,7 +1045,7 @@ Missle::Missle(BattleUnit* unit) :
 	this->shape.setPosition(sf::Vector2f(
 		unit->getPos().x * Config.tileWidth,
 		unit->getPos().y * Config.tileHeight) + Config.battlefieldOffset);
-	this->velocity = { 0, 0 };
+	this->velocity = { 0.f, 0.f };
 }
 
 Missle::~Missle()
@@ -1060,12 +1060,12 @@ void Missle::setTarget(BattleUnit* target)
 		Config.tileHeight * ((float)dir.y + (((float)target->getSize().y / 2.f))));
 	if(dir.x < 0) this->sprite.setRotation(180);
 	float temp;
-	if (abs(tempp.x) > abs(tempp.y))
+	if (std::abs(tempp.x) > std::abs(tempp.y))
 		temp = 1.f / tempp.x;
 	else
 		temp = 1.f / tempp.y;
-	this->velocity.x = tempp.x * abs(temp);
-	this->velocity.y = tempp.y * abs(temp);
+	this->velocity.x = tempp.x * std::abs(temp);
+	this->velocity.y = tempp.y * std::abs(temp);
 
 }
 
