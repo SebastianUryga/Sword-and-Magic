@@ -61,7 +61,6 @@ private:
 	void initMovmentMarker();
 	void sortUnits();
 
-	bool gamePaused = false;
 	Monster selectedUnitType;
 	Spell spellToCast;
 	sf::Sprite activeSpellIcon;
@@ -73,6 +72,7 @@ private:
 	void putMovmentMarker(const sf::Vector2i& pos, bool attck);
 
 public:
+	bool gamePaused = false;
 	int level = -1;
 	std::vector<std::shared_ptr<BattleUnit>> units;
 

@@ -50,12 +50,12 @@ std::map<Monster, MonsterStats> creaturesStats = {
 	{Monster::TROLL1,{{3,2},12,12,6,3,0,65,40.f,0.2f,false,false,false }},
 	{Monster::TROLL2,{{3,2},8,12,5,3,0,60,50.f,0.3f,false,false,false }},
 	{Monster::TROLL3,{{3,2},9,12,8,3,0,40,45.f,0.25f,false,false,false }},
-	{Monster::KNIGHT1,{{2,2},3,7,10,3,0,31,60.f,0.7f,false,false,false }},
-	{Monster::KNIGHT2,{{2,2},6,4,11,3,0,25,40.f,0.4f,false,false,false }},
-	{Monster::KNIGHT3,{{2,2},5,4,9,3,0,25,90.f,0.55f,false,false,false }},
+	{Monster::KNIGHT1,{{2,2},3,7,14,3,0,31,60.f,0.7f,false,false,false }},
+	{Monster::KNIGHT2,{{2,2},6,4,15,3,0,25,40.f,0.4f,false,false,false }},
+	{Monster::KNIGHT3,{{2,2},5,4,12,3,0,25,90.f,0.55f,false,false,false }},
 	{Monster::ELF1,{{2,2},4,7,5,3,7,10,60.f,0.3f,false,true,false }},
 	{Monster::ELF2,{{2,2},5,3,5,3,0,25,90.f,0.6f,false,false,false }},
-	{Monster::ELF3,{{2,2},7,4,3,3,4,12,70.f,0.24f,false,true,false }}
+	{Monster::ELF3,{{2,2},6,4,3,3,4,12,70.f,0.24f,false,true,false }}
 };
 std::map < Monster, sf::Vector2f > creatureTexturesOffest = {
 	{Monster::ORK3, sf::Vector2f(123, 180)},

@@ -7,18 +7,18 @@ class Spell
 public:
 	enum class SpellType : int
 	{
-		NONE,
-		WEEKNES,
-		SHIELD,
-		CURSE,
-		BLESS,
-		HASTE,
-		SLOW,
-		COUNTER_STRIKE,
-		BERSERK,
-		FORGETFULNESS,
-		TURN_TO_STONE,
-		STRENGTH,
+		NONE=0,
+		WEEKNES=1,
+		SHIELD=2,
+		CURSE=3,
+		BLESS=4,
+		HASTE=5,
+		SLOW=6,
+		COUNTER_STRIKE=7,
+		BERSERK=8,
+		FORGETFULNESS=9,
+		TURN_TO_STONE=10,
+		STRENGTH=11,
 	};
 	SpellType spell;
 	Spell(SpellType type = SpellType::NONE):spell(type) {}

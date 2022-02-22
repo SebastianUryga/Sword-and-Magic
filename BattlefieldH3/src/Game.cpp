@@ -259,6 +259,10 @@ void Game::campainState()
 		BH.startBallte("res/Levels/Level4.txt");
 		BH.battlefield->level = 4;
 	});
+	campainMenu->buttons["Level5"]->addFuctionallity([=]() {
+		BH.startBallte("res/Levels/Level5.txt");
+		BH.battlefield->level = 5;
+	});
 
 	for (int i = 1; i <= 9; i++)
 		if (i <= Config.availableLevels)

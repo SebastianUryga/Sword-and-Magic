@@ -66,7 +66,7 @@ void Battlefield::initButtons()
 			}
 			else
 			{
-				buttons["PauseStartGame"]->setText("Start Game");
+				buttons["PauseStartGame"]->setText("Resume Game");
 				gamePaused = true;
 			}
 		});
@@ -285,6 +285,9 @@ bool Battlefield::addUnit(std::shared_ptr<BattleUnit> unit, sf::Vector2i pos, bo
 	unit->setPathfinder(this);
 	
 	unit->setEnemy(enemy);
+	if (this->players[unit->isEnemy()]->isAI() == false)
+		unit->giveOrder(Order::DEFENSIVE_POS);
+
 	for (auto tile : unit->getUsedTilesPos())
 	{
 		this->getTile(tile).unit = unit.get();
@@ -549,7 +552,7 @@ Battlefield::Battlefield(GameMode mode) :
 	WindowObject(20.f, 20.f, Config.windowSize.x -20.f, Config.windowSize.y -20.f, GH.globalFont),
 	InterfaceElem()
 {
-	this->shape = sf::FloatRect(20.f, 20.f, Config.windowSize.x - 20.f, Config.windowSize.y - 20.f);
+	this->shape = sf::FloatRect(-20.f, -20.f, Config.windowSize.x + 20.f, Config.windowSize.y + 20.f);
 
 	this->mode = mode;
 	this->backgroundType = Background::BACKGROUND1;
