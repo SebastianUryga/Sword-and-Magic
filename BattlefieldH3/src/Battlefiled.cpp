@@ -246,6 +246,11 @@ const BattleTile& Battlefield::getTile(const sf::Vector2i pos) const
 	}
 }
 
+bool Battlefield::areUnitSelected() const
+{
+	return !selectedUnits.empty();
+}
+
 bool Battlefield::isTileBlocked(const sf::Vector2i pos) const
 {
 	if (!containsIsBattlefield(pos))

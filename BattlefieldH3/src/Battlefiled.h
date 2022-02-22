@@ -82,6 +82,7 @@ public:
 	BattleTile& getTile(sf::Vector2i pos);
 	BattleTile& getTile(int x, int y);
 	bool isTileBlocked(const sf::Vector2i pos) const;
+	bool areUnitSelected() const;
 	const BattleTile& getTile(const sf::Vector2i pos) const;
 	void changeUnitPos(BattleUnit* unit, sf::Vector2i oldPos, sf::Vector2i newPos);
 	bool addUnit(std::shared_ptr<BattleUnit> unit, sf::Vector2i pos, bool enemy);

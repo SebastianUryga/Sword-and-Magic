@@ -5,12 +5,16 @@ SpellBook::SpellBook(Spell& selectedSpell, Player& player)
 {
 	for (size_t i = 0; i < player.availbleSpells.size(); i++)
 	{
+		auto spell = player.availbleSpells[i];
 		auto pos = this->background.getPosition();
-		pos += sf::Vector2f{ 20.f + (i % 7) * 90,10.f + (i / 7) * 95 };
-		auto temp = std::make_shared<SpellIcon>(*this, pos, player.availbleSpells[i]);
-		auto text = std::make_shared<sf::Text>("Cost: " + std::to_string(spellCost[player.availbleSpells[i].spell]), this->font, 16);
-		text->setPosition(pos + sf::Vector2f(0, 75));
-		this->texts.push_back(text);
+		pos += sf::Vector2f{ 20.f + (i % 7) * 110,30.f + (i / 7) * 105 };
+		auto temp = std::make_shared<SpellIcon>(*this, pos, spell);
+		auto text1 = std::make_shared<sf::Text>(spellToString[spell.spell], this->font, 20);
+		auto text2 = std::make_shared<sf::Text>("Cost: " + std::to_string(spellCost[spell.spell]), this->font, 16);
+		text1->setPosition(pos + sf::Vector2f(3, -21));
+		text2->setPosition(pos + sf::Vector2f(15, 90));
+		this->texts.push_back(text1);
+		this->texts.push_back(text2);
 		this->spellIcons.push_back(temp);
 		this->interactiveElem.push_back(this->spellIcons.back());
 	}

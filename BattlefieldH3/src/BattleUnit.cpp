@@ -608,7 +608,7 @@ void BattleUnit::clickRight(bool down, bool previousState)
 {
 	if ( down )
 	{
-		if (this->alive && BH.battlefield->gamePaused)
+		if (this->alive && BH.battlefield->gamePaused && !BH.battlefield->areUnitSelected())
 		{
 			auto creatureInfo = std::make_shared<CreatureInfo>(
 				this->shape.left, this->shape.top, this);
