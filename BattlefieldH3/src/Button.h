@@ -27,7 +27,7 @@ private:
 	sf::Color activeColor;
 	sf::Color blockColor;
 
-	std::function<void()> onClick;
+	std::function<void()> onClick = []() {};
 	std::shared_ptr<WindowObject> popupWindow;
 
 public:

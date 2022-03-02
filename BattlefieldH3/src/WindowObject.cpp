@@ -48,6 +48,7 @@ void WindowObject::deactivate()
 void WindowObject::activate()
 {
 	this->active = true;
+	this->onActive();
 }
 
 void WindowObject::close()

@@ -70,7 +70,7 @@ private:
 	float markerVisableTimeLeft = 0.f;
 	sf::CircleShape movmentMarker;
 	void putMovmentMarker(const sf::Vector2i& pos, bool attck);
-
+	void setBackground(Background background);
 public:
 	bool gamePaused = false;
 	int level = -1;

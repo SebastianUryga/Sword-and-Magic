@@ -52,15 +52,23 @@ bool Battle::PathFinder::getPath(Battle::BPath& out, const sf::Vector2i& dst)
 	if (!this->battlefield->containsIsBattlefield(dst)) return false;
 
 	out.nodes.clear();
-	auto curnode = &(this->nodes[dst.x][dst.y]);										// nie wiem czemu nie moze byc
+	auto curnode = &(this->nodes[dst.x][dst.y]);		// nie wiem czemu nie moze byc
 
-	if (!curnode->theNodeBefore ) // this->getNode(dst);
+	if (curnode->theNodeBefore[0] == nullptr ) // this->getNode(dst);
 		return false;
 
-	while (curnode)
+	while (curnode != nullptr)
 	{
 		const Battle::PathNode cpn = *curnode;
-		curnode = curnode->theNodeBefore;
+		if (curnode->theNodeBefore[0] && !this->battlefield->isTileBlocked(curnode->theNodeBefore[0]->coord))
+			curnode = curnode->theNodeBefore[0];
+		else if (curnode->theNodeBefore[1] && !this->battlefield->isTileBlocked(curnode->theNodeBefore[1]->coord))
+			curnode = curnode->theNodeBefore[1];
+		else if (curnode->theNodeBefore[2] && !this->battlefield->isTileBlocked(curnode->theNodeBefore[2]->coord))
+			curnode = curnode->theNodeBefore[2];
+		else
+			curnode = curnode->theNodeBefore[0];
+
 		out.nodes.push_back(cpn);
 	}
 	return true;
@@ -133,10 +141,12 @@ void Battle::PathFinder::calculatePaths()
 			float costAtNextTile = source->getCost() + static_cast<float>(cost);
 
 
-			if (destination->getCost() > costAtNextTile)
+			if (destination->getCost() >= costAtNextTile)
 			{
 				destination->setCost(costAtNextTile);
-				destination->theNodeBefore = source;
+				destination->theNodeBefore[2] = destination->theNodeBefore[1];
+				destination->theNodeBefore[1] = destination->theNodeBefore[0];
+				destination->theNodeBefore[0] = source;
 			}
 
 			if (available)

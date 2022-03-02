@@ -12,6 +12,7 @@ public:
 	std::vector< std::shared_ptr<sf::Text>> texts;
 
 	bool active;
+	std::function<void()> onActive = []() {};
 	sf::Font font;
 
 	WindowObject(float x, float y, float width, float height, sf::Font& font);

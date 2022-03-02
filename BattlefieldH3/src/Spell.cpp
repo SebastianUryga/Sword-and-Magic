@@ -17,14 +17,14 @@ void Spell::castSpellOnUnit(BattleUnit& unit, const Spell spell)
 	{
 	case Spell::SpellType::WEEKNES:
 		Spell::takeOffSpellFromUnit(unit, Spell(Spell::SpellType::STRENGTH));
-		unit.attack -= 6;
+		unit.attack -= 7;
 		break;
 	case Spell::SpellType::STRENGTH:
 		Spell::takeOffSpellFromUnit(unit, Spell(Spell::SpellType::WEEKNES));
-		unit.attack += 6;
+		unit.attack += 7;
 		break;
 	case Spell::SpellType::SHIELD:
-		unit.defence += 6;
+		unit.defence += 7;
 		break; 
 	case Spell::SpellType::BLESS:
 		Spell::takeOffSpellFromUnit(unit, Spell(Spell::SpellType::CURSE));
@@ -36,7 +36,7 @@ void Spell::castSpellOnUnit(BattleUnit& unit, const Spell spell)
 		break;
 	case Spell::SpellType::HASTE:
 		Spell::takeOffSpellFromUnit(unit, Spell(Spell::SpellType::SLOW));
-		unit.speed += 30.f;
+		unit.speed *= 1.8f;
 		break;
 	case Spell::SpellType::TURN_TO_STONE:
 		unit.isBlid = true;
@@ -44,10 +44,10 @@ void Spell::castSpellOnUnit(BattleUnit& unit, const Spell spell)
 		break;
 	case Spell::SpellType::SLOW:
 		Spell::takeOffSpellFromUnit(unit, Spell(Spell::SpellType::HASTE));
-		unit.speed *= 0.7f;
+		unit.speed *= 0.5f;
 		break;
 	case Spell::SpellType::COUNTER_STRIKE:
-		unit.attackCoulddown *= 0.8f;
+		unit.attackCoulddown *= 0.7f;
 		break;
 	case Spell::SpellType::BERSERK:
 		unit.setEnemy(!unit.enemy);
@@ -67,13 +67,13 @@ void Spell::takeOffSpellFromUnit(BattleUnit& unit, const Spell spell)
 		switch (spell.spell)
 		{
 		case Spell::SpellType::WEEKNES:
-			unit.attack += 6;
+			unit.attack += 7;
 			break;
 		case Spell::SpellType::STRENGTH:
-			unit.attack -= 6;
+			unit.attack -= 7;
 			break;
 		case Spell::SpellType::SHIELD:
-			unit.defence -= 6;
+			unit.defence -= 7;
 			break;
 		case Spell::SpellType::BLESS:
 			unit.damage -= (int)std::ceil((float)creaturesStats[unit.type].damage * (0.25));
@@ -82,16 +82,16 @@ void Spell::takeOffSpellFromUnit(BattleUnit& unit, const Spell spell)
 			unit.damage += (int)std::ceil((float)creaturesStats[unit.type].damage * (0.25));
 			break;
 		case Spell::SpellType::HASTE:
-			unit.speed -= 30.f;
+			unit.speed /= 1.8f;
 			break;
 		case Spell::SpellType::SLOW:
-			unit.speed /= 0.7f;
+			unit.speed /= 0.5f;
 			break;
 		case Spell::SpellType::TURN_TO_STONE:
 			unit.isBlid = false;
 			break;
 		case Spell::SpellType::COUNTER_STRIKE:
-			unit.attackCoulddown /= 0.8f;
+			unit.attackCoulddown /= 0.7f;
 			break;
 		case Spell::SpellType::BERSERK:
 			unit.setEnemy(!unit.enemy);

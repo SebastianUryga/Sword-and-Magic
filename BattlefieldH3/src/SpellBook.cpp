@@ -1,13 +1,13 @@
 #include "SpellBook.h"
 
 SpellBook::SpellBook(Spell& selectedSpell, Player& player)
-	:WindowObject(400,200,700,400,GH.globalFont), spellToCast(selectedSpell), player(player)
+	:WindowObject(300,200,800,400,GH.globalFont), spellToCast(selectedSpell), player(player)
 {
 	for (size_t i = 0; i < player.availbleSpells.size(); i++)
 	{
 		auto spell = player.availbleSpells[i];
 		auto pos = this->background.getPosition();
-		pos += sf::Vector2f{ 20.f + (i % 7) * 110,30.f + (i / 7) * 105 };
+		pos += sf::Vector2f{ 20.f + (i % 7) * 120,30.f + (i / 7) * 105 };
 		auto temp = std::make_shared<SpellIcon>(*this, pos, spell);
 		auto text1 = std::make_shared<sf::Text>(spellToString[spell.spell], this->font, 20);
 		auto text2 = std::make_shared<sf::Text>("Cost: " + std::to_string(spellCost[spell.spell]), this->font, 16);

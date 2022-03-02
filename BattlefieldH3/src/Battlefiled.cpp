@@ -94,6 +94,8 @@ void Battlefield::initButtons()
 				this->backgroundType = Background::BACKGROUND2;
 			else if(backgroundType == Background::BACKGROUND2)
 				this->backgroundType = Background::BACKGROUND3;
+			else if (backgroundType == Background::BACKGROUND3)
+				this->backgroundType = Background::BACKGROUND4;
 			else
 				this->backgroundType = Background::BACKGROUND1;
 
@@ -195,6 +197,32 @@ void Battlefield::putMovmentMarker(const sf::Vector2i& tilePos, bool attck)
 	this->movmentMarker.setPosition(pixelPos);
 	this->movmentMarker.setRadius(0);
 	this->markerVisableTimeLeft = 0.5f;
+}
+
+void Battlefield::setBackground(Background background)
+{
+	this->backgroundType = background;
+	switch (background)
+	{
+	case Background::BACKGROUND1:
+	{
+		int start = Config.battlefiledTileWidth / 8;
+		int end = (Config.battlefiledTileWidth / 7) * 3;
+		for (int i = start; i < end; i++)
+			tiles[i][0].blocked = true;
+		break;
+	}
+	case Background::BACKGROUND2:
+		for (int i = 0; i < Config.battlefiledTileWidth; i++)
+			tiles[i][0].blocked = true;
+		break;
+	case Background::BACKGROUND3:
+		break;
+	case Background::BACKGROUND4:
+		break;
+	default:
+		break;
+	}
 }
 
 bool Battlefield::containsIsBattlefield(sf::Vector2i pos) const
@@ -769,6 +797,7 @@ bool Battlefield::load(const std::string& path)
 			Config.load(file, true);
 		}
 		this->initTileMap();
+		this->players[1]->setAI(!Config.PvP);
 	}
 	// loading Obstacles
 	file >> temp;
@@ -820,7 +849,7 @@ bool Battlefield::load(const std::string& path)
 	}
 	// loading BackgroundType
 	file >> temp;
-	this->backgroundType = (Background)temp;
+	this->setBackground((Background)temp);
 	this->backgroud.setTexture(*graphics2.backgroundsTextures[this->backgroundType]);
 	return true;
 }

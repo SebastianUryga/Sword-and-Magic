@@ -338,6 +338,7 @@ void BattleHandler::update(const float& dt)
 {
 	if (this->battlefield)
 	{
+		bool playerWin[2] = { true,true };
 		for (auto unit : this->battlefield->units)
 		{
 			if (this->battlefield->gamePaused)
@@ -360,61 +361,75 @@ void BattleHandler::update(const float& dt)
 				if (!this->battlefield->gamePaused)
 					this->makeDecision(unit.get());
 			}
+			playerWin[unit->enemy] &= !unit->alive;
 		}
 		this->updateQueque();
 
-		if ((this->nuberUnitsInBattle[0] <= 0 && this->armyQueque[0].empty())
-			|| (this->nuberUnitsInBattle[1] <= 0 && this->armyQueque[1].empty()))
+		if ((playerWin[0] || playerWin[1] )&&
+			(this->armyQueque[0].empty() || this->armyQueque[1].empty() ) &&
+			(this->nuberUnitsInBattle[0] <1 || this->nuberUnitsInBattle[1] <1))
 		{
-			std::shared_ptr<WindowObject> win;
-			win = std::make_shared<WindowObject>(400, 200, 600, 400, GH.globalFont);
-			
-			if (this->nuberUnitsInBattle[0] > 0)
-				win->addText("Player1 won:", { 250, 10 });
-			else
-				win->addText("Player2 won:", { 250, 10 });
-
-			win->addText("Battle Result", { 240, 40 });
-
-			for (int i = 0; i < 2; i++)
-				if (this->battlefield->players[i]->isAI())
-					win->addText("Player" + std::to_string(i + 1) + "(AI) lost:", { 10 + i * 360.f, 70 });
-				else
-					win->addText("Player" + std::to_string(i + 1) + " lost:", { 10 + i * 360.f, 70 });
-
-			float i = 0, j = 0;
-			for (auto type : allMonseters2)
-			{
-				int number[2] = { 0, 0 };
-				for (auto creature : this->battlefield->units)
-				{
-					if (creature->getType() == type && !creature->getAlive())
-						number[creature->enemy]++;
-				}
-				if (number[0] != 0)
-				{
-					win->addText(creatureToString[type] + "\t " + std::to_string(number[0]), { 10, 100 + i });
-					i += 24;
-				}
-				if (number[1] != 0)
-				{
-					win->addText(creatureToString[type] + "\t " + std::to_string(number[1]), { 370, 100 + j });
-					j += 24;
-				}
-			}
-
-			win->buttons["OK"] = std::make_shared<Button>(400 + 550, 160 + 400, 40, 40, &win->font, "OK");
-			win->buttons["OK"]->addFuctionallity([=]() {
-				win->close();
-				auto playerWon = this->nuberUnitsInBattle[0] > 0;
-				if (playerWon)
-					Config.unlockNextLevel(battlefield->level + 1);
-				battlefield->close();
-			});
-			win->interactiveElem.push_back(win->buttons["OK"]);
-			GH.Get().pushWindow(win);
+			this->showBattleResult();
 		}
 	}
+}
+
+void BattleHandler::showBattleResult()
+{
+	std::shared_ptr<WindowObject> win;
+	win = std::make_shared<WindowObject>(400, 200, 600, 400, GH.globalFont);
+	auto text = std::make_shared<sf::Text>("Victory", GH.globalFont, 30);
+	text->setPosition({ 250 + 400.f, 10 + 200.f });
+	if (this->nuberUnitsInBattle[0] > 0)
+	{
+		text->setString("VICTORY!");
+		text->setFillColor(sf::Color(0, 250, 0));
+	}
+	else
+	{
+		text->setString("DEFEAT!");
+		text->setFillColor(sf::Color(250, 0, 0));
+	}
+	win->texts.push_back(text);
+	win->addText("Battle Result", { 240, 40 });
+
+	for (int i = 0; i < 2; i++)
+		if (this->battlefield->players[i]->isAI())
+			win->addText("Player" + std::to_string(i + 1) + "(AI) lost:", { 10 + i * 360.f, 70 });
+		else
+			win->addText("Player" + std::to_string(i + 1) + " lost:", { 10 + i * 360.f, 70 });
+
+	float i = 0, j = 0;
+	for (auto type : allMonseters2)
+	{
+		int number[2] = { 0, 0 };
+		for (auto creature : this->battlefield->units)
+		{
+			if (creature->getType() == type && !creature->getAlive())
+				number[creature->enemy]++;
+		}
+		if (number[0] != 0)
+		{
+			win->addText(creatureToString[type] + "\t " + std::to_string(number[0]), { 10, 100 + i });
+			i += 24;
+		}
+		if (number[1] != 0)
+		{
+			win->addText(creatureToString[type] + "\t " + std::to_string(number[1]), { 370, 100 + j });
+			j += 24;
+		}
+	}
+
+	win->buttons["OK"] = std::make_shared<Button>(400 + 550, 160 + 400, 40, 40, &win->font, "OK");
+	win->buttons["OK"]->addFuctionallity([=]() {
+		win->close();
+		auto playerWon = this->nuberUnitsInBattle[0] > 0;
+		if (playerWon)
+			Config.unlockNextLevel(battlefield->level + 1);
+		battlefield->close();
+	});
+	win->interactiveElem.push_back(win->buttons["OK"]);
+	GH.Get().pushWindow(win);
 }
 
 void BattleHandler::handleAggressiveStance(BattleUnit* unit)

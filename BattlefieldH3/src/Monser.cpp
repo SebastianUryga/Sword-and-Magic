@@ -55,7 +55,7 @@ std::map<Monster, MonsterStats> creaturesStats = {
 	{Monster::KNIGHT3,{{2,2},5,4,12,3,0,25,90.f,0.55f,false,false,false }},
 	{Monster::ELF1,{{2,2},4,7,5,3,7,10,60.f,0.3f,false,true,false }},
 	{Monster::ELF2,{{2,2},5,3,5,3,0,25,90.f,0.6f,false,false,false }},
-	{Monster::ELF3,{{2,2},6,4,3,3,4,12,70.f,0.24f,false,true,false }}
+	{Monster::ELF3,{{2,2},6,9,2,3,4,12,70.f,0.24f,false,true,false }}
 };
 std::map < Monster, sf::Vector2f > creatureTexturesOffest = {
 	{Monster::ORK3, sf::Vector2f(123, 180)},

@@ -54,12 +54,14 @@ namespace Battle
 			this->accessible = Accessibility::NOT_SET;
 			this->cost = std::numeric_limits<float>::max();
 			this->inPQ = false;
-			this->theNodeBefore = nullptr;
+			this->theNodeBefore[0] = nullptr;
+			this->theNodeBefore[1] = nullptr;
+			this->theNodeBefore[2] = nullptr;
 		}
 		std::vector<Battle::PathNode*> neighbourNodes;
 		sf::Vector2i coord;
 		Accessibility accessible;
-		PathNode* theNodeBefore = nullptr;
+		PathNode* theNodeBefore[3] = { nullptr,nullptr,nullptr };
 		bool inPQ;
 		bool locked;
 	};

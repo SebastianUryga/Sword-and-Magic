@@ -2,6 +2,11 @@
 #include "Spell.h"
 #include "Monser.h"
 
+void Player::setAI(bool AI)
+{
+	artificalIntelligence = AI;
+}
+
 bool Player::setMana(int mana)
 {
 	_actualManaPoints = mana;

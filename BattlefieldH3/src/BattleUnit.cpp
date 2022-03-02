@@ -422,6 +422,8 @@ void BattleUnit::idle()
 
 void BattleUnit::doMove(sf::Vector2i direction)
 {
+	auto& list = this->castedSpellList;
+	
 	if (direction != sf::Vector2i(0, 0))
 	{
 		this->tryToMove = 0;
@@ -437,6 +439,9 @@ void BattleUnit::doMove(sf::Vector2i direction)
 			this->lastDirection = false;
 		if (direction.x < 0)
 			this->lastDirection = true;
+
+		if (std::find(list.begin(), list.end(), Spell(Spell::SpellType::HASTE)) != list.end())
+			this->animationState = AnimationState::RUNNING;
 	}
 
 	this->setVelocity(direction);

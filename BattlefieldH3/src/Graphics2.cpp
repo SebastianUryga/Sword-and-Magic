@@ -109,6 +109,8 @@ void Graphics2::init()
 	backgroundsTextures[Background::BACKGROUND2]->loadFromFile("res/Textures/game_background_2/game_background_2.png");
 	backgroundsTextures[Background::BACKGROUND3] = std::make_shared<sf::Texture>();
 	backgroundsTextures[Background::BACKGROUND3]->loadFromFile("res/Textures/game_background_3/game_background_3.png");
+	backgroundsTextures[Background::BACKGROUND4] = std::make_shared<sf::Texture>();
+	backgroundsTextures[Background::BACKGROUND4]->loadFromFile("res/Textures/game_background_4/game_background_4.png");
 	
 	this->battleObsticles[BattleObstacle::Type::ROCK1] = std::make_shared<sf::Texture>();
 	this->battleObsticles[BattleObstacle::Type::ROCK2] = std::make_shared<sf::Texture>();

@@ -9,7 +9,7 @@ class Monster;
 
 enum class Background : int
 {
-	BACKGROUND1 = 0, BACKGROUND2 = 1, BACKGROUND3 = 2,
+	BACKGROUND1 = 0, BACKGROUND2 = 1, BACKGROUND3 = 2, BACKGROUND4 = 3,
 };
 
 class Graphics2

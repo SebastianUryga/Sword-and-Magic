@@ -32,6 +32,7 @@ public:
 	void updateMissle(BattleUnit* unit);
 	void update(const float& dt);
 private:
+	void showBattleResult();
 	void handleAggressiveStance(BattleUnit* unit);
 	void handleDefenceStance(BattleUnit* unit);
 	void handleAttackOrder(BattleUnit* unit);

@@ -57,10 +57,6 @@ void Game::refresh()
 Game::Game()
 {
 	this->initWindow();
-	std::fstream file;
-	file.open("res/config.txt");
-	Config.load(file, false);
-	file.close();
 	this->initFonts();
 	this->initTextures();
 	this->mainMenuState();
@@ -118,7 +114,12 @@ void Game::mainMenuState()
 		mainMenu->interactiveElem.push_back(btn.second);
 
 	mainMenu->texts.push_back(text);
-
+	mainMenu->onActive = []() {
+		std::fstream file;
+		file.open("res/config.txt");
+		Config.load(file, false);
+		file.close();
+	};
 	GH.pushWindow(mainMenu);
 }
 
@@ -182,17 +183,17 @@ void Game::settingState()
 
 	settingMenu->addText("Choose Game Mode", sf::Vector2f(600, 240));
 	settingMenu->buttons["ModeOption1"] = std::make_shared<Button>(
-		600, 280, 250, 50, this->font, "Player vs AI");
+		600, 280, 250, 50, this->font, "Player vs Player");
 	settingMenu->buttons["ModeOption2"] = std::make_shared<Button>(
-		600, 350, 250, 50, this->font, "Player vs Player");
+		600, 350, 250, 50, this->font, "Player vs AI");
 
 	settingMenu->buttons["ModeOption1"]->addFuctionallity([=]() {
-		Config.PvP = false;
+		Config.PvP = true;
 		marker2->setPosition(560, 280);
 		Config.save("res/config.txt");
 	});
 	settingMenu->buttons["ModeOption2"]->addFuctionallity([=]() {
-		Config.PvP = true;
+		Config.PvP = false;
 		marker2->setPosition(560, 350);
 		Config.save("res/config.txt");
 	});
@@ -263,12 +264,31 @@ void Game::campainState()
 		BH.startBallte("res/Levels/Level5.txt");
 		BH.battlefield->level = 5;
 	});
+	campainMenu->buttons["Level6"]->addFuctionallity([=]() {
+		BH.startBallte("res/Levels/Level6.txt");
+		BH.battlefield->level = 6;
+	});
 
-	for (int i = 1; i <= 9; i++)
+	campainMenu->buttons["Level7"]->addFuctionallity([=]() {
+		BH.startBallte("res/Levels/Level7.txt");
+		BH.battlefield->level = 7;
+	});
+
+	campainMenu->buttons["Level8"]->addFuctionallity([=]() {
+		BH.startBallte("res/Levels/Level8.txt");
+		BH.battlefield->level = 8;
+	});
+
+	campainMenu->buttons["Level9"]->addFuctionallity([=]() {
+		BH.startBallte("res/Levels/Level9.txt");
+		BH.battlefield->level = 9;
+	});
+
+	/*for (int i = 1; i <= 9; i++)
 		if (i <= Config.availableLevels)
 			campainMenu->buttons["Level" + std::to_string(i)]->block(false);
 		else
-			campainMenu->buttons["Level" + std::to_string(i)]->block(true);
+			campainMenu->buttons["Level" + std::to_string(i)]->block(true);*/
 
 	campainMenu->buttons["EXIT_GAME"] = std::make_shared<Button>(
 		300, 680, 250, 50, this->font, "Quit");
@@ -280,6 +300,21 @@ void Game::campainState()
 
 	for (auto button : campainMenu->buttons)
 		campainMenu->interactiveElem.push_back(button.second);
+
+	campainMenu->onActive = [=]() {
+
+		std::fstream file;
+		file.open("res/config.txt");
+		Config.load(file, false);
+		file.close();
+
+		for (int i = 1; i <= 9; i++)
+			if (i <= Config.availableLevels)
+				campainMenu->buttons["Level" + std::to_string(i)]->block(false);
+			else
+				campainMenu->buttons["Level" + std::to_string(i)]->block(true);
+	};
+
 	GH.pushWindow(campainMenu);
 }
 

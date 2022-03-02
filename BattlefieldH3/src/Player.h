@@ -20,7 +20,8 @@ private:
 public:
 	std::vector<Troop> army;
 	std::vector<Spell> availbleSpells;
-	
+
+	void setAI(bool AI);
 	bool setMana(int mana);
 	bool isAI() const;
 	bool hasSpell(Spell spell);
