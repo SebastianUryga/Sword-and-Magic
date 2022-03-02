@@ -1,4 +1,4 @@
-#include "Monser.h"
+#include "Monster.h"
 
 std::map<Monster, std::string> creatureToString = {
 	{Monster::NO_CREATURE,"No Creature"},

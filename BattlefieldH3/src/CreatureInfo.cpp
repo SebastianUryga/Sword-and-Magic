@@ -3,7 +3,7 @@
 #include "BattleUnit.h"
 
 CreatureInfo::CreatureInfo(float x, float y, Monster type)
-	:WindowObject(x, y, 500,350,GH.globalFont )
+	:WindowObject(x, y, 510,350,GH.globalFont )
 {
 	this->background.setFillColor(sf::Color(150, 150, 150, 255));
 	portrait.setPosition(x, y+ 20);
@@ -21,7 +21,7 @@ CreatureInfo::CreatureInfo(float x, float y, Monster type)
 }
 
 CreatureInfo::CreatureInfo(float x, float y, BattleUnit* unit)
-	:WindowObject(x, y, 500, 370, GH.globalFont)
+	:WindowObject(x, y, 550, 370, GH.globalFont)
 {
 	if (x + 500 > Config.windowSize.x) x -= ((x + 500)- Config.windowSize.x);
 	if (y + 370 > Config.windowSize.y) y -= ((y + 370) - Config.windowSize.y);

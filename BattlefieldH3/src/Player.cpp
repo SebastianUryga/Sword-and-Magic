@@ -1,6 +1,6 @@
 #include "Player.h"
 #include "Spell.h"
-#include "Monser.h"
+#include "Monster.h"
 
 void Player::setAI(bool AI)
 {

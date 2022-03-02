@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10.7)
 
-project(BattlefieldH3Engine)
+project(Battlefield)
 
 set(SRCS 
 	src/BattlefieldH3.cpp
@@ -18,7 +18,7 @@ set(SRCS
 	src/GuiHandler.cpp
 	src/Garrnison.cpp
 	src/InterfaceElem.cpp
-	src/Monser.cpp
+	src/Monster.cpp
 	src/CreatureInfo.cpp
 	src/Player.cpp
 	src/SelectionWindow.cpp
@@ -42,7 +42,7 @@ set(HEADERS
 	src/GuiHandler.h
 	src/Garrnison.h
 	src/InterfaceElem.h
-	src/Monser.h
+	src/Monster.h
 	src/CreatureInfo.h
 	src/Player.h
 	src/PCH.hpp
