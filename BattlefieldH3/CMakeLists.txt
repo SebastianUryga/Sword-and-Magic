@@ -1,6 +1,10 @@
-cmake_minimum_required(VERSION 3.10.7)
+cmake_minimum_required(VERSION 3.0)
 
-project(Battlefield)
+project(arena)
+
+#add_compile_options(-Wall -Wextra -g)
+
+add_compile_options(-O3 -flto -march=native)
 
 set(SRCS 
 	src/BattlefieldH3.cpp
@@ -53,25 +57,20 @@ set(HEADERS
 	src/Configuration.h
 )
 set(RESOURCES
-	res
-	)
-	
+	res)
                        
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-set(SFML_DIR "${CMAKE_CURRENT_SOURCE_DIR}/SFML-2.5.1/build")
+# If SFML is included in the project
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/SFML-2.5.1)
 
-#if working on Windows
-#set(SFML_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Extensions/SFML/lib/cmake/SFML")
-
-find_package(SFML 2.5.1 COMPONENTS graphics audio window system REQUIRED)
+# If SFML is installed in the system
+#find_package(SFML 2.5.1 COMPONENTS graphics audio window system REQUIRED)
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/${RESOURCES}
-        DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-
+	DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 add_executable(${PROJECT_NAME} ${SRCS} ${HEADERS})
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 
-target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-audio sfml-window sfml-system)
-
+target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-window sfml-system)

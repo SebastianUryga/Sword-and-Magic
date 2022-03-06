@@ -174,7 +174,7 @@ void Game::settingState()
 	});
 
 	// PvP settings
-	auto marker2 = std::make_shared<sf::Text>("->", GH.globalFont, 30);
+	/*auto marker2 = std::make_shared<sf::Text>("->", GH.globalFont, 30);
 	if (Config.PvP)
 		marker2->setPosition(560, 280);
 	else 
@@ -196,12 +196,12 @@ void Game::settingState()
 		Config.PvP = false;
 		marker2->setPosition(560, 350);
 		Config.save("res/config.txt");
-	});
+	});*/
 
-	settingMenu->buttons["EXIT_GAME"] = std::make_shared<Button>(
-		300, 680, 250, 50, this->font, "Quit");
+	settingMenu->buttons["Back"] = std::make_shared<Button>(
+		300, 680, 250, 50, this->font, "Back");
 
-	settingMenu->buttons["EXIT_GAME"]->addFuctionallity([=]() {
+	settingMenu->buttons["Back"]->addFuctionallity([=]() {
 		GH.popWindow(settingMenu);
 	});
 	
@@ -290,10 +290,10 @@ void Game::campainState()
 		else
 			campainMenu->buttons["Level" + std::to_string(i)]->block(true);*/
 
-	campainMenu->buttons["EXIT_GAME"] = std::make_shared<Button>(
-		300, 680, 250, 50, this->font, "Quit");
+	campainMenu->buttons["Back"] = std::make_shared<Button>(
+		300, 680, 250, 50, this->font, "Back");
 
-	campainMenu->buttons["EXIT_GAME"]->addFuctionallity([=]() {
+	campainMenu->buttons["Back"]->addFuctionallity([=]() {
 		GH.popWindow(campainMenu);
 		Config.load("res/config.txt");
 	});

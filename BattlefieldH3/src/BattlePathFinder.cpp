@@ -154,7 +154,7 @@ void Battle::PathFinder::calculatePaths()
 		}
 	}
 	//std::cout << " path finder time" << clock.getElapsedTime().asMilliseconds() << std::endl;
-	std::cout << " path finder time" <<sec << std::endl;
+	//std::cout << " path finder time" <<sec << std::endl;
 }
 
 Battle::PathNode::Accessibility Battle::PathFinder::evaluateAccessibility(const BattleTile& tinfo)
