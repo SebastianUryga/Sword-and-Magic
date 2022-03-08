@@ -83,7 +83,11 @@ void Battlefield::initButtons()
 		pos = sf::Vector2f((65.f / 160.f) * Config.windowSize.x, (78.f / 90.f) * Config.windowSize.y);
 		this->buttons["Load"] = std::make_shared<Button>(
 			pos.x, pos.y, 60, 40, &this->font, "Load");
-		this->buttons["Load"]->addFuctionallity([=]() { load("res/startMap.txt"); });
+		this->buttons["Load"]->addFuctionallity([=]() { 
+			load("res/startMap.txt");
+			this->gar1->updateSlots();
+			this->gar2->updateSlots();
+		});
 		this->interactiveElem.push_back(this->buttons["Load"]);
 
 		pos = sf::Vector2f((63.f / 160.f) * Config.windowSize.x, (74.f / 90.f) * Config.windowSize.y);
@@ -456,7 +460,7 @@ void Battlefield::clickLeft(bool down, bool previousState)
 {
 	if (down)
 	{
-		if (this->mode == GameMode::Editor)
+		/*if (this->mode == GameMode::Editor)
 		{
 			auto tilePos = GH.mouseTilePos;
 			if (!this->containsIsBattlefield(tilePos))
@@ -464,7 +468,7 @@ void Battlefield::clickLeft(bool down, bool previousState)
 			BattleTile& clickedTile = this->getTile(tilePos);
 			if (!clickedTile.blocked && !clickedTile.unit)
 				this->addObsticle(BattleObstacle::Type::ROCK1, clickedTile.pos);
-		}
+		}*/
 		if (this->mode == GameMode::Game)
 		{
 			this->selectingArea.setSize(sf::Vector2f(0, 0));

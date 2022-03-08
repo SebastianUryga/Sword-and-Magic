@@ -13,6 +13,8 @@ void Garrnison::selectSlot(GarrnisonSlot* slot)
 
 void Garrnison::mergeStacks(int stack1Id, int stack2Id) // Mergeing to stack1
 {
+	if (this->garrnison[stack1Id].count + this->garrnison[stack2Id].count > 10)
+		return;
 	this->garrnison[stack1Id].count += this->garrnison[stack2Id].count;
 	this->garrnison[stack2Id].monster = Monster::NO_CREATURE;
 	this->garrnison[stack2Id].count = 0;

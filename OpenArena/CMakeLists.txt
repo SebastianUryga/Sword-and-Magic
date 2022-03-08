@@ -7,7 +7,7 @@ project(arena)
 add_compile_options(-O3 -flto -march=native)
 
 set(SRCS 
-	src/BattlefieldH3.cpp
+	src/OpenArena.cpp
 	src/AnimationComponent.cpp
 	src/Animator.cpp
 	src/Game.cpp
@@ -74,3 +74,4 @@ add_executable(${PROJECT_NAME} ${SRCS} ${HEADERS})
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 
 target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-window sfml-system)
+
