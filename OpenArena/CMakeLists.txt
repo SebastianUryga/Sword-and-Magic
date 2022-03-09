@@ -62,10 +62,10 @@ set(RESOURCES
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # If SFML is included in the project
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/SFML-2.5.1)
-
+#add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/SFML-2.5.1)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/SFML-2.5.1 EXCLUDE_FROM_ALL)
 # If SFML is installed in the system
-#find_package(SFML 2.5.1 COMPONENTS graphics audio window system REQUIRED)
+#find_package(SFML 2.5.1 COMPONENTS graphics window system REQUIRED)
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/${RESOURCES}
 	DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

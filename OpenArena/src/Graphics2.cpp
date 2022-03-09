@@ -117,8 +117,10 @@ void Graphics2::init()
 	this->battleObsticles[BattleObstacle::Type::ROCK1]->loadFromFile("res/Textures/Obstacle1.png");
 	this->battleObsticles[BattleObstacle::Type::ROCK2]->loadFromFile("res/Textures/Obstacle2.png");
 
-	this->arrow.loadFromFile("res/Textures/arrow.png");
-	this->magicBulet.loadFromFile("res/Textures/magicBulet.png");
+	this->arrow = std::make_shared<sf::Texture>();
+	this->magicBulet = std::make_shared<sf::Texture>();
+	this->arrow->loadFromFile("res/Textures/arrow.png");
+	this->magicBulet->loadFromFile("res/Textures/magicBulet.png");
 
 	this->spellIcons[Spell::SpellType::WEEKNES] = sf::IntRect(74 * 0, 74 * 1, 74, 74);
 	this->spellIcons[Spell::SpellType::SHIELD] = sf::IntRect(74 * 2, 74 * 2, 74, 74);
@@ -156,11 +158,12 @@ void Graphics2::init()
 
 	this->battleEffectsSheet = std::make_shared<sf::Texture>();
 	this->allSpellIcons = std::make_shared<sf::Texture>();
-	this->image.loadFromFile("res/Textures/spellIkons.png");
-	this->allSpellIcons->loadFromImage(this->image);
+	this->image = std::make_shared<sf::Image>();
+	this->image->loadFromFile("res/Textures/spellIkons.png");
+	this->allSpellIcons->loadFromImage(*this->image);
 
-	this->image.loadFromFile("res/Textures/BattleEffects.png");
-	this->battleEffectsSheet->loadFromImage(this->image);
+	this->image->loadFromFile("res/Textures/BattleEffects.png");
+	this->battleEffectsSheet->loadFromImage(*this->image);
 
 }
 

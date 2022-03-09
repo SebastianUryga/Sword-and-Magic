@@ -42,7 +42,7 @@ SelectionWindow::SelectionWindow(Troop& troop) :
 		this->interactiveElem.push_back(this->creaturePortraits[i]);
 	}
 	this->incrementingBtn = std::make_shared<Button>(
-		100, 450, 100, 30, &this->font, "+");
+		100, 430, 100, 50, &this->font, "+");
 	this->incrementingBtn->move(
 		this->background.getPosition().x,
 		this->background.getPosition().y);
@@ -51,7 +51,7 @@ SelectionWindow::SelectionWindow(Troop& troop) :
 		this->incrementingBtn->block(true);
 
 	this->decrementingBtn = std::make_shared<Button>(
-		350, 450, 100, 30, &this->font, "-");
+		350, 430, 100, 50, &this->font, "-");
 	this->decrementingBtn->move(
 		this->background.getPosition().x,
 		this->background.getPosition().y);
@@ -67,7 +67,7 @@ SelectionWindow::SelectionWindow(Troop& troop) :
 		texts.back()->setString(std::to_string(troopQuantity));
 	});
 	this->buttons["-"] = this->decrementingBtn;
-
+	
 	this->incrementingBtn->addFuctionallity([=]() {
 		troopQuantity++;
 		if (troopQuantity > 10)

@@ -217,16 +217,34 @@ void Battlefield::setBackground(Background background)
 		break;
 	}
 	case Background::BACKGROUND2:
+	{
 		for (int i = 0; i < Config.battlefiledTileWidth; i++)
 			tiles[i][0].blocked = true;
+		int start = (Config.battlefiledTileWidth / 6);
+		int end = (Config.battlefiledTileWidth / 4);
+		for (int i = start; i < end; i++)
+			tiles[i][1].blocked = true;
 		break;
+		for (int i = 0; i < Config.battlefiledTileWidth; i++)
+			tiles[i][Config.battlefiledTileHegiht - 2].blocked = true;
+	}
 	case Background::BACKGROUND3:
+		for (int i = 0; i < Config.battlefiledTileWidth; i++)
+			tiles[i][0].blocked = true;
+		for (int i = 0; i < Config.battlefiledTileWidth; i++)
+			tiles[i][Config.battlefiledTileHegiht - 2].blocked = true;
 		break;
 	case Background::BACKGROUND4:
+		for (int i = 0; i < Config.battlefiledTileWidth; i++)
+			tiles[i][0].blocked = true;
+		for (int i = 0; i < Config.battlefiledTileWidth; i++)
+			tiles[i][Config.battlefiledTileHegiht - 2].blocked = true;
 		break;
 	default:
 		break;
 	}
+	for (int i = 0; i < Config.battlefiledTileWidth; i++)
+		tiles[i][Config.battlefiledTileHegiht - 1].blocked = true;
 }
 
 bool Battlefield::containsIsBattlefield(sf::Vector2i pos) const

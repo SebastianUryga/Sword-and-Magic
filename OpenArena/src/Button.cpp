@@ -18,7 +18,7 @@ Button::Button(float x, float y, float width, float height,
 	this->text.setCharacterSize(30);
 	this->text.setPosition(
 		this->background.getPosition().x + (this->background.getGlobalBounds().width  - this->text.getGlobalBounds().width) / 2.f,
-		this->background.getPosition().y - 4 + (this->background.getGlobalBounds().height - this->text.getGlobalBounds().height) / 2.f);
+		this->background.getPosition().y - 7 + (this->background.getGlobalBounds().height - this->text.getGlobalBounds().height) / 2.f);
 
 	this->activeColor = activeColor;
 	this->hoverColor = hoverColor;

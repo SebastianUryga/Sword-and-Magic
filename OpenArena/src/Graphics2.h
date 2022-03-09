@@ -18,9 +18,9 @@ public:
 	Graphics2();
 	virtual ~Graphics2();
 
-	sf::Image image;
-	sf::Texture arrow;
-	sf::Texture magicBulet;
+	std::shared_ptr<sf::Image> image;
+	std::shared_ptr<sf::Texture> arrow;
+	std::shared_ptr<sf::Texture> magicBulet;
 	
 	class CreatureTexture
 	{

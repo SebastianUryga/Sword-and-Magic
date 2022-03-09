@@ -51,6 +51,13 @@ Graphics::~Graphics()
 
 void Graphics::Init()
 {
+	this->menuBackgroud = std::make_shared<sf::Texture>();
+	this->battleBackgrouds = std::make_shared<sf::Texture>();
+	this->allCreaturePortraits = std::make_shared<sf::Texture>();
+	this->battleEffectsSheet = std::make_shared<sf::Texture>();
+	this->allSpellIcons = std::make_shared<sf::Texture>();
+	this->battleBackgrouds->setRepeated(true);
+
 	this->image.loadFromFile("Textures/SpellIcons.png");
 	this->image.createMaskFromColor(this->image.getPixel(1, 1));
 	this->allSpellIcons->loadFromImage(this->image);

@@ -70,8 +70,8 @@ sf::Vector2i BattleHandler::choseMoveDirection(BattleUnit* unit) const
 		for (int i = 0; !unit->pathfinder->getPath(path, unit->destenation + dirs[i]) && i < 18; i++)
 		{
 			
-			if(i > 16)
-				std::cout << "cos nie ten z pathem" << std::endl;
+			if (i > 16)
+				dir = unit->destenation - unit->getPos();
 		}
 		bool checkBetterWay = true;
 		for (int i = 0; i < path.nodes.size(); i++)
