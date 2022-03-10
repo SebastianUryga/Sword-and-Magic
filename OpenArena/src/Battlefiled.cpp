@@ -384,6 +384,7 @@ bool Battlefield::addUnit(std::shared_ptr<BattleUnit> unit, sf::Vector2i pos, bo
 	
 	this->interactiveElem.push_back(unit);
 	this->units.push_back(unit);
+	this->sortUnits();
 	return true;
 }
 

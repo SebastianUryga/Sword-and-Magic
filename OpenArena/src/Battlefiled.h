@@ -72,7 +72,7 @@ private:
 	void putMovmentMarker(const sf::Vector2i& pos, bool attck);
 	void setBackground(Background background);
 public:
-	bool gamePaused = false;
+	bool gamePaused = true;
 	int level = -1;
 	std::vector<std::shared_ptr<BattleUnit>> units;
 

@@ -1027,14 +1027,14 @@ Missle::Missle(BattleUnit* unit) :
 	this->shape.setFillColor(sf::Color::Transparent);
 	if (unit->getType() == Monster::ELF1)
 	{
-		this->sprite.setTexture(graphics2.arrow);
-		this->sprite.setOrigin((sf::Vector2f)graphics2.arrow.getSize() / 2.f);
+		this->sprite.setTexture(*graphics2.arrow);
+		this->sprite.setOrigin((sf::Vector2f)graphics2.arrow->getSize() / 2.f);
 
 	}
 	else if (unit->getType() == Monster::ELF3)
 	{
-		this->sprite.setTexture(graphics2.magicBulet);
-		this->sprite.setOrigin((sf::Vector2f)graphics2.magicBulet.getSize() / 2.f);
+		this->sprite.setTexture(*graphics2.magicBulet);
+		this->sprite.setOrigin((sf::Vector2f)graphics2.magicBulet->getSize() / 2.f);
 	}
 	else
 	{
