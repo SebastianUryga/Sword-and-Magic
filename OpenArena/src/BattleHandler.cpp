@@ -205,7 +205,7 @@ BattleUnit* BattleHandler::calculateBestTargetFor(BattleUnit* unit)
 		for(auto pos: u->getUsedTilesPos())
 			cost = std::min(cost, unit->pathfinder->getNode(pos)->getCost());
 		float value = 100;
-		value += (10.f * (float)u->damage * (1 / u->attackCoulddown)) - ((float)u->hp * 3.f);
+		value += (10.f * (float)u->damage * (1.f / u->attackCoulddown)) - ((float)u->hp * 3.f);
 		value += (float)u->attack - u->defence;
 		value += u->speed * 0.1f;
 		if (u->isShouter())
@@ -610,6 +610,7 @@ void BattleHandler::updateQueque()
 			{
 				this->nuberUnitsInBattle[i]++;
 				this->armyQueque[i].pop();
+
 			}
 		}
 	}

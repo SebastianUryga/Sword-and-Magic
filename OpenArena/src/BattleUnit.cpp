@@ -676,7 +676,7 @@ bool BattleUnit::calculatingPaths()
 void BattleUnit::updatePathfinder(const float& dt)
 {
 	this->timeToUpdatePathfinder += dt * 20.f * (1.f + (std::rand() % 10)/20.f);
-	if (this->getAlive() && timeToUpdatePathfinder > 140)
+	if (this->getAlive() && timeToUpdatePathfinder > 120)
 	{
 		pathfinderNeedToUpdate = true;
 		this->timeToUpdatePathfinder = 0;

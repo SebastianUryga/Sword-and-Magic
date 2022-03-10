@@ -57,7 +57,7 @@ void Battlefield::initButtons()
 
 		pos = sf::Vector2f((90.f / 160.f) * Config.windowSize.x, (77.f / 90.f) * Config.windowSize.y);
 		this->buttons["PauseStartGame"] = std::make_shared<Button>(
-			pos.x, pos.y, 170, 50, &this->font, "Pause Game");
+			pos.x, pos.y, 170, 50, &this->font, "Start Game");
 		this->buttons["PauseStartGame"]->addFuctionallity([=]() {
 			if (gamePaused)
 			{
