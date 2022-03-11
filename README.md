@@ -2,9 +2,12 @@
 
 ---
 
-## Executeing and Compile aplication
+## Executing and Compile application 
 
-To execute aplication on local machine: 
+To execute application on local machine we can use CMake version 3.0 or newer.
+The CMakeList.txt we can find in catalog Sword-and-Magic/OpenArena.
+
+or
 
 ### Windows
  - [DOWNLOAD PACKAGE ZIP](https://github.com/SebastianUryga/Sword-and-Magic/releases/download/v0.1.1/Release.zip)
@@ -27,8 +30,8 @@ Game is inspired by classic titles such as Heroes of Might and Magic 3 or Age of
 ---
 ## Description
 #### Main Menu
-After executing aplication we will be shown a Main Menu.
-Here we can decide to start a campain, play custom game, go to scenario editor, settings or we can trun off aplication.
+After executing application  we will be shown a Main Menu.
+Here we can decide to start a campain, play custom game, go to scenario editor, settings or we can trun off application .
 #### Editor
 Here we can set garnisons which define two armys that will be fight with each other when plaing custom scenario. Double clicking slots, show the window which we can set our unit - type and quantity.
 #### Game Mode
