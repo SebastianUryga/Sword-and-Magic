@@ -18,8 +18,8 @@ or
  - clone repo       ```git clone https://github.com/SebastianUryga/Sword-and-Magic.git```
  - install SFML library ```sudo apt install libsfml-dev```
  - go to catalog with source code ```cd Sword-and-Magic/OpenArena/src/```
- - compile program          ```g++ -std=c++17 *.cpp -I. -o OASM $(pkg-config --libs sfml-all)```
- - execute program            ```./OASM```
+ - build and compile          ```mkdir build && cd build && cmake .. && make```
+ - execute program            ```./arena```
 
 
 ---
