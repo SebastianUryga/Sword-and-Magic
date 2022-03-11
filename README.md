@@ -45,7 +45,7 @@ To do so you have to select units using mouse, and now you can:
 As a commander you can also cast spell which you can find opening your spell book. Click button below. 
 
 #### Campain Mode
-There are defined nine scenario which eight is block. To unblock them you have to win available levels.
+There are defined nine scenario which eight are blocked. To unblock them you have to win available levels.
 
 ---
 ## Author:
