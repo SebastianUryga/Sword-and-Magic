@@ -2,47 +2,49 @@
 
 ---
 
-## DEMO Aplikacji
+## Executeing and Compile aplication
 
-Aby uruchomić aplikacjie na lokalnej maszynie należy:
+To execute aplication on local machine: 
 
 ### Windows
- - [POBIERZ ARCHIWUM ZIP](https://github.com/SebastianUryga/Sword-and-Magic/releases/download/v0.1.1/Release.zip) (wraz z zawartością)
- - rozpakuj archiwum
- - uruchom plik OpenArena.exe
+ - [DOWNLOAD PACKAGE ZIP](https://github.com/SebastianUryga/Sword-and-Magic/releases/download/v0.1.1/Release.zip)
+ - unzip package
+ - execute file OpenArena.exe
  
 ### Linux
- - Sklonować repozytorium       ```git clone https://github.com/SebastianUryga/Sword-and-Magic.git```
- - zainstalować bibliotekę SFML ```sudo apt install libsfml-dev```
- - przejść do katalogu z kodem źródłowym ```cd Sword-and-Magic/OpenArena/src/```
- - skompilować program          ```g++ -std=c++17 *.cpp -I. -o OASM $(pkg-config --libs sfml-all)```
- - uruchomić program            ```./OASM```
+ - clone repo       ```git clone https://github.com/SebastianUryga/Sword-and-Magic.git```
+ - install SFML library ```sudo apt install libsfml-dev```
+ - go to catalog with source code ```cd Sword-and-Magic/OpenArena/src/```
+ - compile program          ```g++ -std=c++17 *.cpp -I. -o OASM $(pkg-config --libs sfml-all)```
+ - execute program            ```./OASM```
+
 
 ---
-## O Aplikacji
-Open Arena of Swords and Magic to symulator prowadzenia bitew. 
-Aplikacja korzysta z biblioteki graficzenij SFML. 
-Dodano mechaniki inspirowane innymi grami strategicznymi takimi jak Heroes of Might and Magic 3 oraz Age of Empires.
+## About Application
+Open Arena of Swords is an original strategy game implemented fully in C++ and uses graphical SFML library.
+Game is inspired by classic titles such as Heroes of Might and Magic 3 or Age of Empires.
 
 ---
-## Działanie Aplikacji
-#### Menu Główne
-W menu głównym mamy możliwość rozpoczęcia kampani, rozgrywki niestandardowej, przejścia do trybu edycji, ustawień, lub wyjścia z aplikacji.
-#### Tryb Edycji
-Umożliwia użytkownikowi ustawienie garnizonów, czyli jakie dwie armie będą ze sobą walczyć.
-Każdy garnizon ma po siedem slotów. Po dwukrotnym kliknięciu na jeden ze slotów ukaże nam się okienko wyboru jednostki gdzie ustawimy jej rodzaj i ilość.
-#### Tryb Rozgrywki
-Pozwala nam oglądać przebieg bitwy, jak również mamy możliwość wydawania poleceń jednostom, czy używania czarów.
-Aby wydać rozkaz jednostkom, należy zaznaczyć je za pomocą myszki i możemy:
-- wydać rozkaz ataku klikając PPM na wrogą jednostkę
-- kazać przemieścić się na konkretne miejsce klikając PPM na odopowiednie pole
-- przyjąć postawę agresywną klikając przycisk Agrressiv Position.
-- przyjąć postawę obronną klikając przycisk Defence Position
+## Description
+#### Main Menu
+After executing aplication we will be shown a Main Menu.
+Here we can decide to start a campain, play custom game, go to scenario editor, settings or we can trun off aplication.
+#### Editor
+Here we can set garnisons which define two armys that will be fight with each other when plaing custom scenario. Double clicking slots, show the window which we can set our unit - type and quantity.
+#### Game Mode
+Now we can manage our units which will apper on the left site of battlefield, by giving them orders.
+To do so you have to select units using mouse, and now you can:
+- give them attack order by Right-Click place, where enemy is standing
+- give move order to place them on tile you Right-Click
+- give them aggressive position using button below
+- give them defence position using button below
 
-Aby użyć czaru należy kliknąć przycisk Spell Book, wybrać czar kilkając jedną z ikon i wybrać jednostkę LPM.
-#### Kamania
-Możemy zdecydować się na zagranie kampanii. Odblokowywać kolejne poziomy, wygrywając dostępne.
+As a commander you can also cast spell which you can find opening your spell book. Click button below. 
+
+#### Campain Mode
+There are defined nine scenario which eight is block. To unblock them you have to win available levels.
+
 ---
-## Autor:
+## Author:
 Sebastian Uryga
 sebastian.uryga@gmail.com
