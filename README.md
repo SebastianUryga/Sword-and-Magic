@@ -1,4 +1,5 @@
 # Open Arena of Swords and Magic
+![GameMode1](https://user-images.githubusercontent.com/33723260/187921672-bb00b074-5455-4fda-b9f0-eda59195439e.png)
 
 ---
 
